@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freenove 4WD Car Challenges</title>
+<style>
+  :root{
+    --bg: #f4f6fb;
+    --panel: #ffffff;
+    --text: #1f2430;
+    --muted: #5a6472;
+    --accent: #ff8a3d;
+    --accent-2: #3d7aff;
+    --good: #2fb673;
+    --border: #e3e7ef;
+    --shadow: 0 6px 20px rgba(30, 40, 70, 0.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #14171f;
+      --panel: #1c212c;
+      --text: #edf0f6;
+      --muted: #9aa4b5;
+      --accent: #ffa159;
+      --accent-2: #6d9bff;
+      --good: #3fd08c;
+      --border: #2a3040;
+      --shadow: 0 6px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #14171f; --panel: #1c212c; --text: #edf0f6; --muted: #9aa4b5;
+    --accent: #ffa159; --accent-2: #6d9bff; --good: #3fd08c; --border: #2a3040;
+    --shadow: 0 6px 24px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"]{
+    --bg: #f4f6fb; --panel: #ffffff; --text: #1f2430; --muted: #5a6472;
+    --accent: #ff8a3d; --accent-2: #3d7aff; --good: #2fb673; --border: #e3e7ef;
+    --shadow: 0 6px 20px rgba(30, 40, 70, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap{
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 5rem;
+  }
+  header.hero{
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+  }
+  header.hero h1{
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    margin: 0 0 0.4rem;
+  }
+  header.hero p{
+    color: var(--muted);
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .progress-shell{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 1rem;
+    z-index: 10;
+  }
+  .progress-shell .label{
+    display:flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .progress-bar{
+    height: 10px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill{
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--good));
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+  .reset-btn{
+    margin-top: 0.75rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .reset-btn:hover{ color: var(--text); border-color: var(--muted); }
+
+  section.lesson{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  section.lesson > summary{
+    list-style: none;
+    cursor: pointer;
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    font-size: 1.15rem;
+    user-select: none;
+  }
+  section.lesson > summary::-webkit-details-marker{ display:none; }
+  section.lesson > summary .chevron{
+    margin-left: auto;
+    color: var(--muted);
+    transition: transform 0.2s ease;
+    font-size: 0.9rem;
+  }
+  section.lesson[open] > summary .chevron{ transform: rotate(90deg); }
+  section.lesson > summary .lesson-progress{
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .lesson-body{
+    padding: 0 1.4rem 1.4rem;
+    border-top: 1px solid var(--border);
+  }
+  .lesson-body h3{
+    margin-top: 1.4rem;
+    font-size: 1.05rem;
+  }
+  .lesson-body h4{
+    margin: 0.6rem 0 0.3rem;
+    font-size: 0.95rem;
+    color: var(--accent-2);
+  }
+  .lesson-body code{
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.4rem;
+    border-radius: 5px;
+    font-size: 0.88em;
+  }
+  .lesson-body pre{
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    overflow-x: auto;
+  }
+  .lesson-body pre code{
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .tip{
+    border-left: 3px solid var(--accent-2);
+    background: var(--bg);
+    padding: 0.7rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin: 0.7rem 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  .tip strong{ color: var(--text); }
+
+  .task{
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    margin: 0.9rem 0;
+    background: var(--bg);
+  }
+  .task input[type="checkbox"]{
+    width: 20px;
+    height: 20px;
+    margin-top: 0.15rem;
+    accent-color: var(--good);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .task .task-content{ flex: 1; }
+  .task .task-content > .title{
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .task.done{
+    border-color: var(--good);
+  }
+  .task.done .title{
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  ul, ol{ padding-left: 1.3rem; }
+  li{ margin: 0.25rem 0; }
+
+  footer{
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>🚗 Freenove 4WD Car Challenges</h1>
+    <p>Your mission book for the Freenove 4WD Car. Work through each lesson, tick off challenges as you go, and don't be afraid to break things — that's how you learn to code!</p>
+  </header>
+
+  <div class="progress-shell">
+    <div class="label">
+      <span>Overall progress</span>
+      <span id="overall-count">0 / 0 done</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="overall-fill"></div></div>
+    <button class="reset-btn" id="reset-btn" type="button">Reset all progress</button>
+  </div>
+
+  <details class="lesson" open>
+    <summary>📥 Guide: How to Download Your Code <span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <h3>Uploading a compiled sketch</h3>
+      <ol>
+        <li>In the Arduino IDE, go to <strong>Sketch → Export Compiled Binary</strong>.</li>
+        <li>Open your sketch folder (<code>Ctrl+K</code>). You will see a file ending in <code>.uf2</code>.</li>
+        <li>Drag and drop that <code>.uf2</code> file directly into the <strong>RPI-RP2</strong> drive.</li>
+        <li>The Pico will automatically reboot and start running your code.</li>
+      </ol>
+      <h3>If you can't see the Pi on your PC then...</h3>
+      <ol>
+        <li>Unplug the Pico from your computer.</li>
+        <li>Press and hold the <strong>BOOTSEL</strong> button on the Pico board.</li>
+        <li>While holding the button, plug the USB cable back in.</li>
+        <li>Release the button. Your computer should now show a new drive named <strong>RPI-RP2</strong>.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="lesson">
+    <summary>🏎️ Lesson 1 – Car Move &amp; Turn <span class="lesson-progress" data-lesson="1"></span><span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <h3>🚦 The Basics: How to Read the Code</h3>
+      <p>The "Magic Command":</p>
+      <pre><code>Motor_M_Move(LeftFront, LeftRear, RightFront, RightRear);</code></pre>
+      <ul>
+        <li><strong>Positive numbers (1 to 100):</strong> Wheel goes forward.</li>
+        <li><strong>Negative numbers (-1 to -100):</strong> Wheel goes backward.</li>
+        <li><code>delay(1000)</code>: Wait for 1000 milliseconds (which is 1 second).</li>
+      </ul>
+
+      <div class="task" data-lesson="1" data-id="l1-c1">
+        <input type="checkbox" id="l1-c1">
+        <div class="task-content">
+          <label class="title" for="l1-c1">🏆 Challenge 1: The Speed Racer</label>
+          <p><strong>Goal:</strong> Make the car go twice as fast when moving forward, and super slow when moving backward.</p>
+          <p><strong>How-to:</strong> Look at the first <code>Motor_M_Move</code> line. Change the 50s to a higher number (up to 100).</p>
+          <div class="tip"><strong>Tip:</strong> If 100 is the fastest, what number would make the car crawl like a turtle?</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="1" data-id="l1-c2">
+        <input type="checkbox" id="l1-c2">
+        <div class="task-content">
+          <label class="title" for="l1-c2">🕒 Challenge 2: The Long Haul</label>
+          <p><strong>Goal:</strong> Make the car drive forward for 3 seconds instead of just 1.</p>
+          <p><strong>How-to:</strong> Find the <code>delay(1000);</code> line right after the forward command. Change the number inside the parentheses.</p>
+          <div class="tip"><strong>Tip:</strong> The computer counts in milliseconds. 1000 = 1 second, so 3000 = 3 seconds.</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="1" data-id="l1-c3">
+        <input type="checkbox" id="l1-c3">
+        <div class="task-content">
+          <label class="title" for="l1-c3">🔄 Challenge 3: The "Dizzy" Spinner</label>
+          <p><strong>Goal:</strong> Make the car spin in a circle in one spot (a "Zero Turn").</p>
+          <p><strong>How-to:</strong> To spin, one side of the car needs to go forward while the other side goes backward. Try:</p>
+          <pre><code>Motor_M_Move(50, 50, -50, -50);</code></pre>
+          <div class="tip"><strong>Tip:</strong> If the car just turns slightly, increase the delay so it keeps spinning longer!</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="lesson">
+    <summary>👀 Lesson 2 – Matrix Display <span class="lesson-progress" data-lesson="2"></span><span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <p>Those two squares on the front of your car are like the robot's "eyes," and you get to tell them exactly what to do. Right now, your robot is programmed to blink, but you can change its personality just by tweaking the code.</p>
+      <p>Here are 5 missions for you to try!</p>
+
+      <div class="task" data-lesson="2" data-id="l2-m1">
+        <input type="checkbox" id="l2-m1">
+        <div class="task-content">
+          <label class="title" for="l2-m1">🚀 Mission 1: The Fast-Blinker</label>
+          <p>The robot is currently blinking slowly. Let's make it look like it just drank a giant soda! Find <code>showArray(500);</code> at the bottom of <code>void loop</code>.</p>
+          <p><strong>Goal:</strong> Change 500 to 100.</p>
+          <div class="tip"><strong>Secret:</strong> That number is "milliseconds." 1000 is one second. Smaller number = faster blinking!</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="2" data-id="l2-m2">
+        <input type="checkbox" id="l2-m2">
+        <div class="task-content">
+          <label class="title" for="l2-m2">😉 Mission 2: The Pirate Wink</label>
+          <p>Can you make the robot wink one eye while keeping the other one wide open? Look at <code>y_array</code> (the right eye).</p>
+          <p><strong>Goal:</strong> Copy the first line of numbers and paste it over the second line so they match.</p>
+          <div class="tip"><strong>Secret:</strong> If the right eye stays the same but <code>x_array</code> keeps changing, it will look like a wink!</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="2" data-id="l2-m3">
+        <input type="checkbox" id="l2-m3">
+        <div class="task-content">
+          <label class="title" for="l2-m3">🌙 Mission 3: Night Mode</label>
+          <p>Find <code>matrix.init(0x71);</code> inside <code>void setup</code>.</p>
+          <p><strong>Goal:</strong> Right under that line, add: <code>matrix.setBrightness(1);</code></p>
+          <div class="tip"><strong>Secret:</strong> Numbers range from 0 (off) to 15 (super bright). Try 15 to see the difference!</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="2" data-id="l2-m4">
+        <input type="checkbox" id="l2-m4">
+        <div class="task-content">
+          <label class="title" for="l2-m4">😠 Mission 4: Angry Robot</label>
+          <p>Let's make the eyes look like flat, grumpy lines. Look at <code>x_array</code> and <code>y_array</code>.</p>
+          <p><strong>Goal:</strong> Change one row of numbers to:</p>
+          <pre><code>0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00</code></pre>
+          <div class="tip"><strong>Secret:</strong> <code>0x00</code> means "lights off" and <code>0xFF</code> means "all lights on in this row."</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="2" data-id="l2-m5">
+        <input type="checkbox" id="l2-m5">
+        <div class="task-content">
+          <label class="title" for="l2-m5">🎨 Mission 5: The Master Artist (Custom Face)</label>
+          <p>The hardest mission! Can you make the eyes look like diamonds? 💎</p>
+          <p><strong>Goal:</strong> Use these secret codes for your array:</p>
+          <pre><code>0x08, 0x1C, 0x3E, 0x7F, 0x7F, 0x3E, 0x1C, 0x08</code></pre>
+          <div class="tip"><strong>Secret:</strong> Each code is one row of the 8x8 grid — the robot will have diamond-shaped eyes.</div>
+        </div>
+      </div>
+
+      <h4>💡 Top Secret Coding Tips</h4>
+      <ul>
+        <li><strong>The "Comma" Rule:</strong> Every number needs a comma after it, except the very last one in the row.</li>
+        <li><strong>The "Zapped" Rule:</strong> If your code won't upload, hit Undo (<code>Ctrl+Z</code>) to go back to when it worked.</li>
+        <li><strong>The "Drawing" Trick:</strong> Search for an "8x8 LED Matrix Tool" online — click the dots, get the <code>0x</code> codes!</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="lesson">
+    <summary>📡 Lesson 3 – Ultrasonic Ranging <span class="lesson-progress" data-lesson="3"></span><span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <h3>🛰️ The "Head" and the "Ears"</h3>
+      <ul>
+        <li><strong>The Servo:</strong> A little motor that acts like a neck, turning to angles like 30°, 90°, or 150°.</li>
+        <li><strong>The Ultrasonic Sensor:</strong> Looks like two eyes, but they're actually ears! They send a "ping" of sound and listen for the echo.</li>
+      </ul>
+
+      <h3>📝 What the Code is Doing</h3>
+      <p><strong>1. The Startup (setup):</strong> Wakes up the Serial Port, gets the sensor and servo ready, looks straight ahead at 90°.</p>
+      <p><strong>2. The Scouting Loop:</strong> Look Left (150°) → Look Center (90°) → Look Right (30°) → Look Center again (90°) — forever.</p>
+
+      <div class="task" data-lesson="3" data-id="l3-m1">
+        <input type="checkbox" id="l3-m1">
+        <div class="task-content">
+          <label class="title" for="l3-m1">🚀 Mission 1: The Fast Scanner 🏃</label>
+          <p><strong>Goal:</strong> Make the robot look left, center, and right much faster.</p>
+          <p><strong>How-to:</strong> Find all the <code>delay(500);</code> lines. Change 500 to 200.</p>
+          <div class="tip"><strong>Secret:</strong> Go too low (like 50) and the robot's neck might get a bit shaky!</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="3" data-id="l3-m2">
+        <input type="checkbox" id="l3-m2">
+        <div class="task-content">
+          <label class="title" for="l3-m2">🚀 Mission 2: The Owl Turn 🦉</label>
+          <p><strong>Goal:</strong> Make the robot look as far left and right as it possibly can.</p>
+          <p><strong>How-to:</strong> Change 150 to 180 (max left) and 30 to 0 (max right).</p>
+          <div class="tip"><strong>Secret:</strong> Servos usually move from 0 to 180. 90 is always the middle!</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="3" data-id="l3-m3">
+        <input type="checkbox" id="l3-m3">
+        <div class="task-content">
+          <label class="title" for="l3-m3">🚀 Mission 3: The Wall Alarm 🚨</label>
+          <p><strong>Goal:</strong> Use your hand to make the robot "yell" through the Serial Monitor when you get too close.</p>
+          <p><strong>How-to:</strong> Make the robot say "TOO CLOSE!" when the distance is less than 10.</p>
+          <div class="tip">
+            <strong>Tip 1 — The "If" Secret:</strong>
+            <pre><code>if (Get_Sonar() &lt; 10) {
+  Serial.print("TOO CLOSE!");
+}</code></pre>
+            <strong>Tip 2:</strong> Place it right after the <code>Get_Sonar</code> line.<br>
+            <strong>Tip 3:</strong> Sensors can see "ghost" numbers occasionally — that's just sensor noise!
+          </div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="3" data-id="l3-m4">
+        <input type="checkbox" id="l3-m4">
+        <div class="task-content">
+          <label class="title" for="l3-m4">🚀 Mission 4: The "Yes" Man ✅</label>
+          <p><strong>Goal:</strong> Make the robot shake its head "yes" instead of "no" (up and down instead of left and right).</p>
+          <p><strong>How-to:</strong> Check how your sensor is mounted — if it can't look up, rewrite the code to switch fast between just two angles: 70 and 110.</p>
+          <div class="tip">
+            <strong>Tip 1:</strong> Try going from 80 to 100 instead of 30 to 150 for a subtle "nod."<br>
+            <strong>Tip 2:</strong> Try <code>delay(100);</code> for a quick gesture instead of a slow turn.<br>
+            <strong>Tip 3:</strong> Move the head gently by hand first to check it moves smoothly.
+          </div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="3" data-id="l3-m5">
+        <input type="checkbox" id="l3-m5">
+        <div class="task-content">
+          <label class="title" for="l3-m5">🚀 Mission 5: The Guard Dog 🐕</label>
+          <p><strong>Goal:</strong> Make the robot stay at 90° for a while, do one quick scan, then go back to waiting.</p>
+          <p><strong>How-to:</strong> At the very end of <code>void loop()</code>, add <code>delay(5000);</code>.</p>
+          <div class="tip">
+            <strong>Tip 1:</strong> The loop runs top to bottom — put the delay at the very bottom.<br>
+            <strong>Tip 2:</strong> End with <code>Servo_1_Angle(90);</code> so it "stares" straight ahead while waiting.<br>
+            <strong>Tip 3:</strong> Change the nap time: 2000 = 2s nap, 10000 = 10s nap.
+          </div>
+        </div>
+      </div>
+
+      <h4>💡 Engineering Pro-Tips</h4>
+      <ul>
+        <li><strong>The "90" Rule:</strong> 90° is always the "Home" position.</li>
+        <li><strong>Watch the Wires:</strong> Turning to 0° or 180° can tangle or pull wires tight.</li>
+        <li><strong>The Serial Monitor:</strong> Click the Magnifying Glass icon to see the distance numbers!</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="lesson">
+    <summary>🧠 Lesson 4 – IR Follow <span class="lesson-progress" data-lesson="4"></span><span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <p>Think of this code as the "Brain" of your robot. It follows a simple loop: <strong>Look, Decide, Act.</strong></p>
+
+      <h4>1. The "Eyes" (Reading the Sensors)</h4>
+      <p>Three sensors on the bottom. <code>Track_Read()</code> looks at the ground: 0 = white floor, 1 = black line. The three sensors combine into a number from 0–7.</p>
+
+      <h4>2. The "Decision" (The Switch Case)</h4>
+      <ul>
+        <li>2 (010): Line in the middle → Drive straight.</li>
+        <li>4 or 6 (100/110): Line sliding left → Turn left.</li>
+        <li>1 or 3 (001/011): Line sliding right → Turn right.</li>
+        <li>7 (111): Big black wall or finish line → Stop.</li>
+      </ul>
+
+      <h4>3. The "Legs" (The Motors)</h4>
+      <p>Positive = forward, negative = backward. To turn, one side goes backward while the other goes forward — like spinning a swivel chair!</p>
+
+      <h4>4. The "Face" (The Emotions)</h4>
+      <p><code>showArrow</code> and <code>eyesBlink</code> don't drive the car, but show you what the "brain" is thinking.</p>
+
+      <div class="task" data-lesson="4" data-id="l4-c1">
+        <input type="checkbox" id="l4-c1">
+        <div class="task-content">
+          <label class="title" for="l4-c1">Challenge 1: The "Top Speed" Test</label>
+          <p>Make the robot go around the track as fast as possible.</p>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="4" data-id="l4-c2">
+        <input type="checkbox" id="l4-c2">
+        <div class="task-content">
+          <label class="title" for="l4-c2">Challenge 2: Reverse</label>
+          <p>Make the robot reverse backwards in a straight line whenever it loses the line.</p>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="4" data-id="l4-c3">
+        <input type="checkbox" id="l4-c3">
+        <div class="task-content">
+          <label class="title" for="l4-c3">Challenge 3: The "Backwards"</label>
+          <p>Make the robot go around the track backwards.</p>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="lesson">
+    <summary>🦇 Lesson 5 – Obstacle Avoidance (Bat Sonar!) <span class="lesson-progress" data-lesson="5"></span><span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <p>Think of this code as your robot's "Spidey-Sense." It looks straight ahead so it doesn't crash into a wall, a chair, or the family dog! It follows a new loop: <strong>Shout, Listen, React.</strong></p>
+
+      <h4>1. The "Bat Ears" (The Ultrasonic Sensor)</h4>
+      <p>Looks like eyes but is actually a tiny speaker and microphone. <code>readUltrasonic()</code> sends an invisible squeak and listens for the echo.</p>
+
+      <h4>2. The "Math Brain" (Calculating Distance)</h4>
+      <p>A built-in stopwatch times how fast the echo returns. Short time = wall is close. Long time = path is clear.</p>
+
+      <h4>3. The "Decision" (The If/Else Block)</h4>
+      <ul>
+        <li>Distance &lt; 15 cm: <strong>Danger!</strong> Hit the brakes.</li>
+        <li>Distance &gt; 15 cm: <strong>Coast is clear!</strong> Keep driving.</li>
+      </ul>
+
+      <h4>4. The "Escape Plan" (The Motors)</h4>
+      <p>Both wheels reverse to back away, then one wheel goes forward and the other backward to spin around and face a new direction.</p>
+    </div>
+  </details>
+
+  <details class="lesson">
+    <summary>💡 Lesson 6 – Light Tracking <span class="lesson-progress" data-lesson="6"></span><span class="chevron">▶</span></summary>
+    <div class="lesson-body">
+      <div class="task" data-lesson="6" data-id="l6-1">
+        <input type="checkbox" id="l6-1">
+        <div class="task-content">
+          <label class="title" for="l6-1">Level 1: The Speed Hacker (Warm-up)</label>
+          <p>Right now, the robot reads the light sensors and prints numbers twice a second.</p>
+          <p><strong>Mission:</strong> Change the code so it reads light ten times a second, then change it to read once every two seconds.</p>
+          <p><strong>Teaches:</strong> The <code>delay()</code> function and how milliseconds work (1000 ms = 1 second).</p>
+          <div class="tip"><strong>Solution:</strong> Find <code>delay(500);</code> → change to <code>delay(100);</code> (fast) or <code>delay(2000);</code> (slow).</div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="6" data-id="l6-2">
+        <input type="checkbox" id="l6-2">
+        <div class="task-content">
+          <label class="title" for="l6-2">Level 2: The Light Detective (Logic &amp; If/Else)</label>
+          <p><strong>Mission:</strong> Add an if/else inside <code>loop()</code>. If the left sensor's number is bigger than the right's, print "The light is on the Left!" Otherwise print "The light is on the Right!"</p>
+          <p><strong>Teaches:</strong> Comparing two variables using <code>&gt;</code>.</p>
+          <div class="tip">
+            <strong>Hint:</strong>
+            <pre><code>if (getLeftPhotosensitiveADCValue &gt; getRightPhotosensitiveADCValue) {
+  Serial.println("The light is on the Left!");
+} else {
+  Serial.println("The light is on the Right!");
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="task" data-lesson="6" data-id="l6-3">
+        <input type="checkbox" id="l6-3">
+        <div class="task-content">
+          <label class="title" for="l6-3">Level 3: The Dark Room Alarm (Variables &amp; Math)</label>
+          <p><strong>Mission:</strong> Create a new <code>int</code> variable called <code>totalLight</code> equal to the left sensor plus the right sensor. If it drops below 1000, print "WARNING: IT IS TOO DARK!"</p>
+          <p><strong>Teaches:</strong> Variable declaration, basic arithmetic, and threshold logic.</p>
+          <div class="tip">
+            <strong>Hint:</strong>
+            <pre><code>int totalLight = getLeftPhotosensitiveADCValue + getRightPhotosensitiveADCValue;
+
+if (totalLight &lt; 1000) {
+  Serial.println("WARNING: IT IS TOO DARK!");
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <footer>Made for a young engineer, one challenge at a time. 🚙</footer>
+</div>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'freenove-challenge-progress';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { state = {}; }
+
+  var checkboxes = Array.prototype.slice.call(document.querySelectorAll('.task input[type="checkbox"]'));
+
+  function save(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function updateProgress(){
+    var total = checkboxes.length;
+    var done = checkboxes.filter(function(cb){ return cb.checked; }).length;
+    document.getElementById('overall-count').textContent = done + ' / ' + total + ' done';
+    document.getElementById('overall-fill').style.width = (total ? (done/total*100) : 0) + '%';
+
+    var lessons = {};
+    checkboxes.forEach(function(cb){
+      var lesson = cb.closest('.task').getAttribute('data-lesson');
+      lessons[lesson] = lessons[lesson] || {total:0, done:0};
+      lessons[lesson].total++;
+      if (cb.checked) lessons[lesson].done++;
+    });
+    Object.keys(lessons).forEach(function(lesson){
+      var el = document.querySelector('.lesson-progress[data-lesson="' + lesson + '"]');
+      if (el) el.textContent = lessons[lesson].done + '/' + lessons[lesson].total;
+    });
+  }
+
+  checkboxes.forEach(function(cb){
+    var id = cb.id;
+    if (state[id]) cb.checked = true;
+    cb.closest('.task').classList.toggle('done', cb.checked);
+
+    cb.addEventListener('change', function(){
+      state[id] = cb.checked;
+      cb.closest('.task').classList.toggle('done', cb.checked);
+      save();
+      updateProgress();
+    });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    if (!confirm('Reset all progress? This cannot be undone.')) return;
+    state = {};
+    save();
+    checkboxes.forEach(function(cb){
+      cb.checked = false;
+      cb.closest('.task').classList.remove('done');
+    });
+    updateProgress();
+  });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
