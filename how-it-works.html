@@ -53,6 +53,38 @@
     padding: 0 1.25rem 5rem;
   }
 
+  /* ---------- Site nav ---------- */
+  .site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.25rem;
+    margin: 0 -1.25rem;
+    background: color-mix(in srgb, var(--panel) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-nav a{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--muted);
+    border: 1px solid transparent;
+  }
+  .site-nav a:hover{ color: var(--text); }
+  .site-nav a.active{
+    color: #fff;
+    background: linear-gradient(135deg, var(--hero-1), var(--hero-2));
+  }
+
   header.hero{
     text-align: center;
     padding: 2.75rem 1.5rem 2.25rem;
@@ -74,20 +106,6 @@
     max-width: 42rem;
     font-size: 1.02rem;
   }
-  .back-link{
-    display: inline-block;
-    margin-top: 1rem;
-    color: #fff;
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.4);
-    padding: 0.4rem 1rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-  .back-link:hover{ background: rgba(255,255,255,0.3); }
-
   .intro-card{
     background: var(--panel);
     border: 1px solid var(--border);
@@ -223,11 +241,15 @@
 <body>
 <div class="wrap">
 
+  <nav class="site-nav">
+    <a href="index.html">🎯 Challenges</a>
+    <a href="how-it-works.html" class="active">📖 How the Code Works</a>
+  </nav>
+
   <header class="hero">
     <div class="badge-emoji">📖🔍</div>
     <h1>How the Code Works</h1>
     <p>Every example program in the kit, explained in plain English. Read this next to the real code — open the .ino file, find the part being talked about, and see if you can spot it.</p>
-    <a class="back-link" href="index.html">⬅ Back to Challenges</a>
   </header>
 
   <div class="intro-card">

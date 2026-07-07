@@ -57,6 +57,38 @@
     padding: 0 1.25rem 5rem;
   }
 
+  /* ---------- Site nav ---------- */
+  .site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.25rem;
+    margin: 0 -1.25rem;
+    background: color-mix(in srgb, var(--panel) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-nav a{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--muted);
+    border: 1px solid transparent;
+  }
+  .site-nav a:hover{ color: var(--text); }
+  .site-nav a.active{
+    color: #fff;
+    background: linear-gradient(135deg, var(--hero-1), var(--hero-2));
+  }
+
   /* ---------- Hero ---------- */
   header.hero{
     text-align: center;
@@ -79,20 +111,6 @@
     max-width: 40rem;
     font-size: 1.05rem;
   }
-  .back-link{
-    display: inline-block;
-    margin-top: 1.1rem;
-    color: #fff;
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.4);
-    padding: 0.4rem 1rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-  .back-link:hover{ background: rgba(255,255,255,0.3); }
-
   /* ---------- Stats bar ---------- */
   .stats-row{
     display: grid;
@@ -343,11 +361,15 @@
 <body>
 <div class="wrap">
 
+  <nav class="site-nav">
+    <a href="index.html" class="active">🎯 Challenges</a>
+    <a href="how-it-works.html">📖 How the Code Works</a>
+  </nav>
+
   <header class="hero">
     <div class="badge-emoji">🚗🏁</div>
     <h1>Freenove 4WD Car Challenges</h1>
     <p>Your mission book for the Freenove 4WD Car. Work through each lesson, hit "Mark Complete" as you finish challenges, and don't be afraid to break things — that's how you learn to code!</p>
-    <a class="back-link" href="how-it-works.html">📖 How the Code Works</a>
   </header>
 
   <div class="stats-row">
