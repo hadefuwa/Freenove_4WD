@@ -295,11 +295,12 @@ void oa_CalculateVoltageCompensation() {
 }
 
 /////////////////////Photosensitive drive area//////////////////////////
-// IMPORTANT ELECTRONICS NOTE: a photoresistor's readings work "backwards"
-// from what you might expect - MORE light on the sensor means LESS
-// resistance, which the Pico's analogRead() turns into a SMALLER number.
-// So throughout this file: a bigger ADC number = it's darker there, and a
-// smaller ADC number = it's brighter there. Keep that in mind below!
+// SENSOR CALIBRATION NOTE (measured on the real hardware): a bigger ADC
+// number here means MORE light (brighter), and a smaller number means LESS
+// light (darker) - roughly: under 10 is pitch black, under 50 is very dark,
+// around 250 is bright, and 1000+ is super bright. So throughout this file:
+// a bigger ADC number = it's brighter there, and a smaller ADC number = it's
+// darker there. Keep that in mind below!
 int light_init_value = 0;  //Set the car's initial environment ADC value
 //Photosensitive initialization
 // Configures both photoresistor pins as inputs so we can read light levels
@@ -310,13 +311,13 @@ void Photosensitive_Setup(void) {
 }
 
 // Reads the LEFT photoresistor and returns its raw ADC value (0-1023).
-// Remember: a smaller number here means the left sensor is seeing MORE light.
+// Remember: a bigger number here means the left sensor is seeing MORE light.
 int getLeftPhotosensitiveADCValue(void) {
   int photosensitiveADCValue = analogRead(Left_PHOTOSENSITIVE_PIN);
   return photosensitiveADCValue;
 }
 // Reads the RIGHT photoresistor and returns its raw ADC value (0-1023).
-// Same rule as the left sensor: smaller number = more light on the right.
+// Same rule as the left sensor: bigger number = more light on the right.
 int getRightPhotosensitiveADCValue(void) {
   int photosensitiveADCValue = analogRead(Right_PHOTOSENSITIVE_PIN);
   return photosensitiveADCValue;
@@ -326,10 +327,9 @@ int getRightPhotosensitiveADCValue(void) {
 #define LIGHT_MODE_CRUISE_SPEED (25+oa_VoltageCompensationToSpeed)     //0-100
 bool isLightModeFirstStarting = true;  //is_light_mode_first_starting
 // THE MAIN LIGHT-CHASING LOGIC. Called every time through loop(). It reads
-// both light sensors, compares them, and steers the car toward whichever
-// side is brighter by making that side's wheels spin a bit faster than the
-// other side's - just like how you'd paddle harder on one side of a canoe
-// to turn it.
+// both light sensors, compares them, and speeds up the wheels on whichever
+// side is brighter while slowing the wheels on the darker side, steering
+// the car one way or the other depending on which side sees more light.
 void Light_Car() {
     // The very first time this function runs, give the car a quick little
     // nudge forward. This "un-sticks" the motors/gears so the very first
@@ -344,9 +344,9 @@ void Light_Car() {
     int leftLightValue = getLeftPhotosensitiveADCValue();
     int rightLightValue = getRightPhotosensitiveADCValue();
     // diffLightValue tells us which side is brighter and by how much.
-    // Since smaller ADC = brighter, (right - left) is POSITIVE when the LEFT
-    // side is brighter (right's bigger "darker" number minus left's smaller
-    // "brighter" number), and NEGATIVE when the RIGHT side is brighter.
+    // Since bigger ADC = brighter, (right - left) is POSITIVE when the RIGHT
+    // side is brighter (right's bigger "brighter" number minus left's smaller
+    // "darker" number), and NEGATIVE when the LEFT side is brighter.
     // We divide by 8 just to shrink the raw sensor difference down to a
     // gentler number that's more sensible to add/subtract from a motor speed.
     int diffLightValue = (rightLightValue - leftLightValue) / 8;
@@ -357,13 +357,17 @@ void Light_Car() {
     if (leftLightValue > LIGHT_MIN_MOVED && rightLightValue > LIGHT_MIN_MOVED) {
       // Start from a steady "cruise" speed for both sides, then steer by
       // giving the two sides opposite adjustments based on diffLightValue:
-      //  - If the LEFT is brighter, diffLightValue is positive, so the left
-      //    wheels (lsp) get SLOWER and the right wheels (rsp) get FASTER.
-      //    Making the right side push harder turns the car toward the left,
-      //    i.e. toward the brighter light - exactly what we want!
-      //  - If the RIGHT is brighter, diffLightValue is negative, so it's the
-      //    opposite: left wheels speed up and right wheels slow down,
-      //    steering the car toward the right, toward that brighter light.
+      //  - If the RIGHT is brighter, diffLightValue is positive, so the left
+      //    wheels (lsp) get SLOWER and the right wheels (rsp) get FASTER -
+      //    i.e. the wheels on the BRIGHTER side speed up and the wheels on
+      //    the DARKER side slow down.
+      //  - If the LEFT is brighter, diffLightValue is negative, so it's the
+      //    opposite: left wheels speed up and right wheels slow down - again,
+      //    the brighter side's wheels get faster.
+      // Whether "speed up the brighter side's wheels" makes the car curve
+      // TOWARD or AWAY FROM the light depends on exactly how your wheels and
+      // motors are wired up - the best way to know for sure is to shine a
+      // torch at one sensor and watch which way your own car actually turns!
       // constrain() just makes sure the final speed never goes outside the
       // motors' valid -100 to 100 range.
       int lsp = constrain(LIGHT_MODE_CRUISE_SPEED - diffLightValue, -100, 100);

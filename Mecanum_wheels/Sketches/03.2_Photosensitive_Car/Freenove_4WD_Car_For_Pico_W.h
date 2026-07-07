@@ -73,7 +73,7 @@ void oa_CalculateVoltageCompensation(void);
 #define Right_PHOTOSENSITIVE_PIN   27
 
 void Photosensitive_Setup(void);           //Photosensitive initialization
-int getLeftPhotosensitiveADCValue(void);              //Reads the left light sensor (bigger number = darker, smaller number = brighter, roughly 0-1023)
+int getLeftPhotosensitiveADCValue(void);              //Reads the left light sensor (bigger number = brighter, smaller number = darker, roughly 0-1023)
 int getRightPhotosensitiveADCValue(void);              //Reads the right light sensor (same scale as the left one)
 void Light_Car(void);               //Reads both light sensors and drives the wheels toward the brighter side
 

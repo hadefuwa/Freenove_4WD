@@ -12,10 +12,10 @@
 // voltage using its ADC (Analog-to-Digital Converter). The sensor is wired
 // up so that the voltage on the pin changes along with the light level, and
 // analogRead() converts that voltage into a plain number (a "raw ADC value")
-// that our code can use. On this board, more light generally gives a
-// DIFFERENT (not necessarily bigger) number than darkness - the important
-// thing for this sketch is comparing the left and right readings to each
-// other, so you can tell which side has more/less light shining on it.
+// that our code can use. On this board, LOWER numbers mean DARKER and HIGHER
+// numbers mean BRIGHTER: roughly under 10 is pitch black, under 50 is very
+// dark, around 250 is bright, and 1000+ is super bright (like a torch shining
+// right on the sensor).
 // ---------------------------------------------------------------------------
 
 // GPIO pin numbers on the Pico that the left/right photosensitive sensors are wired to.
@@ -23,8 +23,7 @@
 #define Right_PHOTOSENSITIVE_PIN 27 //Define the pins that Raspberry Pi Pico reads photosensitive
 // These variables remember the most recent raw ADC reading (a whole number,
 // typically 0-4095 on the Pico's 12-bit ADC) from each sensor, so we can
-// print them later. Bigger/smaller doesn't map simply to "brighter", so just
-// compare the two numbers to see which side is getting more/less light.
+// print them later. Lower = darker, higher = brighter (see the scale above).
 int getLeftPhotosensitiveADCValue;  //Define a variable to store the left photosensitive adc value
 int getRightPhotosensitiveADCValue; //Define a variable to store the right photosensitive adc value
 

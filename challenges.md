@@ -377,16 +377,18 @@ if (getLeftPhotosensitiveADCValue > getRightPhotosensitiveADCValue) {
 
 Let's see if he can create a brand new variable and use it to trigger an alarm.
 
-**The Mission:** Create a new `int` variable inside the loop called `totalLight`. Make it equal to the left sensor plus the right sensor. If `totalLight` drops below a certain number (like 1000), print "WARNING: IT IS TOO DARK!"
+**The Mission:** Create a new `int` variable inside the loop called `totalLight`. Make it equal to the left sensor plus the right sensor. If `totalLight` drops below 100, print "WARNING: IT IS TOO DARK!"
 
 **What this teaches:** Variable declaration inside a scope, basic arithmetic (`+`), and threshold logic.
+
+**Good to know:** On this sensor, LOWER numbers mean DARKER and HIGHER numbers mean BRIGHTER — the opposite of what you might expect! Roughly: under 10 = pitch black, under 50 = very dark, around 250 = bright, and 1000+ = super bright (like a torch shining right on it).
 
 **The Hint:**
 
 ```cpp
 int totalLight = getLeftPhotosensitiveADCValue + getRightPhotosensitiveADCValue;
 
-if (totalLight < 1000) {
+if (totalLight < 100) {
   Serial.println("WARNING: IT IS TOO DARK!");
 }
 ```

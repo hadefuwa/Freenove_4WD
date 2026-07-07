@@ -6,10 +6,11 @@
 **********************************************************************/
 #include <Arduino.h>
 #include "Freenove_4WD_Car_For_Pico_W.h"
-// This sketch makes the car chase the brightest light it can see.
-// It reads two light sensors (one on the left, one on the right) and steers
-// toward whichever side is brighter. All the sensor-reading and motor logic
-// lives in Freenove_4WD_Car_For_Pico_W.cpp, inside a function called Light_Car().
+// This sketch steers the car based on which side sees more light.
+// It reads two light sensors (one on the left, one on the right), then speeds
+// up the wheels on the brighter side and slows the wheels on the darker side.
+// All the sensor-reading and motor logic lives in
+// Freenove_4WD_Car_For_Pico_W.cpp, inside a function called Light_Car().
 
 
 // setup() runs ONCE, right when the Pico boots up.
