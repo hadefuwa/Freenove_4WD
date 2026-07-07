@@ -319,6 +319,49 @@
   }
   .tip strong{ color: var(--text); }
 
+  /* ---------- Step sections (Upload / Read / Challenge) ---------- */
+  .step{ margin: 1.3rem 0; }
+  .step:first-child{ margin-top: 0.8rem; }
+  .step-title{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    color: var(--lc);
+  }
+  .step-title::before{
+    content: '';
+    flex-shrink: 0;
+  }
+  .view-code-primary{
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.1rem;
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--lc) 45%, transparent);
+  }
+  .lesson-body pre.code-block{
+    background: #1e1b2e;
+    color: #e5e1f7;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    max-height: 480px;
+    overflow: auto;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin: 0 0 0.9rem;
+  }
+  .code-block code{
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    white-space: pre;
+  }
+
   .how-it-works{
     background: var(--bg);
     border: 1px solid var(--border);
@@ -519,12 +562,50 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>00.0_Servo_90</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/00.0_Servo_90" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Set the Angle value of servo to 90°
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+// This brings in all the servo functions (Servo_Setup, Servo_1_Angle, etc.)
+// that are written in Freenove_4WD_Car_For_Pico_W.cpp. Think of the .h file
+// as a "menu" of what's available, and the .cpp file as where it's cooked up.
+#include "Freenove_4WD_Car_For_Pico_W.h"
+
+// setup() runs exactly ONCE, right when the Pico powers on or is reset.
+// It's the place to get hardware ready before the main program starts.
+void setup() {
+  Servo_Setup();  // Get the servo's PWM signal ready to use (see the .cpp file for details)
+}
+
+// loop() runs over and over again, forever, after setup() finishes.
+// This sketch just keeps telling the steering servo to point at 90 degrees,
+// which is "straight ahead" for a servo that can swing between 0-180 degrees.
+void loop() {
+  Servo_1_Angle(90);  // Command servo 1 to move to (and hold) the 90 degree position
+  delay(1000);         // Wait 1000 milliseconds (1 second) before repeating the command
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This little program tells the car's steering servo to point straight ahead (90 degrees out of its 0–180 degree range) so you can check it's mounted correctly before doing anything fancier.</p>
           <p>It teaches core C++/Arduino ideas: <code>setup()</code> runs once to get hardware ready while <code>loop()</code> repeats forever; functions can take parameters (like an angle in degrees) and be reused from other files via a header (<code>.h</code>) file; and how a servo motor is actually controlled using PWM — rapid on/off pulses whose width tells the servo which angle to move to.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/00.0_Servo_90" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
   </div>
@@ -542,7 +623,117 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>01.1_Car_Move_and_Turn</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.1_Car_Move_and_Turn" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+#include "Freenove_4WD_Car_For_Pico_W.h"
+
+// setup() runs ONCE when the board powers on or is reset.
+// It's the perfect place to prepare things before the main program starts.
+void setup() {
+  Serial.begin(9600);   //Start the serial connection so we could print debug messages to a computer if we wanted to (not used in this sketch)
+  Servo_Setup();        //Get the steering/pan servo ready (not driven in this sketch, but must still be initialized)
+  Motor_Setup();  //Motor Initializes
+}
+
+// loop() runs over and over again, forever, right after setup() finishes.
+// This is where we tell all 4 mecanum wheels what to do, one movement at a time.
+//
+// Motor_M_Move(M1, M2, M3, M4) sets the speed of each wheel independently:
+//   M1 = front-left wheel   M2 = back-left wheel
+//   M3 = front-right wheel  M4 = back-right wheel
+// Each value is a PWM speed from -100 (full speed backward) to 100 (full speed forward),
+// where 0 means "stopped". PWM (Pulse Width Modulation) is how we get "in-between" speeds
+// out of a motor that's really just an on/off switch: the code flips the motor on and off
+// very fast, and the fraction of time it's "on" controls how fast it spins.
+//
+// Mecanum wheels have rollers mounted at 45 degrees around their rim (instead of a normal
+// flat tyre). That means a spinning mecanum wheel doesn't just push the car forward/back —
+// part of its force also pushes the car sideways. By choosing different speeds and
+// directions for each of the 4 wheels, those sideways and forward/back forces can be made
+// to cancel out or add up in different combinations, which is how the car can drive
+// forward, spin on the spot, slide sideways, or glide diagonally, all without turning
+// the wheels themselves like a steering wheel would.
+void loop() {
+  Motor_M_Move(50, 50, 50, 50);  //Farward
+  // All 4 wheels spin forward at the same speed. Each wheel's small sideways push is
+  // cancelled out by the wheel diagonally opposite it, leaving only forward motion.
+  delay(1000);  //Keep driving for 1000 milliseconds (1 second) before the next command
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(-50, -50, -50, -50);  //Backward
+  // Same idea as forward, but every wheel spins the opposite way.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(-50, -50, 50, 50);  //Turn left
+  // Left wheels (M1, M2) spin backward while right wheels (M3, M4) spin forward.
+  // Their forward/backward pushes now oppose each other instead of adding up, so the car
+  // doesn't travel forward at all — instead it rotates on the spot, turning left, like
+  // paddling a canoe backward on one side and forward on the other.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(50, 50, -50, -50);  //Turn right
+  // The mirror image of "Turn left": left wheels forward, right wheels backward,
+  // spinning the car the opposite way on the spot.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(-50, 50, -50, 50);  //Move left
+  // Front wheels (M1, M3) spin one way and back wheels (M2, M4) spin the other way.
+  // This cancels out any forward/backward motion, but the sideways force from every
+  // wheel's angled rollers points the same way, so the car slides left without turning
+  // to face a new direction — this is called "strafing".
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(50, -50, 50, -50);  //Move right
+  // The exact opposite pattern to "Move left", so the sideways forces add up pointing
+  // right instead, making the car strafe right.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(-50, 50, -50, 50);  //Move diagonally upward to the left
+  // Note: this uses the exact same wheel speeds as the "Move left" strafe above — on this
+  // kit's wheel layout, this pattern produces a sideways/diagonal glide rather than a pure
+  // forward diagonal, so the visible movement will look similar to strafing left.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(0, -50, 0, -50);  //Move diagonally downward to the right
+  // Only the two back wheels (M2, M4) are driven; the front wheels are left stopped.
+  // Driving just one diagonal pair of wheels means their forward/back push and sideways
+  // push don't get cancelled by a partner wheel, so the car glides diagonally instead of
+  // moving in a straight line.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(50, 0, 50, 0);  //Move diagonally upward to the right
+  // Only the two front wheels (M1, M3) are driven forward; the back wheels are left
+  // stopped, sending the car gliding diagonally forward-and-sideways.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+  Motor_M_Move(-50, 0, -50, 0);  //Move diagonally downward to the left
+  // Same idea as above, but the front wheels spin backward instead, sending the car
+  // gliding diagonally the opposite way.
+  delay(1000);
+  Motor_M_Move(0, 0, 0, 0);  //Stop
+  delay(1000);
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program teaches the robot car to drive in every direction using its four special "mecanum" wheels, which have angled rollers that let the car go forward, spin in place, slide sideways, or glide diagonally — all without turning the wheels like a steering wheel.</p>
           <p>The "Magic Command":</p>
@@ -554,8 +745,11 @@
           </ul>
           <p>The real lesson is in the <em>pattern</em> of numbers: matching signs make the car go straight, opposite left/right signs make it spin, and opposite front/back signs make it slide sideways or diagonally.</p>
         </div>
+        </div>
 
-        <div class="try-it-heading">🏆 Try it: Challenges</div>
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <div class="try-it-heading">🏆 Try it: Challenges</div>
 
         <div class="task" data-lesson="01.1" data-id="l1-c1">
           <div class="task-content">
@@ -587,8 +781,7 @@
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.1_Car_Move_and_Turn" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
       </div>
     </details>
 
@@ -600,12 +793,58 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>01.2_Servo</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.2_Servo" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : use servo.
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+// This example shows how to control a servo motor - a small motor that can
+// turn to a specific angle (instead of just spinning forever like a normal
+// motor). This car uses one servo to pan (turn left/right) a sensor or
+// camera mount. We'll sweep it back and forth between 30 and 150 degrees
+// to see it move.
+#include "Freenove_4WD_Car_For_Pico_W.h"
+
+// setup() runs once, automatically, when the board powers on or resets.
+// It's the perfect place to get hardware ready before the main program starts.
+void setup()
+{
+  Servo_Setup();       //Servo initialization: turns on the PWM signal generator for the servo pin
+  Servo_1_Angle(90);   //Move servo 1 straight to its middle position (90 degrees) as a starting point
+  delay(1000);         //Wait 1000 milliseconds (1 second) so the servo has time to reach 90 degrees
+}
+
+// loop() runs over and over again, forever, right after setup() finishes.
+// Each call below sweeps the servo smoothly from one angle to another,
+// one degree at a time, so the arm's motion looks steady instead of jumpy.
+void loop()
+{
+  // Servo 1 motion path; 90°- 30°- 150°- 90°
+   Servo_Sweep(1, 90, 30);    // Sweep from the middle (90°) to the left limit (30°)
+   Servo_Sweep(1, 30, 150);   // Sweep all the way across to the right limit (150°)
+   Servo_Sweep(1, 150, 90);   // Sweep back to the middle (90°), then loop() repeats forever
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program controls a servo motor — a small motor that can turn to a specific angle and hold it, unlike a regular motor that just spins. It first sets the servo to its middle position (90°), then sweeps it smoothly back and forth between 30° and 150°, forever, moving one degree at a time with tiny pauses in between.</p>
           <p>It teaches the <code>setup()</code>/<code>loop()</code> structure, functions with parameters (like <code>Servo_1_Angle(degrees)</code> and <code>Servo_Sweep(start, end)</code>), and how PWM signals are used to tell real hardware what to do.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.2_Servo" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -617,12 +856,46 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>01.3_Buzzer</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.3_Buzzer" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Use buzzer
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+#include "Freenove_4WD_Car_For_Pico_W.h"  // Brings in all the pin numbers and functions for the car (motors, servo, buzzer)
+
+// setup() runs exactly ONCE, right when the board powers on or is reset.
+// It's the perfect place to get things ready before the main action starts.
+void setup() {
+  Buzzer_Setup();      // Tell the Pico W that the buzzer pin will be used to SEND a signal out (an "output")
+  Buzzer_Alert(4, 3);  // Beep the buzzer: 4 quick beeps per burst, repeated 3 times in a row
+}
+
+// loop() runs over and over again, forever, right after setup() finishes.
+// Here it just waits - all the beeping already happened once in setup().
+void loop() {
+  delay(1000);  // Pause for 1000 milliseconds (1 second) before checking loop() again
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program makes the onboard buzzer beep out a pattern of sounds — 4 short beeps, repeated 3 times.</p>
           <p>It teaches <code>setup()</code>/<code>loop()</code>, and introduces <strong>digital output</strong> — a computer pin can only be fully ON (HIGH) or fully OFF (LOW), and flipping a pin HIGH and LOW very fast is exactly how the buzzer makes a musical pitch. It also shows how breaking a task into small, well-named functions (<code>Buzzer_Setup</code>, <code>Buzzer_Alert</code>, <code>freq</code>) makes code easier to read and reuse.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.3_Buzzer" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -634,12 +907,57 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>01.4_Battery_level</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.4_Battery_level" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Read battery voltage.
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+#include "Freenove_4WD_Car_For_Pico_W.h"
+// This header brings in all the car's helper functions, including the two
+// battery-reading functions we use below: Get_Battery_Voltage_ADC() and
+// Get_Battery_Voltage(). They are actually defined in
+// Freenove_4WD_Car_For_Pico_W.cpp - have a look there for the full story on
+// how a raw ADC number gets turned into a real voltage.
+
+// setup() runs ONCE, right when the Pico W powers on or is reset.
+// It's the place to get everything ready before the main program starts.
+void setup() {
+  Serial.begin(115200);                     //Start the Serial connection so we can send text to the computer. 115200 is the "baud rate" - how fast the bits travel; both sides must agree on this number.
+  Servo_Setup();    //Get the servo motor ready to move (not actually used by this battery-reading demo, but the shared setup code always initializes it).
+}
+
+// loop() runs over and over again, forever, after setup() finishes.
+// Each time through, it reads the battery and prints the result, then
+// waits a bit before doing it all again - like a repeat block in Scratch.
+void loop() {
+  Serial.print("Battery ADC : ");
+  Serial.println(Get_Battery_Voltage_ADC());//Ask for the raw ADC reading (a whole number, roughly 0-1023) and print it as-is, with no conversion to volts yet.
+  Serial.print("Battery Voltage : ");
+  Serial.print(Get_Battery_Voltage());      //Ask for the reading again, but this time already converted into real volts (a decimal number like 7.4).
+  Serial.println("V");
+  delay(300);                               //Pause for 300 milliseconds (0.3 seconds) so the readings don't scroll by too fast to read.
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program measures how much charge is left in the battery and prints it to the computer screen every 0.3 seconds. It works by reading a voltage through a "voltage divider" circuit into the Pico's ADC (analog-to-digital converter), which turns a real-world voltage into a number between 0 and 1023, then uses a bit of math to convert that number back into real volts.</p>
           <p>It shows off functions that take inputs and return a result (like <code>Get_Battery_Voltage()</code> returning a decimal volts value), and simple arithmetic turning raw sensor data into something meaningful.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.4_Battery_level" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -652,13 +970,123 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>01.5_Matrix</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.5_Matrix" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Test the expression module
+  Auther      : www.freenove.com
+  Modification: 2023/04/10
+**********************************************************************/
+// This library gives us the "Freenove_VK16K33" class, which knows how to
+// talk to the LED matrix driver chip (the VK16K33) over the car's I2C bus.
+#include "Freenove_VK16K33_Lib.h"
+
+// "matrix" is our one object for controlling BOTH 8x8 LED matrices (the
+// car's two "eyes"). We'll call functions on it, like matrix.init(...).
+Freenove_VK16K33 matrix = Freenove_VK16K33();
+
+// ---------------------------------------------------------------------
+// HOW A PICTURE GETS STORED AS NUMBERS
+// ---------------------------------------------------------------------
+// Each LED matrix is a grid of 8x8 tiny lights (64 LEDs total). To draw a
+// picture, we need to tell the chip exactly which of those 64 lights to
+// turn on. Instead of writing 64 separate true/false values, we use a
+// clever shortcut: ONE ROW OF 8 LEDS = ONE BYTE (8 bits).
+//
+// A "byte" is just a number made of 8 binary digits (bits), each one a 0
+// or a 1. If we say "1 = LED on" and "0 = LED off", then a single byte can
+// describe a whole row of 8 dots at once!
+//
+// Example: the hex number 0x3C means:
+//   0x3C  -&gt;  binary 0 0 1 1 1 1 0 0
+//              LED#:  1 2 3 4 5 6 7 8
+// So 0x3C lights up the 4 middle LEDs (numbers 3,4,5,6) and leaves the
+// 2 LEDs on each end turned off. Reading the picture is just reading
+// which bits are 1!
+//
+// "0x" just means "the number after this is written in hexadecimal
+// (base 16) instead of normal base 10" - it's a compact way to write
+// binary, because each hex digit = exactly 4 bits.
+//
+// Each array below holds 8 bytes = 8 rows = one complete 8x8 picture.
+// Stacking several of these 8-byte pictures one after another lets us
+// store several "video frames" that we can flip through to make an
+// animation (like a flipbook)!
+// ---------------------------------------------------------------------
+
+// x_array[][8]: a list of pictures (frames) for the LEFT eye matrix.
+// Each row of 8 bytes below is one frame; each byte is one row of dots.
+byte x_array[][8] = {//Put the data into the left LED matrix
+  //////////////////////////////////////////////
+  0x00, 0x18, 0x24, 0x42, 0x42, 0x24, 0x18, 0x00,
+  0x00, 0x18, 0x24, 0x5A, 0x5A, 0x24, 0x18, 0x00,
+  //////////////////////////////////////////////
+};
+
+// y_array[][8]: same idea as x_array, but these frames are shown on the
+// RIGHT eye matrix at the same time, so both eyes animate together.
+byte y_array[][8] = {//Put the data into the right LED matrix
+  //////////////////////////////////////////////
+  0x00, 0x18, 0x24, 0x42, 0x42, 0x24, 0x18, 0x00,
+  0x00, 0x18, 0x24, 0x5A, 0x5A, 0x24, 0x18, 0x00,
+  /////////////////////////////////////////////////
+};
+
+// setup() runs once, automatically, when the board powers on or resets.
+// Here we wake up the LED matrix driver chip and turn off its built-in
+// blinking effect so we can control the blinking ourselves in loop().
+void setup()
+{
+  // Start (initialise) the matrix driver chip. 0x71 is its I2C address -
+  // like a phone number the Pico uses to talk to this specific chip.
+  matrix.init(0x71);
+  // Turn off the chip's automatic blink feature (we want steady eyes,
+  // and we control any "blinking" ourselves by changing frames).
+  matrix.setBlink(VK16K33_BLINK_OFF);
+}
+
+// loop() runs over and over, forever, after setup() finishes.
+// Each pass, we play through all the eye frames with 500ms between them.
+void loop()
+{
+  showArray(500);
+}
+
+// showArray(): displays every frame stored in x_array/y_array, one after
+// another, pausing "delay_ms" milliseconds between each one. This is what
+// makes the still pictures look like a simple blinking animation.
+// Parameter: delay_ms - how many milliseconds to hold each frame on screen.
+void showArray(int delay_ms)
+{
+  // Work out how many frames (pictures) we have, by dividing the total
+  // array size by the size of just one frame (8 bytes).
+  int count = sizeof(x_array) / sizeof(x_array[0]);
+  for (int i = 0; i &lt; count; i++)
+  {
+    // Send frame "i" to both matrices at once (left eye + right eye).
+    matrix.showStaticArray(x_array[i], y_array[i]);
+    // Wait here so the frame stays visible before we move to the next one.
+    delay(delay_ms);
+  }
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>Those two squares on the front of your car are like the robot's "eyes." Each 8×8 grid of tiny lights is drawn using bytes — one byte per row, where each of its 8 bits is either a 0 (LED off) or 1 (LED on), written compactly in hex like <code>0x18</code>. The program stores several of these 8-row "frames" in arrays (<code>x_array</code>, <code>y_array</code>) and loops through them to create a simple flipbook-style animation.</p>
           <p>It teaches arrays, binary/hex number representation, bit patterns, and using loops to repeat an action over and over forever. Here are 5 missions for you to try!</p>
         </div>
+        </div>
 
-        <div class="try-it-heading">🏆 Try it: Missions</div>
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <div class="try-it-heading">🏆 Try it: Missions</div>
 
         <div class="task" data-lesson="01.5" data-id="l2-m1">
           <div class="task-content">
@@ -718,8 +1146,7 @@
           <li><strong>The "Zapped" Rule:</strong> If your code won't upload, hit Undo (<code>Ctrl+Z</code>) to go back to when it worked.</li>
           <li><strong>The "Drawing" Trick:</strong> Search for an "8x8 LED Matrix Tool" online — click the dots, get the <code>0x</code> codes!</li>
         </ul>
-
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.5_Matrix" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
       </div>
     </details>
 
@@ -731,12 +1158,46 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>01.6_WS2812</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.6_WS2812" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Basic usage of LEDPixel, 
+                Make the strip light up in different colors gradually.
+  Auther      : www.freenove.com
+  Modification: 2023/04/10
+**********************************************************************/
+#include &lt;Arduino.h&gt;             // Core Arduino functions (pinMode, millis, etc.)
+#include &lt;Adafruit_NeoPixel.h&gt;   // Library that knows how to talk to WS2812 RGB LEDs
+#include "Freenove_4WD_Car_WS2812.h" // Our own helper functions for the LED strip, declared in this header
+
+// setup() runs ONCE when the board powers on or resets.
+void setup() {
+ WS2812_Setup();      // Get the LED strip ready: connect to it and pick starting colors
+}
+
+// loop() runs OVER AND OVER FOREVER after setup() finishes.
+void loop() {
+  WS2812_Show(5);   // Mode 5 = "rainbow" mode. Try changing this number (0-5) to see other light patterns!
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program controls the strip of tiny RGB LEDs on the front of the car, making them glow, chase, blink, breathe, and swirl through rainbow colors. It shows how every light color is really just a mix of Red, Green, and Blue numbers from 0–255, and how a <code>for</code> loop can update each LED one at a time.</p>
           <p>It also introduces functions as reusable "recipes" (like <code>WS2812_Setup</code> and <code>WS2812_Show</code>) and uses <code>millis()</code> timing so the lights can animate smoothly without ever freezing the rest of the program.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.6_WS2812" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
   </div>
@@ -754,14 +1215,67 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>02.1_Ultrasonic_Ranging</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/02.1_Ultrasonic_Ranging" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Ultrasonic ranging and servo.
+  Auther      : www.freenove.com
+  Modification: 2023/04/13
+**********************************************************************/
+#include &lt;Arduino.h&gt;
+#include "Freenove_4WD_Car_For_Pico_W.h"
+
+// setup() runs once when the board powers on or resets.
+// Here we get the ultrasonic sensor and the pan servo ready to use,
+// and point the servo straight ahead (90 degrees) before the main loop starts.
+void setup() {
+  Serial.begin(115200);//Open the serial port and set the baud rate to 115200 bits/second, so Serial Monitor can show our printed text
+  Ultrasonic_Setup();  //Ultrasonic module initialization
+  Servo_Setup();       //Servo motor initialization
+  Servo_1_Angle(90);   //Set the initial value of Servo 1 to 90 degrees (straight ahead)
+  delay(500);          //Wait for the servo to arrive at the specified location - motors need a moment to physically move!
+}
+
+// loop() runs over and over forever after setup() finishes.
+// Each time through, the servo turns the ultrasonic sensor to a new angle,
+// waits for it to get there, then "pings" for a distance reading and prints it.
+// The pattern is: right -&gt; center -&gt; left -&gt; center, like a head slowly looking around.
+void loop() {
+  Servo_1_Angle(150);  //Turn servo 1 to 150 degrees (look right)
+  Serial.print("Distance: " + String(Get_Sonar()) + "\n");//Ping and print the distance to whatever is in front of the sensor now
+  delay(500);          //Give the servo time to finish turning and the reading time to settle before moving on
+
+  Servo_1_Angle(90);   //Turn servo 1 to 90 degrees (back to center)
+  Serial.print("Distance: " + String(Get_Sonar()) + "\n");//Print ultrasonic distance
+  delay(500);
+
+  Servo_1_Angle(30);   //Turn servo 1 to 30 degrees (look left)
+  Serial.print("Distance: " + String(Get_Sonar()) + "\n");//Print ultrasonic distance
+  delay(500);
+
+  Servo_1_Angle(90);   //Turn servo 1 to 90 degrees (back to center, ready to repeat the sweep)
+  Serial.print("Distance: " + String(Get_Sonar()) + "\n");//Print ultrasonic distance
+  delay(500);
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program makes the ultrasonic sensor "look around" by riding on a servo that swings it right, center, left, and back to center, over and over. Each time it stops at a new angle, the code sends out a tiny, silent sound pulse and times how long the echo takes to bounce back — just like a bat uses echolocation — then does some quick math (distance = time × speed of sound ÷ 2) to turn that time into a distance in centimetres.</p>
           <p><strong>1. The Startup (setup):</strong> Wakes up the Serial Port, gets the sensor and servo ready, looks straight ahead at 90°.<br>
           <strong>2. The Scouting Loop:</strong> Look Left (150°) → Look Center (90°) → Look Right (30°) → Look Center again (90°) — forever.</p>
         </div>
+        </div>
 
-        <div class="try-it-heading">🏆 Try it: Missions</div>
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <div class="try-it-heading">🏆 Try it: Missions</div>
 
         <div class="task" data-lesson="02.1" data-id="l3-m1">
           <div class="task-content">
@@ -834,8 +1348,7 @@
           <li><strong>Watch the Wires:</strong> Turning to 0° or 180° can tangle or pull wires tight.</li>
           <li><strong>The Serial Monitor:</strong> Click the Magnifying Glass icon to see the distance numbers!</li>
         </ul>
-
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/02.1_Ultrasonic_Ranging" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
       </div>
     </details>
 
@@ -847,12 +1360,50 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>02.2_Ultrasonic_Ranging_Car</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/02.2_Ultrasonic_Ranging_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Description : Ultrasonic Car.
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+#include &lt;Arduino.h&gt;              // Core Arduino functions (pinMode, digitalWrite, delay, etc.)
+#include "Freenove_4WD_Car_For_Pico_W.h"  // Declares all the car's helper functions (motors, servo, ultrasonic sensor...)
+
+// setup() runs ONCE when the board powers on or resets.
+// Think of it like a "getting ready" checklist before the robot starts moving.
+void setup() {
+  Ultrasonic_Setup();           // Get the ultrasonic distance sensor's pins ready to use
+  Motor_Setup();                // Get the 4 wheel motors ready to use
+  Servo_Setup();                // Get the sensor's steering servo ready to use (it swivels the sensor left/right)
+}
+
+// loop() runs over and over again, forever, after setup() finishes.
+// Every trip through loop() the robot: looks around with the sensor, decides what to do,
+// and moves the wheels accordingly. This is what makes the robot "think" continuously.
+void loop()
+{
+  Ultrasonic_Car();  // Do one round of "scan for obstacles, then drive or dodge"
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program makes the car act like a bat using sonar to feel its way around a room. Every loop, the car swivels its ultrasonic sensor left, straight ahead, and right, then uses if/else decisions: if the path is clear, keep driving forward; if something is too close on one side, curve away from it; if something blocks the way straight ahead, stop, back up, and spin toward whichever side has more open space.</p>
           <p>It's a great first example of "sensor-driven decision making" — comparing numbers against thresholds (like <code>OBSTACLE_DISTANCE</code>) to let the robot choose its own actions instead of just following a fixed set of commands.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/02.2_Ultrasonic_Ranging_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
   </div>
@@ -870,13 +1421,80 @@
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>03.1_Photosensitive</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/03.1_Photosensitive" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : Photosensitive_Sensor.ino
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/04/13
+**********************************************************************/
+// ---------------------------------------------------------------------------
+// A photosensitive sensor (a.k.a. photoresistor / LDR - "Light Dependent
+// Resistor") is a little component whose resistance changes depending on
+// how much light hits it: lots of light = low resistance, darkness = high
+// resistance. The Pico can't measure resistance directly, but it CAN measure
+// voltage using its ADC (Analog-to-Digital Converter). The sensor is wired
+// up so that the voltage on the pin changes along with the light level, and
+// analogRead() converts that voltage into a plain number (a "raw ADC value")
+// that our code can use. On this board, more light generally gives a
+// DIFFERENT (not necessarily bigger) number than darkness - the important
+// thing for this sketch is comparing the left and right readings to each
+// other, so you can tell which side has more/less light shining on it.
+// ---------------------------------------------------------------------------
+
+// GPIO pin numbers on the Pico that the left/right photosensitive sensors are wired to.
+#define Left_PHOTOSENSITIVE_PIN 28  //Define the pins that Raspberry Pi Pico reads photosensitive
+#define Right_PHOTOSENSITIVE_PIN 27 //Define the pins that Raspberry Pi Pico reads photosensitive
+// These variables remember the most recent raw ADC reading (a whole number,
+// typically 0-4095 on the Pico's 12-bit ADC) from each sensor, so we can
+// print them later. Bigger/smaller doesn't map simply to "brighter", so just
+// compare the two numbers to see which side is getting more/less light.
+int getLeftPhotosensitiveADCValue;  //Define a variable to store the left photosensitive adc value
+int getRightPhotosensitiveADCValue; //Define a variable to store the right photosensitive adc value
+
+// setup() runs once when the board powers on or resets. It gets the two
+// sensor pins ready to read from, and opens the Serial connection so we can
+// send text back to the Serial Monitor on your computer.
+void setup()
+{
+  pinMode(Left_PHOTOSENSITIVE_PIN, INPUT);//Configure the pins for input mode
+  pinMode(Right_PHOTOSENSITIVE_PIN, INPUT);//Configure the pins for input mode
+  Serial.begin(115200);          //Initialize the serial port and set the baud rate to 115200
+}
+
+// loop() runs over and over, forever, after setup() finishes. Each time
+// through, it reads both light sensors, prints their raw ADC values to the
+// Serial Monitor so you can compare the left and right readings, then waits
+// half a second before doing it all again.
+void loop()
+{
+  getLeftPhotosensitiveADCValue = analogRead(Left_PHOTOSENSITIVE_PIN);//Read ADC1 value value
+  getRightPhotosensitiveADCValue = analogRead(Right_PHOTOSENSITIVE_PIN);//Read ADC2 value value
+  Serial.print("The photosensitive ADC on the left: ");
+  Serial.println(getLeftPhotosensitiveADCValue);       //Print the photosensitive ADC value on the left
+  Serial.print("The photosensitive ADC on the right: ");
+  Serial.println(getRightPhotosensitiveADCValue);      //Print the photosensitive ADC value on the right
+  delay(500); //Pause for 500 milliseconds so the readings don't scroll by too fast to read
+}
+
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program uses two photoresistors (light-sensing components) to check how bright it is on the left and right sides of the robot. Every half-second, it reads each sensor's light level as a number using <code>analogRead()</code>, then sends both numbers to the Serial Monitor so you can compare which side is brighter or darker.</p>
           <p>It's a great first look at reading real-world analog sensors, storing values in variables, and using a <code>loop()</code> that repeats forever with a <code>delay()</code> in between.</p>
         </div>
+        </div>
 
-        <div class="try-it-heading">🏆 Try it: Levels</div>
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <div class="try-it-heading">🏆 Try it: Levels</div>
 
         <div class="task" data-lesson="03.1" data-id="l6-1">
           <div class="task-content">
@@ -922,8 +1540,7 @@ if (totalLight &lt; 1000) {
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/03.1_Photosensitive" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
       </div>
     </details>
 
@@ -935,12 +1552,57 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>03.2_Photosensitive_Car</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/03.2_Photosensitive_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : Photosensitive_Car.ino
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+#include &lt;Arduino.h&gt;
+#include "Freenove_4WD_Car_For_Pico_W.h"
+// This sketch makes the car chase the brightest light it can see.
+// It reads two light sensors (one on the left, one on the right) and steers
+// toward whichever side is brighter. All the sensor-reading and motor logic
+// lives in Freenove_4WD_Car_For_Pico_W.cpp, inside a function called Light_Car().
+
+
+// setup() runs ONCE, right when the Pico boots up.
+// Think of it as "get everything ready before the game starts."
+void setup() {
+  Buzzer_Setup();
+  Photosensitive_Setup();  //Photosensitive initialization
+  Motor_Setup();           //Motor initialization
+  Buzzer_Alert(1, 1);      //The buzzer beeps to prompt the user to start playing
+  Serial.begin(115200);    //Initialize the serial port and set the baud rate to 115200
+}
+
+// loop() runs over and over and over, forever, as fast as the Pico can manage.
+// Every time through the loop we call Light_Car(), which checks the light
+// sensors and decides how to drive the wheels - that's what makes the car
+// keep "chasing" the light instead of just reacting to it once.
+void loop() {
+  Light_Car();
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program gives the car "phototropism" — like a plant bending toward sunlight, it steers itself toward whichever side has brighter light. Every fraction of a second it compares its two light sensors: if the left sensor sees more light, it speeds up the right wheels to turn left, and vice versa.</p>
           <p>It teaches comparing two numbers to choose a direction, and using that comparison result (a "difference") to smoothly adjust motor speeds instead of just turning fully one way or the other — a nice first taste of proportional control instead of simple on-off logic.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/03.2_Photosensitive_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
   </div>
@@ -957,12 +1619,75 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>04.1_Tracking_Sensor</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/04.1_Tracking_Sensor" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : Tracking_Sensor.ino
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+#include &lt;Arduino.h&gt;
+#include "Freenove_4WD_Car_For_Pico_W.h"
+// This file only defines setup() and loop(). All the real sensor-reading work
+// happens inside Track_Setup()/Track_Read(), which live in
+// Freenove_4WD_Car_For_Pico_W.cpp (declared in the matching .h file above).
+
+// This sketch is the simplest possible demo of the 3 line-tracking sensors
+// on the bottom of the car. Each sensor is a tiny infrared "eye" that shines
+// invisible light at the floor and checks how much bounces back:
+//   - shiny/white floor reflects a lot of light  -&gt; sensor reads 0
+//   - black tape/line absorbs the light          -&gt; sensor reads 1
+// Later sketches use these same 0/1 readings to make the car steer itself
+// along a black line. Here we just print the numbers so you can see them.
+
+// setup() runs once when the Pico W powers on or is reset.
+void setup() {
+  Serial.begin(115200); //set baud rate
+  Track_Setup(); // configure the 3 sensor pins as digital inputs
+}
+
+// loop() runs over and over, forever, after setup() finishes.
+void loop() {
+  Track_Read(); // ask the 3 sensors for fresh readings and fill sensorValue[]
+  Serial.print("Sensor Value (L / M / R / ALL) : ");
+  // sensorValue[0] = Left sensor   (0 or 1)
+  // sensorValue[1] = Middle sensor (0 or 1)
+  // sensorValue[2] = Right sensor  (0 or 1)
+  // sensorValue[3] = all three combined into ONE number from 0-7.
+  // Track_Read() builds that combined number using bit shifting, like this:
+  //   sensorValue[3] = (Left &lt;&lt; 2) | (Middle &lt;&lt; 1) | Right
+  // Think of it as writing the 3 readings side by side as one 3-bit binary
+  // number "LMR". For example Left=1, Middle=0, Right=1 becomes binary 101,
+  // which is 5 in decimal. This is a common trick: instead of tracking 3
+  // separate 0/1 values, you pack them into a single number that's easy to
+  // print, compare, or use in a switch statement.
+  for (int i = 0; i &lt; 4; i++) {
+    Serial.print(sensorValue[i]); // print L, M, R, then the combined value
+    Serial.print('\t'); // tab character, just to line up the columns nicely
+  }
+  Serial.print('\n'); // newline, so the next loop's readings start fresh
+  delay(500); // wait half a second before reading again, so the output
+              // doesn't scroll by too fast to read
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program checks the three infrared line sensors on the bottom of the car — Left, Middle, Right — which each report a simple 0 (white floor) or 1 (black line). It teaches digital input, and the neat trick of combining three separate 0/1 bits into a single number from 0–7 using bit-shifting and OR, so instead of juggling three values you get one number that tells you the exact pattern of what's under the car.</p>
           <p>This groundwork — turning sensor readings into one combined number — is exactly what the next lesson uses to make the car follow a line automatically.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/04.1_Tracking_Sensor" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -975,7 +1700,120 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>04.2_Track_Car</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/04.2_Track_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : Tracking_Car.ino
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+
+#include &lt;Arduino.h&gt;
+#include "Freenove_4WD_Car_For_Pico_W.h"
+
+// This sketch is the "brain" of a line-following robot. Every trip around
+// loop() the car does three things, over and over, forever:
+//   1. LOOK  - read the 3 floor sensors (Track_Read)
+//   2. DECIDE - use a switch/case to turn that sensor pattern into a plan
+//   3. ACT   - spin the 4 wheels (Motor_M_Move) and show a face/arrow
+//
+// The floor sensors shine light down and check whether it bounces back.
+// A dark line (usually black tape) absorbs light, so a sensor sitting
+// over the line reads differently than one sitting over the light floor.
+// We combine the 3 separate on/off sensor readings into a single 3-bit
+// binary number (0-7) so the switch/case below can handle every possible
+// combination of "line / no line" in one place.
+
+// Speed "levels" - just friendly names for motor power percentages, so the
+// switch/case below reads like "go at SPEED_LV1" instead of a mystery 45.
+// (100 = full power, 0 = stopped). Higher numbers here do NOT mean the
+// wheel spins faster automatically - they're just labels we chose.
+#define SPEED_LV4   ( 90 )
+#define SPEED_LV3   ( 75 )
+#define SPEED_LV2   ( 60 )
+#define SPEED_LV1   ( 45 )
+
+// setup() runs exactly once, right after the Pico powers on or resets.
+// It wakes up the three hardware systems this sketch needs: the line
+// sensors, the drive motors, and the little LED "face" on top of the car.
+void setup()
+{
+  Track_Setup();      //Trace module initialization
+  Motor_Setup();      //Motor initialization
+  Emotion_Setup();    //Emotion initialization
+}
+
+// loop() runs forever, thousands of times per second. Each pass reads the
+// sensors fresh, decides what that reading means, and drives the motors
+// to match - this is what makes the car react to the line in real time.
+void loop()
+{
+  Track_Read();
+  // sensorValue[3] packs the left/center/right sensor bits into ONE number
+  // from 0 to 7, e.g. binary 010 (left=0, center=1, right=0) becomes the
+  // number 2. Writing the switch this way means every one of the 8
+  // possible sensor combinations gets its own clearly labelled case below.
+  // Sensor bit = 1 usually means "line detected under this sensor".
+  switch (sensorValue[3])
+  {
+    case 2:   //010 - only the CENTER sensor sees the line: dead on target.
+    case 5:   //101 - LEFT and RIGHT sensors both see line, center doesn't.
+              //      This happens when the line is thicker than the
+              //      center sensor alone, or at a crossing - still counts
+              //      as "centered", so we treat it the same as case 2.
+      showArrow(1, 100);                                          //Show a "straight ahead" arrow on the LED face
+      Motor_M_Move(SPEED_LV1 , SPEED_LV1, SPEED_LV1, SPEED_LV1);  //Move Forward - all 4 wheels spin the same speed, same direction
+      break;
+    case 0:   //000 - NO sensor sees the line. The car has drifted off the
+              //      track entirely, or is between line segments. Keep
+              //      creeping forward slowly and hope to find it again.
+      Motor_M_Move(SPEED_LV1 , SPEED_LV1 ,SPEED_LV1 ,SPEED_LV1);  //Move Forward
+      break;
+    case 7:   //111 - ALL THREE sensors see the line: this means the whole
+              //      width of the track is dark, which this course uses
+              //      as a "finish line" / stop marker rather than a turn.
+      eyesBlink1(100);           //Blink the LED eyes to celebrate reaching the stop line
+      Motor_M_Move(0, 0, 0, 0);  //Stop - zero power to every wheel
+      break;
+    case 4:   //100 - only the LEFT sensor sees the line: the line has
+              //      drifted to the car's left, so the car needs to
+              //      steer LEFT to get back on top of it.
+    case 6:   //110 - LEFT and CENTER both see the line: line is drifting
+              //      left but not as far off as case 4 - same fix applies.
+      wheel(2, 100);  //Spin the LED "wheel" icon to show we're turning left
+      // To pivot left, the two LEFT wheels spin BACKWARDS (negative speed)
+      // while the two RIGHT wheels spin FORWARDS (positive speed). Wheels
+      // turning opposite directions makes the car rotate on the spot
+      // instead of driving in a straight line - a "tank turn".
+      Motor_M_Move(-SPEED_LV4, -SPEED_LV4, SPEED_LV3, SPEED_LV3);  //Turn Left
+      break;
+    case 1:   //001 - only the RIGHT sensor sees the line: line has
+              //      drifted to the car's right, so steer RIGHT.
+    case 3:   //011 - CENTER and RIGHT both see the line: same idea as
+              //      case 1, line is off to the right.
+      wheel(1, 100);  //Spin the LED "wheel" icon to show we're turning right
+      // Mirror image of the left turn above: LEFT wheels spin FORWARDS
+      // (positive) and RIGHT wheels spin BACKWARDS (negative), pivoting
+      // the car the other way to chase the line back to center.
+      Motor_M_Move(SPEED_LV3, SPEED_LV3, -SPEED_LV4, -SPEED_LV4);  //Turn Right
+      break;
+    default:
+      // sensorValue[3] can only ever be 0-7, and every one of those 8
+      // values is already handled above, so this branch should never
+      // actually run. It's here just in case, so the car simply does
+      // nothing rather than crashing if something unexpected happens.
+      break;
+  }
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>Think of this code as the "Brain" of your robot. It follows a simple loop: <strong>Look, Decide, Act.</strong> Every loop it looks at the three floor sensors, squishes their readings into one number (0–7), and uses a <code>switch</code>/<code>case</code> to decide what that number means:</p>
           <ul>
@@ -986,8 +1824,11 @@ if (totalLight &lt; 1000) {
           </ul>
           <p>It then spins the four wheels — sending opposite-signed speeds to the left and right sides to pivot like a tank — and shows a matching face or arrow on the LED display.</p>
         </div>
+        </div>
 
-        <div class="try-it-heading">🏆 Try it: Challenges</div>
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <div class="try-it-heading">🏆 Try it: Challenges</div>
 
         <div class="task" data-lesson="04.2" data-id="l4-c1">
           <div class="task-content">
@@ -1012,8 +1853,7 @@ if (totalLight &lt; 1000) {
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/04.2_Track_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
       </div>
     </details>
   </div>
@@ -1030,12 +1870,64 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>05.1_IR_Receiver</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.1_IR_Receiver" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : Infrared Remote Control
+  Description : Decode the infrared remote control and print it out through the serial port.
+  Auther      : www.freenove.com
+  Modification: 2023/04/13
+**********************************************************************/
+// This library does the hard work of listening to the IR receiver sensor
+// and turning the flickering infrared light pulses into numbers we can use.
+#include &lt;IRremote.hpp&gt;
+#define IR_Pin 3  // Infrared receiving pin
+#define ENABLE_LED_FEEDBACK true
+#define DISABLE_LED_FEEDBACK false
+
+// setup() runs once when the board powers on or is reset.
+// It gets the Serial Monitor and the IR receiver ready to use, then
+// prints a message so we know the program is alive and listening.
+void setup() {
+  Serial.begin(115200);                           // Initialize the serial port and set the baud rate to 115200
+  IrReceiver.begin(IR_Pin, DISABLE_LED_FEEDBACK);  // Start the receiver
+  Serial.print("IRrecvDemo is now running and waiting for IR message on Pin ");
+  Serial.println(IR_Pin);  //print the infrared receiving pin
+}
+
+// loop() runs over and over, forever, after setup() finishes.
+// Every remote button sends its own unique numeric code as a burst of
+// infrared light. This function checks whether a new code has just been
+// received, and if so, prints that number to the Serial Monitor. Since
+// each button always sends the same number, comparing this printed value
+// against a known list of codes (e.g. with if/switch statements) is how
+// you could figure out exactly which button was pressed.
+void loop() {
+  if (IrReceiver.decode()) {  // true only when a fresh IR signal has just arrived
+    // decodedRawData holds the unique number sent by whichever button was pressed
+    unsigned long value = IrReceiver.decodedIRData.decodedRawData;
+    Serial.println(value, HEX);  // Print "old" raw data
+    IrReceiver.resume();    // Enable receiving of the next value
+  }
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program listens for signals from an infrared remote control, like the one used to point-and-click at a TV. Every button sends its own secret number as a burst of invisible light, and this sketch catches that number and prints it to the Serial Monitor in hex.</p>
           <p>It teaches reading sensor input in <code>setup()</code>/<code>loop()</code>, checking "did something new just happen?" with an <code>if</code> statement, and the idea that button presses often become unique numeric codes your code compares against to decide what to do next.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.1_IR_Receiver" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -1047,12 +1939,243 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>05.2_IR_Receiver_Car</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.2_IR_Receiver_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : IR_Receiver_Car.ino
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+// This sketch turns the car into an RC (remote-controlled) car.
+// Every time you press a button on the little infrared (IR) remote,
+// it sends a unique code through the air as invisible light pulses.
+// The IR receiver module on the car "hears" that code, and this
+// program looks up what that code means and drives the motors to match.
+#include &lt;Arduino.h&gt;
+#include &lt;IRremote.hpp&gt;                        // Library that decodes IR remote signals for us
+#include "Freenove_4WD_Car_For_Pico_W.h"
+#define IR_Pin 3                                // The Pico pin wired to the IR receiver module
+#define ENABLE_LED_FEEDBACK true                // (unused option) would flash an LED whenever a signal is received
+#define DISABLE_LED_FEEDBACK false               // We use this one - no LED flashing
+int motor_speed = 50;                           // How fast the wheels spin when driving (0-100)
+int emotionMode = 4;                            // Which face/animation shows on the LED matrix "eyes"
+float time_proportion = 5.7;  //If you want to get the best out of the rotation mode, change the value by experimenting
+int motor_flag = 0;                             // Toggles between two control layouts: 0 = drive/turn mode, 1 = diagonal strafe mode
+int set_angle = 0;  //Set the forward angle of rotation
+int rotate_flag = 0;                            // When true, the car spins slowly on the spot (see loop() below)
+int around_rotate_flag = 0;                     // When true, the car orbits/rotates around a point
+float battery_voltage = 0;                      // Battery reading, used to time the spin-in-place animation
+
+// Runs once at power-on: get everything (motors, "face" display, IR receiver) ready to go.
+void setup() {
+  Serial.begin(115200);
+  Motor_Setup();                                   //Motor initialization
+  Emotion_Setup();                                 //Initializes Emotion module
+  IrReceiver.begin(IR_Pin, DISABLE_LED_FEEDBACK);  // Start the receiver
+}
+
+// Runs over and over, forever. Each pass: check for a new remote button press,
+// react to it, update the "face" animation, and if a rotation mode is active,
+// keep nudging the car through its spin.
+void loop() {
+  if (IrReceiver.decode()) {                     // True only when a fresh IR code has just arrived
+    unsigned long value = IrReceiver.decodedIRData.decodedRawData;
+    handleControl(value);        // Handle the commands from remote control
+    Serial.println(value, HEX);  // Print "old" raw data
+    Serial.println();
+    IrReceiver.resume();  // Enable receiving of the next value
+  }
+  showEmotion(emotionMode);
+  if (rotate_flag) {  //Rotate when the rotate_glag is true
+    // Spin-in-place mode: every loop we move the "forward direction" a few
+    // degrees further around the compass (set_angle) and drive the mecanum
+    // wheels toward that new angle, so the car slowly rotates on the spot.
+    int VY = 40 * cos(set_angle * (M_PI / 180));
+    int VX = -(40 * sin(set_angle * (M_PI / 180)));
+    int W = 40;
+
+    // Standard mecanum-wheel math: combine forward/sideways speed (VX, VY)
+    // with a spin speed (W) to get each wheel's individual speed.
+    int FR = VY - VX + W;
+    int FL = VY + VX - W;
+    int BL = VY - VX - W;
+    int BR = VY + VX + W;
+
+    Motor_M_Move(FL, BL, BR, FR);
+    delay(5 * time_proportion * 8 / battery_voltage);
+    set_angle -= 5;
+  }
+  //The car rotates around a point
+  if (around_rotate_flag) {                     //Rotate when the rotate_glag is true 围绕旋转模式//-90 100 90 100
+    int LY = 100 * cos(-90 * (M_PI / 180));     //paramters[1] represents the Angle to the the Y-axis,Counterclockwise is 0 to 180 degrees
+    int LX = -(100 * sin(-90 * (M_PI / 180)));  //paramters[2] represents the move speed(the first jostick)
+    int RX = 100 * sin(90 * (M_PI / 180));      //paramters[3] represents the Angle to the Y-axis,Counterclockwise is 0 to 180 degrees
+    int RY = 100 * cos(90 * (M_PI / 180));      //Converts data from the client to its x and y axis positions
+    int FR = LY - LX + RX;  //The McNamum wheel chassis motion formula
+    int FL = LY + LX - RX;  //LY stands for longitudinal velocity
+    int BL = LY - LX - RX;  //LX stands for transverse velocity
+    int BR = LY + LX + RX;  //RX stands for angular velocity
+    Motor_M_Move(FL, BL, BR, FR);
+  }
+}
+
+// This is the heart of the remote control: it takes the raw hex code that
+// the IR receiver decoded and looks it up in a switch/case table, like a
+// big "if this button, then do that movement" list. Each remote button
+// sends one fixed 32-bit code (in hex, e.g. 0xBF40FF00), so every case here
+// matches exactly one physical button.
+void handleControl(unsigned long value) {
+  // Handle the commands
+  switch (value) {
+    case 0xBF40FF00:  // Receive the number '+'
+      rotate_flag = 0;
+      Motor_M_Move(motor_speed, motor_speed, motor_speed, motor_speed);  // Go forward
+      delay(500);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+
+    case 0xE619FF00:  // Receive the number '-'
+      rotate_flag = 0;
+      Motor_M_Move(-motor_speed, -motor_speed, -motor_speed, -motor_speed);  // Back up
+      delay(500);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+
+    // '|&lt;&lt;' turns left. Which movement it does depends on motor_flag:
+    // if motor_flag is 0 (normal mode) it spins the car on the spot;
+    // if motor_flag is 1 (strafe mode, toggled by the '▶' button) it
+    // instead slides the car sideways to the left without turning.
+    case 0xF807FF00:  // Receive the number '|&lt;&lt;'
+      rotate_flag = 0;
+      if (!motor_flag) {
+        Motor_M_Move(-motor_speed, -motor_speed, motor_speed, motor_speed);  // Turn left
+        delay(200);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      } else {
+        Motor_M_Move(-motor_speed, motor_speed, -motor_speed, motor_speed);  // Turn left
+        delay(500);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      }
+    // '&gt;&gt;|' turns right, same motor_flag logic as '|&lt;&lt;' above (turn vs. sideways slide).
+    case 0xF609FF00:  // Receive the number '&gt;&gt;|'
+      rotate_flag = 0;
+      if (!motor_flag) {
+        Motor_M_Move(motor_speed, motor_speed, -motor_speed, -motor_speed);  // Turn right
+        delay(200);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      } else {
+        Motor_M_Move(motor_speed, -motor_speed, motor_speed, -motor_speed);  // Turn right
+        delay(500);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      }
+    // These next four buttons only do something while motor_flag is 1
+    // (strafe mode) - they drive the mecanum wheels diagonally, which
+    // only mecanum wheels can do! In normal mode (motor_flag == 0) they
+    // are ignored (the else branch just breaks with no movement).
+    case 0xBB44FF00:  //Receive the number 'TEST'
+      rotate_flag = 0;
+      if (motor_flag) {
+        Motor_M_Move(0, motor_speed, 0, motor_speed);  // Move forward and to the left diagonally
+        delay(500);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      } else {
+        break;
+      }
+
+    case 0xF20DFF00:  //Receive the number 'c'
+      rotate_flag = 0;
+      if (motor_flag) {
+        Motor_M_Move(0, -motor_speed, 0, -motor_speed);  // Move backward and to the right diagonally
+        delay(500);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      } else {
+        break;
+      }
+
+    case 0xBC43FF00:  //Receive the number '↗'
+      rotate_flag = 0;
+      if (motor_flag) {
+        Motor_M_Move(motor_speed, 0, motor_speed, 0);  // Move forward and to the right diagonally
+        delay(500);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      } else {
+        break;
+      }
+
+    case 0xE916FF00:  //Receive the number '0'
+      rotate_flag = 0;
+      if (motor_flag) {
+        Motor_M_Move(-motor_speed, 0, -motor_speed, 0);  // Move back and to the left diagonally
+        delay(500);
+        Motor_M_Move(0, 0, 0, 0);
+        break;
+      } else {
+        break;
+      }
+
+    // '1' picks a "random-ish" face animation using the current millisecond
+    // clock (millis() % 10 gives a leftover value from 0-9) - a cheap trick
+    // for pseudo-randomness without needing a real random-number function.
+    case 0xF30CFF00:  // Receive the number '1'
+      emotionMode = millis() % 10;
+      break;
+
+    // '▶' (play) flips motor_flag between 0 and 1, switching the remote
+    // between "turn mode" and "diagonal strafe mode" for the buttons above.
+    case 0xEA15FF00:  // Receive the number '▶'
+      rotate_flag = 0;
+      motor_flag = !motor_flag;
+      break;
+
+    // 'MENU' toggles the spin-in-place mode on/off (rotate_flag), resets
+    // the spin angle to 0, and re-measures the battery voltage so the
+    // spin's timing (delay in loop()) stays accurate as the battery drains.
+    case 0xB847FF00:  // Receive the number 'MENU'
+      battery_voltage = Get_Battery_Voltage();
+      rotate_flag = !rotate_flag;
+      set_angle = 0;
+      break;
+
+    // '2' toggles the "orbit around a point" mode on/off.
+    case 0xE718FF00:  // Receive the number '2'
+      around_rotate_flag = !around_rotate_flag;
+      break;
+
+    // Any code that isn't one of the buttons above (including the repeat
+    // codes some remotes send while a button is held, or noise) falls
+    // through to here - and the safe response is simply to stop the motors.
+    // This is effectively the car's "no command / unknown command" case.
+    default:
+      Motor_M_Move(0, 0, 0, 0);  //stop
+      break;
+  }
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program turns the car into a real RC car you drive with an infrared remote! Every button sends its own secret code, and <code>handleControl()</code> uses a big switch/case "lookup table" to match each code to a specific move — forward, back, turn, or (in a special mode) slide diagonally sideways, which only mecanum wheels can do.</p>
           <p>It also teaches "non-blocking timing," where the car checks the clock (<code>millis()</code>) instead of freezing with <code>delay()</code>, so its animated LED face keeps blinking while it's still listening for your next button press. If no button code is found, the code falls through to a safe "default" case that simply stops the motors.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.2_IR_Receiver_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -1064,12 +2187,241 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>05.3_Multi_Functional_Car</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.3_Multi_Functional_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : IR_Receiver_Car.ino
+  Product     : Freenove 4WD Car for Raspberry Pi Pico (W)
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+// ============================================================================
+// THE "MULTI-FUNCTIONAL CAR" SKETCH
+// ----------------------------------------------------------------------------
+// This is the "everything at once" project. It ties together three systems
+// you may have already met in earlier lessons:
+//   1. IR REMOTE CONTROL   - reading button presses from the little remote
+//   2. LED MATRIX "FACE"   - showing emotions/eyes on the small 8x8x2 display
+//   3. WS2812 RGB LIGHTS   - colourful light strip effects on the car body
+//
+// The big idea in this file is a classic pattern used in almost every
+// Arduino program: setup() runs ONCE to get everything ready, then loop()
+// runs OVER AND OVER FOREVER, each time checking "did anything happen?" and
+// reacting to it. Think of loop() like a video game's main loop: check
+// controller input -&gt; update the world -&gt; draw the screen -&gt; repeat.
+// ============================================================================
+#include &lt;Arduino.h&gt;
+#include &lt;Adafruit_NeoPixel.h&gt;
+#include &lt;IRremote.hpp&gt;
+#include "Freenove_4WD_Car_For_Pico_W.h"
+#include "Freenove_4WD_Car_Emotion.h"
+#include "Freenove_VK16K33_Lib.h"
+#include "Freenove_4WD_Car_WS2812.h"
+
+#define IR_Pin 3  // Infrared receiving pin
+#define ENABLE_LED_FEEDBACK true
+#define DISABLE_LED_FEEDBACK false
+
+static int servo_1_angle = 90;  // Current angle of the head/camera servo (90 = pointing straight ahead)
+int emotion_flag = 0;   // Which "face" the LED matrix is currently showing (0-7)
+int ws2812_flag = 0;    // Which light effect the RGB strip is currently showing (0-5)
+
+int CAR_MODE_VOL = 0;      // (not actively used below, left over from other sketches in this family)
+int LASt_CAR_MODE_VOL = 0;
+
+// setup() runs exactly once, right after the board powers on or is reset.
+// This is where we turn on and configure every piece of hardware before the
+// main loop starts using it.
+void setup() {
+  Serial.begin(115200);  //Turn on the serial port monitor and set the baud rate to 115200
+  Motor_Setup();         //Initialize motor
+  Servo_Setup();         //Initialize servo
+  Buzzer_Setup();        //Initialize the buzzer
+  WS2812_Setup();        //WS2812 initialization
+  Emotion_and_Ultrasonic_Setup();  // Detect whether the LED matrix or the ultrasonic sensor is plugged onto the head
+  IrReceiver.begin(IR_Pin, DISABLE_LED_FEEDBACK);  // Start the receiver
+  Servo_1_Angle(servo_1_angle);  // Point the head servo straight ahead to start
+  delay(100);
+}
+
+// loop() runs forever, as fast as the board can manage. Each pass through it:
+//   1. Checks if a new IR remote signal arrived, and if so, reacts to it.
+//   2. Re-checks which "head" accessory (matrix or ultrasonic) is attached.
+//   3. Updates the battery-voltage speed compensation.
+//   4. Draws one "frame" of the emotion display (if the matrix is present).
+//   5. Lets the currently selected car mode (manual/light/track/sonar) drive.
+//   6. Draws one "frame" of the WS2812 light effect.
+// Nothing in here uses delay() to wait around (except brief motor pulses),
+// which is what lets the remote control, the face and the lights all appear
+// to run "at the same time" even though the microcontroller can only do one
+// thing at a time.
+void loop() {
+  if (IrReceiver.decode()) {                      // Did a new remote signal just arrive?
+    unsigned long value = IrReceiver.decodedIRData.decodedRawData;
+    handleControl(value);        // Handle the commands from remote control
+    Serial.println(value, HEX);  // Print "old" raw data
+    Serial.println();
+    IrReceiver.resume();  // Enable receiving of the next value
+  }
+  Emotion_and_Ultrasonic_Setup();       // Re-check which head module is plugged in
+  oa_CalculateVoltageCompensation();    // Adjust motor speeds as the battery drains
+  if (Check_Module_value == MATRIX_IS_EXIST) {
+    Emotion_Show(emotion_task_mode);  //Led matrix display function
+  } else if (Check_Module_value == SONAR_IS_ESIST) {
+    // No matrix attached (ultrasonic sensor instead) - nothing to draw on a face.
+  }
+  Car_Select(carFlag);             // Let the currently active driving mode take control of the motors
+  WS2812_Show(ws2812_task_mode);  //Car color lights display function
+}
+
+// handleControl() is called every time the IR remote sends a new code.
+// Each button on the remote sends its own unique 32-bit hex number - the
+// switch statement below matches that number and decides what to do.
+// This is a common way to turn "raw sensor data" into "meaningful actions".
+void handleControl(unsigned long value) {
+  // Handle the commands
+  switch (value) {
+    case 0xBF40FF00:  // Receive the number '+'
+      // Drive all 4 wheels forward briefly, then stop - one "nudge" forward.
+      Motor_M_Move(50, 50, 50, 50);
+      delay(300);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+    case 0xE619FF00:  // Receive the number '-'
+      // Same idea, but all wheels spin backwards - a "nudge" backward.
+      Motor_M_Move(-50, -50, -50, -50);
+      delay(300);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+    case 0xF807FF00:  // Receive the number '|&lt;&lt;'
+      // Left wheels backward, right wheels forward - the car strafes/spins left.
+      Motor_M_Move(-50, -50, 50, 50);
+      delay(300);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+    case 0xF609FF00:  // Receive the number '&gt;&gt;|'
+      // Opposite of above - spins/strafes right.
+      Motor_M_Move(50, 50, -50, -50);
+      delay(300);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+    case 0xEA15FF00:  // Receive the number '▶'
+      Motor_M_Move(0, 0, 0, 0);  // "Play" button used here simply as an emergency stop
+      break;
+    case 0xE916FF00:  // Receive the number '0'
+      // Tilt the head servo up a bit (add 10 degrees) and move it there.
+      servo_1_angle = servo_1_angle + 10;
+      Servo_1_Angle(servo_1_angle);
+      break;
+    case 0xF30CFF00:  // Receive the number '1'
+      // Tilt the head servo down a bit (subtract 10 degrees).
+      servo_1_angle = servo_1_angle - 10;
+      Servo_1_Angle(servo_1_angle);
+      break;
+    case 0xF708FF00:  // Receive the number '4'
+      // Recentre the head servo back to looking straight ahead.
+      servo_1_angle = 90;
+      Servo_1_Angle(servo_1_angle);
+      break;
+    case 0xF20DFF00:  // Receive the number 'C'
+      // Switch into "light tracing" mode (car follows a light source).
+      isLightModeFirstStarting = true;
+      Servo_1_Angle(90);
+      Car_SetMode(1);
+      break;
+    case 0xA15EFF00:  // Receive the number '3'
+      // Switch into "line tracking" mode (car follows a black line on the floor).
+      Servo_1_Angle(90);
+      Car_SetMode(2);
+      break;
+    case 0xA55AFF00:  // Receive the number '6'
+      // Switch into "sonar/obstacle avoidance" mode - but only if an
+      // ultrasonic sensor is actually plugged in! If it isn't, beep a
+      // warning instead and fall back to manual mode.
+      Servo_1_Angle(90);
+      if (Check_Module_value == SONAR_IS_ESIST) {
+        LASt_CAR_MODE_VOL = 1;
+        Car_SetMode(3);
+      }
+      if (Check_Module_value != SONAR_IS_ESIST) {
+        Buzzer_Variable(2000, 50, 2);
+        Car_SetMode(0);
+        Motor_M_Move(0, 0, 0, 0);
+      }
+      break;
+    case 0xB54AFF00:  // Receive the number '9'
+      // Reset everything back to plain manual driving: clear the face,
+      // recentre the head, stop the motors.
+      emotion_flag = 0;
+      Emotion_SetMode(emotion_flag);
+      Servo_1_Angle(90);
+      Car_SetMode(0);
+      Motor_M_Move(0, 0, 0, 0);
+      break;
+    case 0xBB44FF00:  // Receive the number 'TEST'
+      Buzzer_Variable(2000, 100, 1);  // Just beep once, to confirm the remote works
+      break;
+    case 0xE718FF00:  // Receive the number '2'
+      // Cycle through the LED matrix face animations (0-7), but only if a
+      // matrix is actually attached - otherwise beep to say "no matrix here".
+      if (Check_Module_value == MATRIX_IS_EXIST) {
+        emotion_flag = emotion_flag + 1;
+        if (emotion_flag &gt; 7) {
+          emotion_flag = 0;
+        }
+        Emotion_SetMode(emotion_flag);  //Display
+        Serial.print(" \n matrix is exist !!! \n");
+      }
+      if (Check_Module_value != MATRIX_IS_EXIST) {
+        Buzzer_Variable(2000, 50, 2);
+        Serial.print(" \n sonar is exist !!! \n");
+      }
+      break;
+    case 0xE31CFF00:  // Receive the number '5'
+      // Turn the face display off (blank).
+      emotion_flag = 0;
+      Emotion_SetMode(emotion_flag);
+      break;
+    case 0xBD42FF00:  // Receive the number '7'
+      // Cycle through the WS2812 light effects (0-5).
+      ws2812_flag = ws2812_flag + 1;
+      if (ws2812_flag &gt;= 6) {
+        ws2812_flag = 0;
+      }
+      WS2812_SetMode(ws2812_flag);
+      break;
+    case 0xAD52FF00:  // Receive the number '8'
+      // Turn the RGB lights off.
+      ws2812_flag = 0;
+      WS2812_SetMode(ws2812_flag);
+      break;
+    case 0xFFFFFFFF:  // Remain unchanged
+      // This special code means "the same button is still held down" (a
+      // repeat code), so we deliberately do nothing here.
+      break;
+    default:
+      // Any button we don't recognise - just ignore it.
+      break;
+  }
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This is the "everything car" for this stage — it combines three things you built separately before: driving with the IR remote, showing feelings on the LED-matrix face, and lighting up the RGB strip. It teaches how real programs combine multiple systems at once using a single fast-repeating loop — checking the remote, updating the face, driving the wheels, and animating the lights all happen together, many times per second.</p>
           <p>You'll see how a remote button press becomes a number your code reacts to, how "eyes" and lights are drawn frame-by-frame using the clock instead of freezing the program with delays, and how the car can automatically detect which accessories are plugged in.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.3_Multi_Functional_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
   </div>
@@ -1086,12 +2438,138 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>06.1_WiFi_APP_TcpServer</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/06.1_WiFi_APP_TcpServer" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : WiFi Server
+  Description : Use Pico W's WiFi server feature to wait for other WiFi devices to connect.
+                And communicate with them once a connection has been established.
+  Auther      : www.freenove.com
+  Modification: 2022/09/27
+**********************************************************************/
+// This library gives the Pico W all its WiFi powers: connecting to a
+// network, and acting as a server that other devices can connect to.
+#include &lt;WiFi.h&gt;
+
+// A "port" is like a door number on the Pico W. Your WiFi network is the
+// street address (the IP address below), and the port picks which door
+// on that address to knock on. Port 4002 is just a number we picked that
+// isn't already used by something else - the phone app needs to know
+// this exact number to find us.
+#define port 4002
+
+// Replace the "********" text below with the name (SSID) and password of
+// YOUR WiFi network, keeping the quote marks. The Pico W can only join a
+// network it has been told the name and password for, just like you
+// would type them into a phone or laptop.
+const char *ssid_Router      = "********";  //input your wifi name
+const char *password_Router  = "********";  //input your wifi passwords
+
+// This creates the actual TCP server object, listening on the port number
+// above. Think of a TCP server like a phone that only answers calls - it
+// never dials out by itself, it just waits for someone (the app) to call it.
+WiFiServer  server(port);
+
+/**
+ * setup()
+ * Runs once when the Pico W powers on or resets.
+ * Connects to your WiFi network, waits until the connection succeeds,
+ * prints the Pico's network address/port to the Serial Monitor so you
+ * can find it, then starts the TCP server so it's ready for a client
+ * (like the phone app) to connect.
+ */
+void setup()
+{
+    Serial.begin(115200);
+    delay(1000);
+    Serial.printf("\nConnecting to ");
+    Serial.println(ssid_Router);
+    WiFi.disconnect();
+    // Ask the WiFi chip to start joining the network using the name and
+    // password we set above. This doesn't wait for success - it just
+    // starts the process running in the background.
+    WiFi.begin(ssid_Router, password_Router);
+    // Keep checking WiFi.status() over and over until it reports
+    // "connected". This is called "polling" - like repeatedly checking
+    // if a cake is done instead of just guessing. Each loop we wait half
+    // a second (delay(500)) and print a dot so you can see it's working.
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("");
+    Serial.println("WiFi connected.");
+    Serial.print("IP address: ");
+    // WiFi.localIP() is the Pico's unique address on your home network -
+    // the phone app will need this address (plus the port number) to
+    // know where to send its "call".
+    Serial.println(WiFi.localIP());
+    Serial.printf("IP port: %d\n",port);
+    // Actually start the server listening for incoming connections on
+    // our chosen port. Before this line, nobody could connect yet.
+    server.begin(port);
+}
+
+/**
+ * loop()
+ * Runs over and over forever after setup() finishes. Each pass, it
+ * checks whether a client (like the phone app) has connected, and if
+ * so, relays text back and forth between that client and the Serial
+ * Monitor until the client disconnects. This is a simple two-way
+ * "chat bridge" between your network connection and your USB cable.
+ */
+void loop(){
+ // Ask the server "has anyone tried to connect since last time?"
+ // If yes, this gives us a WiFiClient object representing that
+ // connection. If no one has connected, client will be "empty".
+ WiFiClient client = server.accept();            // listen for incoming clients
+  if (client) {                                     // if you get a client,
+    Serial.println("Client connected.");
+    // client.connected() stays true for as long as the phone/PC app is
+    // still connected to us. As soon as it disconnects, this becomes
+    // false and we drop out of the loop below.
+    while (client.connected()) {                    // loop while the client's connected
+      // client.available() tells us how many bytes the client has sent
+      // that we haven't read yet. If it's more than 0, there's a
+      // message waiting for us to pick up.
+      if (client.available()) {                     // if there's bytes to read from the client,
+        // readStringUntil('\n') reads everything the client sent up to
+        // (and including) a newline character, and gives it back as text.
+        Serial.println(client.readStringUntil('\n')); // print it out the serial monitor
+        while(client.read()&gt;0);                     // clear the wifi receive area cache
+      }
+      // Same idea, but the other direction: if you type something into
+      // the Serial Monitor on your computer, send that text over WiFi
+      // to whatever app is connected to the Pico.
+      if(Serial.available()){                       // if there's bytes to read from the serial monitor,
+        client.print(Serial.readStringUntil('\n')); // print it out the client.
+        while(Serial.read()&gt;0);                     // clear the wifi receive area cache
+      }
+    }
+    // The client disconnected (or we asked it to stop), so free up the
+    // connection. After this, loop() will run again and wait for the
+    // next client to connect.
+    client.stop();                                  // stop the client connecting.
+    Serial.println("Client Disconnected.");
+  }
+}</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This program turns the Pico W into a tiny WiFi "phone" that only answers calls — it connects to your home WiFi and waits on a specific "door number" called a port (4002) for a companion phone/PC app to connect. Once connected, the Pico acts like a chat bridge: anything the app sends gets printed to the Serial Monitor, and anything you type gets sent back to the app.</p>
           <p>It teaches WiFi networking basics (SSID/password, IP addresses, ports), how a TCP server waits for and accepts connections, and how programs check ("poll") repeatedly for new data using functions like <code>client.connected()</code> and <code>client.available()</code>.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/06.1_WiFi_APP_TcpServer" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
 
@@ -1103,12 +2581,381 @@ if (totalLight &lt; 1000) {
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
-        <div class="how-it-works">
+        <div class="step">
+          <div class="step-title">📤 Step 1 — Upload the code</div>
+          <p>Upload the <code>06.2_Multi_Functional_Car</code> sketch to your Raspberry Pi Pico (see the Guide above if you're not sure how).</p>
+          <a class="view-code view-code-primary" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/06.2_Multi_Functional_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">📄 Step 2 — Read the code</div>
+          <pre class="code-block"><code>/**********************************************************************
+  Filename    : Camera Car
+  Product     : Freenove 4WD Car for Pico W
+  Auther      : www.freenove.com
+  Modification: 2023/07/10
+**********************************************************************/
+// ======================================================================
+// THE "EVERYTHING" SKETCH — Multi Functional Car
+// ======================================================================
+// This is the biggest, most complete program in the whole course. It ties
+// together every part of the robot into one program that a phone app can
+// control over WiFi:
+//   - Driving the mecanum wheels (forward/back/sideways/spin, all at once)
+//   - Showing emotions (a face) or reading distance on the LED matrix
+//   - Lighting up the WS2812 RGB strip in different patterns
+//   - Reading the light sensors, line-tracking sensors and ultrasonic
+//     sensor so the car can also drive itself in three "auto" modes
+//
+// THE BIG IDEA: your phone sends short text messages like "N#45#80#...\n"
+// over WiFi. This program listens for those messages, figures out what
+// they mean (this is called "parsing"), and then calls the right function
+// to make the car do it. Read Get_Command() at the bottom of this file
+// and Freenove_4WD_Car_WiFi.cpp to see exactly how a line of text turns
+// into a robot doing something.
+//
+// Overall flow of the program:
+//   1. setup()  - turns everything on once when the Pico W boots up.
+//   2. loop()   - runs forever. It waits for the phone app to connect,
+//                 then repeatedly: reads one command, does what it says,
+//                 updates the face/lights, and sends sensor data back.
+// ======================================================================
+#include &lt;Arduino.h&gt;
+#include &lt;Adafruit_NeoPixel.h&gt;  //Library for controlling WS2812 RGB LEDs
+#include &lt;WiFi.h&gt;               //Lets the Pico W join a WiFi network
+#include &lt;WiFiClient.h&gt;         //Lets us talk to the phone app over a WiFi connection
+#include &lt;Wire.h&gt;               //I2C library, used to talk to the LED matrix chip
+#include &lt;math.h&gt;               //Gives us cos()/sin()/M_PI for the mecanum-wheel maths
+#include "Freenove_4WD_Car_WiFi.h"
+#include "Freenove_4WD_Car_Emotion.h"
+#include "Freenove_4WD_Car_WS2812.h"
+#include "Freenove_4WD_Car_For_Pico_W.h"
+
+// These control how often (in milliseconds) we send different types of
+// sensor data back to the phone app, so we don't flood the WiFi link.
+#define UPLOAD_VOL_TIME 3000          //How often to send battery voltage (every 3 seconds)
+long int lastUploadVoltageTime;       //Remembers the last time we sent it
+#define UPLOAD_LIGHTVOL_TIME 500      //How often to send light-sensor readings
+long int lastUploadLIGHTADCTime;
+#define UPLOAD_LINEVOL_TIME 200       //How often to send line-tracking sensor readings
+long int lastUploadLINEVOLTime;
+#define UPLOAD_SONARVOL_TIME 20       //How often to send ultrasonic distance readings
+long int lastUploadSONARVOLTime;
+float time_proportion = 5.5;  //If you want to get the best out of the rotation mode, change the value by experimenting
+int buzzer_frequency = 0;
+int CAR_MODE_VOL = 0;      //The car's current auto-drive mode (0=manual, 1=light, 2=line, 3=sonar)
+int LASt_CAR_MODE_VOL = 0; //The mode we just switched to, used to detect when the mode changes
+
+// CmdArray/paramters hold the most recently decoded command from the app.
+// CmdArray[0] is the single letter that says WHAT to do (see the CMD_*
+// defines in Freenove_4WD_Car_WiFi.h), and paramters[1..4] are the numbers
+// that came after it (e.g. angle and speed for a drive command).
+char CmdArray[8];
+int paramters[8];
+int sendOnceModuleCheck = 1;  //1 = we still need to tell the app which head module (matrix/sonar) is fitted
+int cmdFlag;
+
+
+//WiFi parameter setting — this is where you type in YOUR home WiFi details.
+//Replace the "********" placeholders with your own network name and password.
+char ssid_Router[] = "********";         //Modify according to your router name
+char password_Router[] = "********";  //Modify according to your router password
+char ssid_AP[] = "Sunshine";             //Pico W turns on an AP and calls it Sunshine
+char password_AP[] = "Sunshine";         //Set your AP password for Pico W to Sunshine
+WiFiServer server_Cmd(4002);  //A TCP server on port 4002 that the phone app connects to for sending commands
+
+// setup() runs ONCE when the Pico W is powered on or reset.
+// It turns on every subsystem before the car starts listening for commands.
+void setup() {
+  Buzzer_Setup();  //Buzzer initialization
+  Serial.begin(115200);
+  WiFi_Setup(0);                //Set mode. When the parameter is 1, AP mode is enabled. If the parameter is 0, the STA mode is enabled.
+  server_Cmd.begin(4002);       //Start the command server
+  server_Cmd.setNoDelay(true);  //Set no delay in sending and receiving data
+  Wire.begin();
+  Motor_Setup();                   //Motor initialization
+  Servo_Setup();                   //Servo initialization
+  WS2812_Setup();                  //WS2812 initialization
+  Emotion_and_Ultrasonic_Setup();  //Emotion initialization or Ultrasonic initialization
+  Photosensitive_Setup();          //Light initialization
+  Track_Setup();                   //Track initialization
+  Servo_1_Angle(90);
+  delay(500);
+}
+
+// loop() runs over and over, forever, as fast as the Pico W can manage.
+// Each time round it: accepts a phone connection if there is one, reads
+// one line of text (a command) if one has arrived, works out what that
+// command means, does it, and then updates the face/lights/sensors
+// before looping back round to check for the next command.
+void loop() {
+  WiFiClient client = server_Cmd.accept();  //listen for incoming clients
+  if (client) {                                //if you get a client
+    Serial.println("Cmd_Server connected to a client.");
+    while (client.connected()) {
+      if (sendOnceModuleCheck == 1) {
+        // The very first time we talk to the app, tell it whether this car
+        // has an LED matrix (face) or an ultrasonic sensor plugged into its
+        // "head" connector — the app shows different buttons depending on
+        // which one is fitted.
+        if (Check_Module_value == SONAR_IS_ESIST)
+          cmdFlag = SONAR_IS_ESIST;
+        else
+          cmdFlag = MATRIX_IS_EXIST;
+        sendOnceModuleCheck = 0;
+        client.print("A#" + String(cmdFlag) + "\n");
+      }                                                         //loop while the client's connected
+      if (client.available()) {                                 //if there's bytes to read from the client
+        // A command from the app is one line of text ending in '\n', for
+        // example "N#45#80#0#0\n". Read it, copy it into a plain C string
+        // (char array) because that's what Get_Command()/strtok() need,
+        // then hand it to Get_Command() to decode into CmdArray/paramters.
+        String inputStringTemp = client.readStringUntil('\n');  //Read the command by WiFi
+        Serial.println(inputStringTemp);                        //Print out the command received by WiFi
+        int string_length = inputStringTemp.length() + 1;
+        char str[string_length];
+        inputStringTemp.toCharArray(str, string_length);
+        Get_Command(str);
+        if (CmdArray[0] == CMD_LED_MOD)  //Set the display mode of car colored lights
+        {
+          WS2812_SetMode(paramters[1]);
+        }
+        if (CmdArray[0] == CMD_LED)  //Set the color and brightness of the car lights
+        {
+          WS2812_Set_Color_1(paramters[1], paramters[2], paramters[3], paramters[4]);
+        }
+        if (CmdArray[0] == CMD_MATRIX_MOD)  //Set the display mode of the LED matrix
+        {
+          if (Check_Module_value == MATRIX_IS_EXIST) {
+            Emotion_SetMode(paramters[1]);  //Display
+            Serial.print(" \n matrix is exist !!! \n");
+          }
+          if (Check_Module_value != MATRIX_IS_EXIST) {
+            // Buzzer_Variable(2000, 50, 2);
+            client.print("A#" + String(SONAR_IS_ESIST) + "\n");
+            Serial.print(" \n sonar is exist !!! \n");
+          }
+        }
+        if (CmdArray[0] == CMD_BUZZER)  //Buzzer control command
+        {
+          tone(2, paramters[1]);  //Play a tone on pin 2 at the requested frequency (Hz); paramters[1]==0 turns it off
+          ;
+        }
+        if (CmdArray[0] == CMD_POWER) {  //Power query command
+          // The app asked "how much battery is left?" — read it and send an
+          // answer straight back in the same "LETTER#value\n" style as the
+          // commands we receive, e.g. "P#7.90\n".
+          float battery_voltage = Get_Battery_Voltage();
+          client.print(CMD_POWER);
+          client.print(INTERVAL_CHAR);
+          client.print(battery_voltage);
+          client.print(ENTER);
+        }
+
+        if (CmdArray[0] == CMD_M_MOTOR) {  //Network control car movement command
+          // The app has two virtual joysticks. The LEFT one sends its angle
+          // and distance-from-centre as paramters[1]/paramters[2] and steers
+          // the car's direction/speed; the RIGHT one sends paramters[3]/[4]
+          // and controls how fast the car spins on the spot. We turn each
+          // joystick's (angle, distance) into (X, Y) speeds using basic
+          // trigonometry (cos/sin), exactly like converting a compass
+          // direction and distance into "how far across, how far up".
+          Car_SetMode(0);
+          int LY = paramters[2] * cos(paramters[1] * (M_PI / 180));     //paramters[1] represents the Angle to the the Y-axis,Counterclockwise is 0 to 180 degrees
+          int LX = -(paramters[2] * sin(paramters[1] * (M_PI / 180)));  //paramters[2] represents the move speed(the first jostick)
+          int RX = paramters[4] * sin(paramters[3] * (M_PI / 180));     //paramters[3] represents the Angle to the Y-axis,Counterclockwise is 0 to 180 degrees
+          int RY = paramters[4] * cos(paramters[3] * (M_PI / 180));     //Converts data from the client to its x and y axis positions
+
+          // Mecanum wheels have rollers set at 45 degrees, so mixing the
+          // forward (LY), sideways (LX) and turning (RX) speeds together
+          // with plus/minus like this lets all four wheels spin at just
+          // the right speed to drive in ANY direction, even sideways,
+          // without turning the car's body at all!
+          int FR = LY - LX + RX;  //The McNamum wheel chassis motion formula
+          int FL = LY + LX - RX;  //LY stands for longitudinal velocity
+          int BL = LY - LX - RX;  //LX stands for transverse velocity
+          int BR = LY + LX + RX;  //RX stands for angular velocity
+          Motor_M_Move(FL, BL, BR, FR);
+        }
+        if (CmdArray[0] == CMD_CAR_ROTATE)  //Rotate car command
+        {
+          // This is the "spin while driving in a circle" trick mode. If the
+          // right joystick isn't pushed, it just drives normally (same maths
+          // as CMD_M_MOTOR above). But if it IS pushed, we enter a small
+          // loop of our own (a "while(1)") that keeps recalculating the
+          // wheel speeds every few milliseconds, slowly walking set_angle
+          // around a full circle, so the car drives round and round while
+          // also spinning — like a fairground teacup ride! It keeps checking
+          // for a new command each time round so it can be told to stop.
+          Car_SetMode(0);
+          float battery_voltage = Get_Battery_Voltage();
+          int LY = paramters[2] * cos(paramters[1] * (M_PI / 180));
+          int LX = -(paramters[2] * sin(paramters[1] * (M_PI / 180)));
+          int RX = paramters[4] * sin(paramters[3] * (M_PI / 180));
+          int RY = paramters[4] * cos(paramters[3] * (M_PI / 180));  //Converts data from the client to its x and y axis positions
+
+          if (paramters[4] == 0) {  //If we don't move joystick of the right
+            int FR = LY - LX + RX;
+            int FL = LY + LX - RX;
+            int BL = LY - LX - RX;
+            int BR = LY + LX + RX;
+            Motor_M_Move(FL, BL, BR, FR);  //
+          } else {
+            int W = (RX &gt; 0) ? 40 : -40;  //Spin direction/speed: +40 one way, -40 the other
+            int VY;
+            int VX;
+            int set_angle = paramters[3];
+            while (1) {  //Keep driving round the circle until told to stop
+              VY = 40 * cos(set_angle * (M_PI / 180));
+              VX = -(40 * sin(set_angle * (M_PI / 180)));
+              int FR = VY - VX + W;
+              int FL = VY + VX - W;
+              int BL = VY - VX - W;
+              int BR = VY + VX + W;
+              Motor_M_Move(FL, BL, BR, FR);
+              delay(5 * time_proportion * 8 / battery_voltage);  //Pause briefly; battery voltage nudges the timing to keep speed consistent
+              if (W == 40) {
+                set_angle -= 5;  //Step the circle angle round a bit each time
+              } else {
+                set_angle += 5;
+              }
+              if (client.available()) {  //Check if a new command has arrived while we're stuck in this loop
+                String inputStringTemp = client.readStringUntil('\n');
+                Serial.println(inputStringTemp);
+                int string_length = inputStringTemp.length() + 1;
+                char str[string_length];
+                inputStringTemp.toCharArray(str, string_length);
+                Get_Command(str);
+                if (CmdArray[0] == CMD_CAR_ROTATE &amp;&amp; paramters[3] == 0) {  //App says "stop rotating"
+                  Motor_M_Move(0, 0, 0, 0);
+                  break;  //Exit the while(1) loop and return to the normal command loop
+                }
+              }
+            }
+          }
+        }
+        if (CmdArray[0] == CMD_SERVO) {  //Network control servo motor movement command
+          Servo_1_Angle(paramters[1]);
+        }
+        if (CmdArray[0] == CMD_CAR_MODE) {  //Car command Mode
+          // This is how the app switches the car between manual driving and
+          // one of the three "self-driving" auto modes. Car_SetMode() just
+          // records which mode we're in (checked later, at the bottom of
+          // loop(), by Car_Select() which actually runs the self-driving
+          // behaviour every time round the loop).
+          oa_CalculateVoltageCompensation();
+          if (paramters[1] == CAR_MODE_LIGHT_TRACING)  //Light seeking car command
+          {
+            LASt_CAR_MODE_VOL = 1;
+            Car_SetMode(1);
+          } else if (paramters[1] == CAR_MODE_LINE_TRACKING)  //Tracking car command
+          {
+            LASt_CAR_MODE_VOL = 1;
+            Car_SetMode(2);
+          } else if (paramters[1] == CAR_MODE_SONAR)  //Ultrasonic car command
+          {
+            if (Check_Module_value == SONAR_IS_ESIST) {
+              LASt_CAR_MODE_VOL = 1;
+              Car_SetMode(CAR_MODE_SONAR);
+            }
+            if (Check_Module_value != SONAR_IS_ESIST) {
+              Car_SetMode(CAR_MODE_MANUAL);
+              // Buzzer_Variable(2000, 50, 2);
+              client.print("A#" + String(MATRIX_IS_EXIST) + "\n");
+            }
+          } else if (paramters[1] == 0) {
+            LASt_CAR_MODE_VOL = 2;
+            Car_SetMode(0);
+          }
+          if (CAR_MODE_VOL != LASt_CAR_MODE_VOL) {
+            if (CAR_MODE_VOL == 1) {
+              emotion_task_mode = 0;  //Display
+              Motor_Move(0, 0);       //Stop the car
+              Servo_1_Angle(90);
+              delay(100);
+              isLightModeFirstStarting = true;
+            }
+            CAR_MODE_VOL = LASt_CAR_MODE_VOL;
+          }
+        }
+        //Clears the command array and parameter array
+        memset(CmdArray, 0, sizeof(CmdArray));
+        memset(paramters, 0, sizeof(paramters));
+      }
+      // --- From here on we run EVERY time round loop(), whether or not a
+      // new command just arrived, so the face/lights/sensors keep updating
+      // smoothly even while nothing new has been said over WiFi. ---
+      if (millis() - lastUploadVoltageTime &gt; UPLOAD_VOL_TIME) {  //Time to send another battery reading?
+        float battery_voltage = Get_Battery_Voltage();
+        client.print("P#" + String(battery_voltage) + "\n");
+        lastUploadVoltageTime = millis();
+      }
+      Emotion_and_Ultrasonic_Setup();  //Re-check which "head" module (matrix or sonar) is plugged in
+      if (Check_Module_value == MATRIX_IS_EXIST) {
+        Emotion_Show(emotion_task_mode);  //Led matrix display function
+      } else if (Check_Module_value == SONAR_IS_ESIST) {
+      }
+      WS2812_Show(ws2812_task_mode);  //Car color lights display function
+      Car_Select(carFlag);            //Pico W Car mode selection function — runs the self-driving behaviour if we're in an auto mode
+      if (carFlag == CAR_MODE_LIGHT_TRACING) {  //Send light-sensor readings back to the app while in light-seeking mode
+        if (millis() - lastUploadLIGHTADCTime &gt; UPLOAD_LIGHTVOL_TIME) {
+          int leftADCVoltage = getLeftPhotosensitiveADCValue();
+          int rightADCVoltage = getRightPhotosensitiveADCValue();
+          client.print("C#1#" + String(leftADCVoltage) + "#" + String(rightADCVoltage) + "\n");
+          lastUploadLIGHTADCTime = millis();
+        }
+      }
+      if (carFlag == CAR_MODE_LINE_TRACKING) {  //Send line-tracking sensor readings back to the app while in line-tracking mode
+        if (millis() - lastUploadLINEVOLTime &gt; UPLOAD_LINEVOL_TIME) {
+          Track_Read();
+          client.print("C#2#" + String(sensorValue[0]) + String(sensorValue[1]) + String(sensorValue[2]) + "\n");
+          lastUploadLINEVOLTime = millis();
+        }
+      }
+      if (carFlag == CAR_MODE_SONAR &amp;&amp; Check_Module_value == SONAR_IS_ESIST) {  //Send ultrasonic distance readings back to the app while in sonar mode
+        if(millis() - lastUploadSONARVOLTime &gt; UPLOAD_SONARVOL_TIME){
+          client.print("C#3#" + String(sonar_distance) + "\n");
+          lastUploadSONARVOLTime = millis();
+        }
+      }
+    }
+    client.stop();  //close the connection:
+    Serial.println("Command Client Disconnected.");
+    sendOnceModuleCheck = 1;  //Next time a phone connects, tell it which head module we have again
+    carFlag = CAR_MODE_MANUAL;  //Safety: if the app disconnects, stop any auto-driving mode
+  }
+}
+
+// Get_Command() is the heart of "turning text into action". It takes one
+// command line (already split from the '\n'), e.g. "N#45#80#0#0", and
+// breaks it apart at each '#' character using strtok() — a C function that
+// chops a string into pieces ("tokens") around a separator, a bit like
+// Python's str.split("#"). The first piece is a single letter saying WHAT
+// to do (stored in CmdArray[0]); the rest are turned from text into numbers
+// with atoi() ("ASCII to integer") and stored in paramters[1..5] for the
+// code in loop() to use.
+void Get_Command(char *string) {
+  char *token = strtok(string, INTERVAL_CHAR);
+  CmdArray[0] = token[0];                    // Put the command into an array
+  for (int i = 0; i &lt; 5; i++) {
+    if (token != NULL) {
+      token = strtok(NULL, INTERVAL_CHAR);
+    }
+    paramters[i + 1] = atoi(token);
+  }
+}
+</code></pre>
+          <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
           <p>This is the "everything" program — it lets you control the whole car from a phone app over WiFi, all in one sketch! Your phone sends short text messages like <code>N#45#80#0#0</code>, and the Pico W reads that text, breaks it into pieces ("parsing"), and calls the right function to drive the mecanum wheels, change the LED face's expression, light up the RGB strip, or check the battery and sensors.</p>
           <p>It teaches how a computer can run several "brains" at once without freezing — using <code>millis()</code> timers instead of <code>delay()</code> so the face animates, the lights glow, and new WiFi commands keep arriving all at the same time — plus it shows off some real trigonometry, letting a joystick's angle and distance become sideways, forwards, and spinning motion for the mecanum wheels.</p>
         </div>
-        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/06.2_Multi_Functional_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+        </div>
+
+        <div class="step">
+          <div class="step-title">🏆 Step 3 — Try the challenge</div>
+          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+        </div>
       </div>
     </details>
   </div>
