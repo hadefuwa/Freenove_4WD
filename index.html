@@ -57,37 +57,32 @@
     padding: 0 1.25rem 5rem;
   }
 
-  /* ---------- Site nav ---------- */
-  .site-nav{
+  /* ---------- Quick jump ---------- */
+  .quick-jump{
     position: sticky;
     top: 0;
     z-index: 20;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     padding: 0.7rem 1.25rem;
     margin: 0 -1.25rem;
     background: color-mix(in srgb, var(--panel) 88%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
   }
-  .site-nav a{
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 1rem;
+  .quick-jump a{
+    padding: 0.3rem 0.7rem;
     border-radius: 999px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.78rem;
     color: var(--muted);
-    border: 1px solid transparent;
+    background: var(--bg);
+    border: 1px solid var(--border);
   }
-  .site-nav a:hover{ color: var(--text); }
-  .site-nav a.active{
-    color: #fff;
-    background: linear-gradient(135deg, var(--hero-1), var(--hero-2));
-  }
+  .quick-jump a:hover{ color: var(--text); border-color: var(--muted); }
 
   /* ---------- Hero ---------- */
   header.hero{
@@ -108,7 +103,7 @@
   header.hero p{
     color: rgba(255,255,255,0.92);
     margin: 0 auto;
-    max-width: 40rem;
+    max-width: 42rem;
     font-size: 1.05rem;
   }
   /* ---------- Stats bar ---------- */
@@ -191,7 +186,32 @@
   }
   .reset-btn:hover{ color: var(--text); border-color: var(--muted); }
 
-  /* ---------- Lesson cards ---------- */
+  /* ---------- Group headings ---------- */
+  .group-heading{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 2.2rem 0 1rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    scroll-margin-top: 4rem;
+  }
+  .group-heading .dot{
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--lc);
+    flex-shrink: 0;
+  }
+  .group-heading .group-desc{
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-left: 0.3rem;
+  }
+  .group[data-color]{ --lc: initial; }
+
+  /* ---------- Lesson (sketch) cards ---------- */
   details.lesson{
     background: var(--panel);
     border: 1px solid var(--border);
@@ -207,10 +227,11 @@
     padding: 1.15rem 1.3rem;
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.75rem;
     font-weight: 800;
-    font-size: 1.12rem;
+    font-size: 1.05rem;
     user-select: none;
+    flex-wrap: wrap;
   }
   details.lesson > summary::-webkit-details-marker{ display:none; }
   details.lesson > summary .icon-badge{
@@ -223,6 +244,16 @@
     justify-content: center;
     font-size: 1.35rem;
     background: var(--lc-soft);
+  }
+  details.lesson > summary .folder-tag{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--lc);
+    background: var(--lc-soft);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
   }
   details.lesson > summary .chevron{
     margin-left: auto;
@@ -254,7 +285,7 @@
     font-size: 1.05rem;
   }
   .lesson-body h4{
-    margin: 0.6rem 0 0.3rem;
+    margin: 0.9rem 0 0.3rem;
     font-size: 0.95rem;
     color: var(--lc);
   }
@@ -287,6 +318,49 @@
     color: var(--muted);
   }
   .tip strong{ color: var(--text); }
+
+  .how-it-works{
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    margin: 0.9rem 0;
+  }
+  .how-it-works .kicker{
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--lc);
+    margin-bottom: 0.4rem;
+  }
+  .how-it-works p:first-of-type{ margin-top: 0; }
+  .how-it-works p:last-child{ margin-bottom: 0; }
+
+  .try-it-heading{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin: 1.3rem 0 0.4rem;
+    color: var(--lc);
+  }
+
+  .view-code{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--lc);
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .view-code:hover{ filter: brightness(1.08); }
 
   /* ---------- Task cards ---------- */
   .task{
@@ -339,37 +413,50 @@
     margin-top: 2rem;
   }
 
-  /* ---------- Lesson color themes ---------- */
-  .lesson[data-color="slate"]  { --lc: #64748b; --lc-soft: #e2e8f0; }
-  .lesson[data-color="orange"] { --lc: #f97316; --lc-soft: #ffedd5; }
-  .lesson[data-color="pink"]   { --lc: #ec4899; --lc-soft: #fce7f3; }
-  .lesson[data-color="blue"]   { --lc: #3b82f6; --lc-soft: #dbeafe; }
-  .lesson[data-color="green"]  { --lc: #16a34a; --lc-soft: #dcfce7; }
-  .lesson[data-color="violet"] { --lc: #8b5cf6; --lc-soft: #ede9fe; }
-  .lesson[data-color="amber"]  { --lc: #d97706; --lc-soft: #fef3c7; }
+  /* ---------- Group / lesson color themes ---------- */
+  .group[data-color="slate"] .group-heading,
+  .group[data-color="slate"] details.lesson  { --lc: #64748b; --lc-soft: #e2e8f0; }
+  .group[data-color="orange"] .group-heading,
+  .group[data-color="orange"] details.lesson { --lc: #f97316; --lc-soft: #ffedd5; }
+  .group[data-color="blue"] .group-heading,
+  .group[data-color="blue"] details.lesson   { --lc: #3b82f6; --lc-soft: #dbeafe; }
+  .group[data-color="amber"] .group-heading,
+  .group[data-color="amber"] details.lesson  { --lc: #d97706; --lc-soft: #fef3c7; }
+  .group[data-color="green"] .group-heading,
+  .group[data-color="green"] details.lesson  { --lc: #16a34a; --lc-soft: #dcfce7; }
+  .group[data-color="pink"] .group-heading,
+  .group[data-color="pink"] details.lesson   { --lc: #ec4899; --lc-soft: #fce7f3; }
+  .group[data-color="violet"] .group-heading,
+  .group[data-color="violet"] details.lesson { --lc: #8b5cf6; --lc-soft: #ede9fe; }
   @media (prefers-color-scheme: dark){
-    .lesson[data-color="slate"]  { --lc-soft: #2a3340; }
-    .lesson[data-color="orange"] { --lc-soft: #3a2412; }
-    .lesson[data-color="pink"]   { --lc-soft: #3a1c2c; }
-    .lesson[data-color="blue"]   { --lc-soft: #17273f; }
-    .lesson[data-color="green"]  { --lc-soft: #123423; }
-    .lesson[data-color="violet"] { --lc-soft: #291f42; }
-    .lesson[data-color="amber"]  { --lc-soft: #3a2c0c; }
+    .group[data-color="slate"] details.lesson  { --lc-soft: #2a3340; }
+    .group[data-color="orange"] details.lesson { --lc-soft: #3a2412; }
+    .group[data-color="blue"] details.lesson   { --lc-soft: #17273f; }
+    .group[data-color="amber"] details.lesson  { --lc-soft: #3a2c0c; }
+    .group[data-color="green"] details.lesson  { --lc-soft: #123423; }
+    .group[data-color="pink"] details.lesson   { --lc-soft: #3a1c2c; }
+    .group[data-color="violet"] details.lesson { --lc-soft: #291f42; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <nav class="site-nav">
-    <a href="index.html" class="active">🎯 Challenges</a>
-    <a href="how-it-works.html">📖 How the Code Works</a>
+  <nav class="quick-jump">
+    <a href="#guide">📥 Guide</a>
+    <a href="#group-00">00</a>
+    <a href="#group-01">01 First Moves</a>
+    <a href="#group-02">02 Ultrasonic</a>
+    <a href="#group-03">03 Light</a>
+    <a href="#group-04">04 Line Tracking</a>
+    <a href="#group-05">05 Remote</a>
+    <a href="#group-06">06 WiFi</a>
   </nav>
 
   <header class="hero">
     <div class="badge-emoji">🚗🏁</div>
     <h1>Freenove 4WD Car Challenges</h1>
-    <p>Your mission book for the Freenove 4WD Car. Work through each lesson, hit "Mark Complete" as you finish challenges, and don't be afraid to break things — that's how you learn to code!</p>
+    <p>Every example program in the kit, in the exact same order as your <code>Sketches</code> folder — with a plain-English explanation of how the code works, plus hands-on challenges to try where they exist. Hit "Mark Complete" as you finish challenges, and don't be afraid to break things — that's how you learn to code!</p>
   </header>
 
   <div class="stats-row">
@@ -379,7 +466,7 @@
     </div>
     <div class="stat-card badges">
       <div class="num" id="stat-lessons">0/5</div>
-      <div class="lbl">Lessons Cleared</div>
+      <div class="lbl">Modules Cleared</div>
     </div>
     <div class="stat-card streak">
       <div class="num" id="stat-percent">0%</div>
@@ -396,7 +483,7 @@
     <button class="btn reset-btn" id="reset-btn" type="button">Reset all progress</button>
   </div>
 
-  <details class="lesson" data-color="slate" open>
+  <details class="lesson" data-color="slate" id="guide" open style="--lc:#64748b; --lc-soft:#e2e8f0;">
     <summary>
       <span class="icon-badge">📥</span>
       Guide: How to Download Your Code
@@ -420,354 +507,611 @@
     </div>
   </details>
 
-  <details class="lesson" data-color="orange">
-    <summary>
-      <span class="icon-badge">🏎️</span>
-      Lesson 1 – Car Move &amp; Turn
-      <span class="lesson-progress" data-lesson="1"></span>
-      <span class="chevron">▶</span>
-    </summary>
-    <div class="lesson-body">
-      <h3>🚦 The Basics: How to Read the Code</h3>
-      <p>The "Magic Command":</p>
-      <pre><code>Motor_M_Move(LeftFront, LeftRear, RightFront, RightRear);</code></pre>
-      <ul>
-        <li><strong>Positive numbers (1 to 100):</strong> Wheel goes forward.</li>
-        <li><strong>Negative numbers (-1 to -100):</strong> Wheel goes backward.</li>
-        <li><code>delay(1000)</code>: Wait for 1000 milliseconds (which is 1 second).</li>
-      </ul>
+  <!-- ============ 00 ============ -->
+  <div class="group" data-color="slate">
+    <div class="group-heading" id="group-00"><span class="dot"></span>00 — Getting Ready<span class="group-desc">calibrate before you build</span></div>
 
-      <div class="task" data-lesson="1" data-id="l1-c1">
-        <div class="task-content">
-          <span class="title">🏆 Challenge 1: The Speed Racer</span>
-          <p><strong>Goal:</strong> Make the car go twice as fast when moving forward, and super slow when moving backward.</p>
-          <p><strong>How-to:</strong> Look at the first <code>Motor_M_Move</code> line. Change the 50s to a higher number (up to 100).</p>
-          <div class="tip"><strong>Tip:</strong> If 100 is the fastest, what number would make the car crawl like a turtle?</div>
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🔧</span>
+        <span class="folder-tag">00.0_Servo_90</span>
+        Center the Steering Servo
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This little program tells the car's steering servo to point straight ahead (90 degrees out of its 0–180 degree range) so you can check it's mounted correctly before doing anything fancier.</p>
+          <p>It teaches core C++/Arduino ideas: <code>setup()</code> runs once to get hardware ready while <code>loop()</code> repeats forever; functions can take parameters (like an angle in degrees) and be reused from other files via a header (<code>.h</code>) file; and how a servo motor is actually controlled using PWM — rapid on/off pulses whose width tells the servo which angle to move to.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/00.0_Servo_90" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
+    </details>
+  </div>
 
-      <div class="task" data-lesson="1" data-id="l1-c2">
-        <div class="task-content">
-          <span class="title">🕒 Challenge 2: The Long Haul</span>
-          <p><strong>Goal:</strong> Make the car drive forward for 3 seconds instead of just 1.</p>
-          <p><strong>How-to:</strong> Find the <code>delay(1000);</code> line right after the forward command. Change the number inside the parentheses.</p>
-          <div class="tip"><strong>Tip:</strong> The computer counts in milliseconds. 1000 = 1 second, so 3000 = 3 seconds.</div>
+  <!-- ============ 01 ============ -->
+  <div class="group" data-color="orange">
+    <div class="group-heading" id="group-01"><span class="dot"></span>01 — First Moves<span class="group-desc">motors, servos, sound, lights, and eyes</span></div>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🏎️</span>
+        <span class="folder-tag">01.1_Car_Move_and_Turn</span>
+        Car Move &amp; Turn
+        <span class="lesson-progress" data-lesson="01.1"></span>
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program teaches the robot car to drive in every direction using its four special "mecanum" wheels, which have angled rollers that let the car go forward, spin in place, slide sideways, or glide diagonally — all without turning the wheels like a steering wheel.</p>
+          <p>The "Magic Command":</p>
+          <pre><code>Motor_M_Move(LeftFront, LeftRear, RightFront, RightRear);</code></pre>
+          <ul>
+            <li><strong>Positive numbers (1 to 100):</strong> Wheel goes forward.</li>
+            <li><strong>Negative numbers (-1 to -100):</strong> Wheel goes backward.</li>
+            <li><code>delay(1000)</code>: Wait for 1000 milliseconds (1 second).</li>
+          </ul>
+          <p>The real lesson is in the <em>pattern</em> of numbers: matching signs make the car go straight, opposite left/right signs make it spin, and opposite front/back signs make it slide sideways or diagonally.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="1" data-id="l1-c3">
-        <div class="task-content">
-          <span class="title">🔄 Challenge 3: The "Dizzy" Spinner</span>
-          <p><strong>Goal:</strong> Make the car spin in a circle in one spot (a "Zero Turn").</p>
-          <p><strong>How-to:</strong> To spin, one side of the car needs to go forward while the other side goes backward. Try:</p>
-          <pre><code>Motor_M_Move(50, 50, -50, -50);</code></pre>
-          <div class="tip"><strong>Tip:</strong> If the car just turns slightly, increase the delay so it keeps spinning longer!</div>
+        <div class="try-it-heading">🏆 Try it: Challenges</div>
+
+        <div class="task" data-lesson="01.1" data-id="l1-c1">
+          <div class="task-content">
+            <span class="title">🏆 Challenge 1: The Speed Racer</span>
+            <p><strong>Goal:</strong> Make the car go twice as fast when moving forward, and super slow when moving backward.</p>
+            <p><strong>How-to:</strong> Look at the first <code>Motor_M_Move</code> line. Change the 50s to a higher number (up to 100).</p>
+            <div class="tip"><strong>Tip:</strong> If 100 is the fastest, what number would make the car crawl like a turtle?</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
-    </div>
-  </details>
 
-  <details class="lesson" data-color="pink">
-    <summary>
-      <span class="icon-badge">👀</span>
-      Lesson 2 – Matrix Display
-      <span class="lesson-progress" data-lesson="2"></span>
-      <span class="chevron">▶</span>
-    </summary>
-    <div class="lesson-body">
-      <p>Those two squares on the front of your car are like the robot's "eyes," and you get to tell them exactly what to do. Right now, your robot is programmed to blink, but you can change its personality just by tweaking the code.</p>
-      <p>Here are 5 missions for you to try!</p>
-
-      <div class="task" data-lesson="2" data-id="l2-m1">
-        <div class="task-content">
-          <span class="title">🚀 Mission 1: The Fast-Blinker</span>
-          <p>The robot is currently blinking slowly. Let's make it look like it just drank a giant soda! Find <code>showArray(500);</code> at the bottom of <code>void loop</code>.</p>
-          <p><strong>Goal:</strong> Change 500 to 100.</p>
-          <div class="tip"><strong>Secret:</strong> That number is "milliseconds." 1000 is one second. Smaller number = faster blinking!</div>
+        <div class="task" data-lesson="01.1" data-id="l1-c2">
+          <div class="task-content">
+            <span class="title">🕒 Challenge 2: The Long Haul</span>
+            <p><strong>Goal:</strong> Make the car drive forward for 3 seconds instead of just 1.</p>
+            <p><strong>How-to:</strong> Find the <code>delay(1000);</code> line right after the forward command. Change the number inside the parentheses.</p>
+            <div class="tip"><strong>Tip:</strong> The computer counts in milliseconds. 1000 = 1 second, so 3000 = 3 seconds.</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="2" data-id="l2-m2">
-        <div class="task-content">
-          <span class="title">😉 Mission 2: The Pirate Wink</span>
-          <p>Can you make the robot wink one eye while keeping the other one wide open? Look at <code>y_array</code> (the right eye).</p>
-          <p><strong>Goal:</strong> Copy the first line of numbers and paste it over the second line so they match.</p>
-          <div class="tip"><strong>Secret:</strong> If the right eye stays the same but <code>x_array</code> keeps changing, it will look like a wink!</div>
+        <div class="task" data-lesson="01.1" data-id="l1-c3">
+          <div class="task-content">
+            <span class="title">🔄 Challenge 3: The "Dizzy" Spinner</span>
+            <p><strong>Goal:</strong> Make the car spin in a circle in one spot (a "Zero Turn").</p>
+            <p><strong>How-to:</strong> To spin, one side needs to go forward while the other goes backward. Try:</p>
+            <pre><code>Motor_M_Move(50, 50, -50, -50);</code></pre>
+            <div class="tip"><strong>Tip:</strong> If the car just turns slightly, increase the delay so it keeps spinning longer!</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="2" data-id="l2-m3">
-        <div class="task-content">
-          <span class="title">🌙 Mission 3: Night Mode</span>
-          <p>Find <code>matrix.init(0x71);</code> inside <code>void setup</code>.</p>
-          <p><strong>Goal:</strong> Right under that line, add: <code>matrix.setBrightness(1);</code></p>
-          <div class="tip"><strong>Secret:</strong> Numbers range from 0 (off) to 15 (super bright). Try 15 to see the difference!</div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.1_Car_Move_and_Turn" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🕹️</span>
+        <span class="folder-tag">01.2_Servo</span>
+        Servo Sweep
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program controls a servo motor — a small motor that can turn to a specific angle and hold it, unlike a regular motor that just spins. It first sets the servo to its middle position (90°), then sweeps it smoothly back and forth between 30° and 150°, forever, moving one degree at a time with tiny pauses in between.</p>
+          <p>It teaches the <code>setup()</code>/<code>loop()</code> structure, functions with parameters (like <code>Servo_1_Angle(degrees)</code> and <code>Servo_Sweep(start, end)</code>), and how PWM signals are used to tell real hardware what to do.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.2_Servo" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
+    </details>
 
-      <div class="task" data-lesson="2" data-id="l2-m4">
-        <div class="task-content">
-          <span class="title">😠 Mission 4: Angry Robot</span>
-          <p>Let's make the eyes look like flat, grumpy lines. Look at <code>x_array</code> and <code>y_array</code>.</p>
-          <p><strong>Goal:</strong> Change one row of numbers to:</p>
-          <pre><code>0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00</code></pre>
-          <div class="tip"><strong>Secret:</strong> <code>0x00</code> means "lights off" and <code>0xFF</code> means "all lights on in this row."</div>
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🔊</span>
+        <span class="folder-tag">01.3_Buzzer</span>
+        Buzzer
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program makes the onboard buzzer beep out a pattern of sounds — 4 short beeps, repeated 3 times.</p>
+          <p>It teaches <code>setup()</code>/<code>loop()</code>, and introduces <strong>digital output</strong> — a computer pin can only be fully ON (HIGH) or fully OFF (LOW), and flipping a pin HIGH and LOW very fast is exactly how the buzzer makes a musical pitch. It also shows how breaking a task into small, well-named functions (<code>Buzzer_Setup</code>, <code>Buzzer_Alert</code>, <code>freq</code>) makes code easier to read and reuse.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.3_Buzzer" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
+    </details>
 
-      <div class="task" data-lesson="2" data-id="l2-m5">
-        <div class="task-content">
-          <span class="title">🎨 Mission 5: The Master Artist (Custom Face)</span>
-          <p>The hardest mission! Can you make the eyes look like diamonds? 💎</p>
-          <p><strong>Goal:</strong> Use these secret codes for your array:</p>
-          <pre><code>0x08, 0x1C, 0x3E, 0x7F, 0x7F, 0x3E, 0x1C, 0x08</code></pre>
-          <div class="tip"><strong>Secret:</strong> Each code is one row of the 8x8 grid — the robot will have diamond-shaped eyes.</div>
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🔋</span>
+        <span class="folder-tag">01.4_Battery_level</span>
+        Battery Level
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program measures how much charge is left in the battery and prints it to the computer screen every 0.3 seconds. It works by reading a voltage through a "voltage divider" circuit into the Pico's ADC (analog-to-digital converter), which turns a real-world voltage into a number between 0 and 1023, then uses a bit of math to convert that number back into real volts.</p>
+          <p>It shows off functions that take inputs and return a result (like <code>Get_Battery_Voltage()</code> returning a decimal volts value), and simple arithmetic turning raw sensor data into something meaningful.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.4_Battery_level" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
+    </details>
 
-      <h4>💡 Top Secret Coding Tips</h4>
-      <ul>
-        <li><strong>The "Comma" Rule:</strong> Every number needs a comma after it, except the very last one in the row.</li>
-        <li><strong>The "Zapped" Rule:</strong> If your code won't upload, hit Undo (<code>Ctrl+Z</code>) to go back to when it worked.</li>
-        <li><strong>The "Drawing" Trick:</strong> Search for an "8x8 LED Matrix Tool" online — click the dots, get the <code>0x</code> codes!</li>
-      </ul>
-    </div>
-  </details>
-
-  <details class="lesson" data-color="blue">
-    <summary>
-      <span class="icon-badge">📡</span>
-      Lesson 3 – Ultrasonic Ranging
-      <span class="lesson-progress" data-lesson="3"></span>
-      <span class="chevron">▶</span>
-    </summary>
-    <div class="lesson-body">
-      <h3>🛰️ The "Head" and the "Ears"</h3>
-      <ul>
-        <li><strong>The Servo:</strong> A little motor that acts like a neck, turning to angles like 30°, 90°, or 150°.</li>
-        <li><strong>The Ultrasonic Sensor:</strong> Looks like two eyes, but they're actually ears! They send a "ping" of sound and listen for the echo.</li>
-      </ul>
-
-      <h3>📝 What the Code is Doing</h3>
-      <p><strong>1. The Startup (setup):</strong> Wakes up the Serial Port, gets the sensor and servo ready, looks straight ahead at 90°.</p>
-      <p><strong>2. The Scouting Loop:</strong> Look Left (150°) → Look Center (90°) → Look Right (30°) → Look Center again (90°) — forever.</p>
-
-      <div class="task" data-lesson="3" data-id="l3-m1">
-        <div class="task-content">
-          <span class="title">🚀 Mission 1: The Fast Scanner 🏃</span>
-          <p><strong>Goal:</strong> Make the robot look left, center, and right much faster.</p>
-          <p><strong>How-to:</strong> Find all the <code>delay(500);</code> lines. Change 500 to 200.</p>
-          <div class="tip"><strong>Secret:</strong> Go too low (like 50) and the robot's neck might get a bit shaky!</div>
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">👀</span>
+        <span class="folder-tag">01.5_Matrix</span>
+        Matrix Display (Eyes)
+        <span class="lesson-progress" data-lesson="01.5"></span>
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>Those two squares on the front of your car are like the robot's "eyes." Each 8×8 grid of tiny lights is drawn using bytes — one byte per row, where each of its 8 bits is either a 0 (LED off) or 1 (LED on), written compactly in hex like <code>0x18</code>. The program stores several of these 8-row "frames" in arrays (<code>x_array</code>, <code>y_array</code>) and loops through them to create a simple flipbook-style animation.</p>
+          <p>It teaches arrays, binary/hex number representation, bit patterns, and using loops to repeat an action over and over forever. Here are 5 missions for you to try!</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="3" data-id="l3-m2">
-        <div class="task-content">
-          <span class="title">🚀 Mission 2: The Owl Turn 🦉</span>
-          <p><strong>Goal:</strong> Make the robot look as far left and right as it possibly can.</p>
-          <p><strong>How-to:</strong> Change 150 to 180 (max left) and 30 to 0 (max right).</p>
-          <div class="tip"><strong>Secret:</strong> Servos usually move from 0 to 180. 90 is always the middle!</div>
+        <div class="try-it-heading">🏆 Try it: Missions</div>
+
+        <div class="task" data-lesson="01.5" data-id="l2-m1">
+          <div class="task-content">
+            <span class="title">🚀 Mission 1: The Fast-Blinker</span>
+            <p>The robot is currently blinking slowly. Let's make it look like it just drank a giant soda! Find <code>showArray(500);</code> at the bottom of <code>void loop</code>.</p>
+            <p><strong>Goal:</strong> Change 500 to 100.</p>
+            <div class="tip"><strong>Secret:</strong> That number is "milliseconds." 1000 is one second. Smaller number = faster blinking!</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="3" data-id="l3-m3">
-        <div class="task-content">
-          <span class="title">🚀 Mission 3: The Wall Alarm 🚨</span>
-          <p><strong>Goal:</strong> Use your hand to make the robot "yell" through the Serial Monitor when you get too close.</p>
-          <p><strong>How-to:</strong> Make the robot say "TOO CLOSE!" when the distance is less than 10.</p>
-          <div class="tip">
-            <strong>Tip 1 — The "If" Secret:</strong>
-            <pre><code>if (Get_Sonar() &lt; 10) {
+        <div class="task" data-lesson="01.5" data-id="l2-m2">
+          <div class="task-content">
+            <span class="title">😉 Mission 2: The Pirate Wink</span>
+            <p>Can you make the robot wink one eye while keeping the other one wide open? Look at <code>y_array</code> (the right eye).</p>
+            <p><strong>Goal:</strong> Copy the first line of numbers and paste it over the second line so they match.</p>
+            <div class="tip"><strong>Secret:</strong> If the right eye stays the same but <code>x_array</code> keeps changing, it will look like a wink!</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="01.5" data-id="l2-m3">
+          <div class="task-content">
+            <span class="title">🌙 Mission 3: Night Mode</span>
+            <p>Find <code>matrix.init(0x71);</code> inside <code>void setup</code>.</p>
+            <p><strong>Goal:</strong> Right under that line, add: <code>matrix.setBrightness(1);</code></p>
+            <div class="tip"><strong>Secret:</strong> Numbers range from 0 (off) to 15 (super bright). Try 15 to see the difference!</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="01.5" data-id="l2-m4">
+          <div class="task-content">
+            <span class="title">😠 Mission 4: Angry Robot</span>
+            <p>Let's make the eyes look like flat, grumpy lines. Look at <code>x_array</code> and <code>y_array</code>.</p>
+            <p><strong>Goal:</strong> Change one row of numbers to:</p>
+            <pre><code>0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00</code></pre>
+            <div class="tip"><strong>Secret:</strong> <code>0x00</code> means "lights off" and <code>0xFF</code> means "all lights on in this row."</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="01.5" data-id="l2-m5">
+          <div class="task-content">
+            <span class="title">🎨 Mission 5: The Master Artist (Custom Face)</span>
+            <p>The hardest mission! Can you make the eyes look like diamonds? 💎</p>
+            <p><strong>Goal:</strong> Use these secret codes for your array:</p>
+            <pre><code>0x08, 0x1C, 0x3E, 0x7F, 0x7F, 0x3E, 0x1C, 0x08</code></pre>
+            <div class="tip"><strong>Secret:</strong> Each code is one row of the 8x8 grid — the robot will have diamond-shaped eyes.</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <h4>💡 Top Secret Coding Tips</h4>
+        <ul>
+          <li><strong>The "Comma" Rule:</strong> Every number needs a comma after it, except the very last one in the row.</li>
+          <li><strong>The "Zapped" Rule:</strong> If your code won't upload, hit Undo (<code>Ctrl+Z</code>) to go back to when it worked.</li>
+          <li><strong>The "Drawing" Trick:</strong> Search for an "8x8 LED Matrix Tool" online — click the dots, get the <code>0x</code> codes!</li>
+        </ul>
+
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.5_Matrix" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">✨</span>
+        <span class="folder-tag">01.6_WS2812</span>
+        WS2812 RGB Lights
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program controls the strip of tiny RGB LEDs on the front of the car, making them glow, chase, blink, breathe, and swirl through rainbow colors. It shows how every light color is really just a mix of Red, Green, and Blue numbers from 0–255, and how a <code>for</code> loop can update each LED one at a time.</p>
+          <p>It also introduces functions as reusable "recipes" (like <code>WS2812_Setup</code> and <code>WS2812_Show</code>) and uses <code>millis()</code> timing so the lights can animate smoothly without ever freezing the rest of the program.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/01.6_WS2812" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ 02 ============ -->
+  <div class="group" data-color="blue">
+    <div class="group-heading" id="group-02"><span class="dot"></span>02 — Ultrasonic Sensing<span class="group-desc">bat-style sonar, then obstacle avoidance</span></div>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">📡</span>
+        <span class="folder-tag">02.1_Ultrasonic_Ranging</span>
+        Ultrasonic Ranging
+        <span class="lesson-progress" data-lesson="02.1"></span>
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program makes the ultrasonic sensor "look around" by riding on a servo that swings it right, center, left, and back to center, over and over. Each time it stops at a new angle, the code sends out a tiny, silent sound pulse and times how long the echo takes to bounce back — just like a bat uses echolocation — then does some quick math (distance = time × speed of sound ÷ 2) to turn that time into a distance in centimetres.</p>
+          <p><strong>1. The Startup (setup):</strong> Wakes up the Serial Port, gets the sensor and servo ready, looks straight ahead at 90°.<br>
+          <strong>2. The Scouting Loop:</strong> Look Left (150°) → Look Center (90°) → Look Right (30°) → Look Center again (90°) — forever.</p>
+        </div>
+
+        <div class="try-it-heading">🏆 Try it: Missions</div>
+
+        <div class="task" data-lesson="02.1" data-id="l3-m1">
+          <div class="task-content">
+            <span class="title">🚀 Mission 1: The Fast Scanner 🏃</span>
+            <p><strong>Goal:</strong> Make the robot look left, center, and right much faster.</p>
+            <p><strong>How-to:</strong> Find all the <code>delay(500);</code> lines. Change 500 to 200.</p>
+            <div class="tip"><strong>Secret:</strong> Go too low (like 50) and the robot's neck might get a bit shaky!</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="02.1" data-id="l3-m2">
+          <div class="task-content">
+            <span class="title">🚀 Mission 2: The Owl Turn 🦉</span>
+            <p><strong>Goal:</strong> Make the robot look as far left and right as it possibly can.</p>
+            <p><strong>How-to:</strong> Change 150 to 180 (max left) and 30 to 0 (max right).</p>
+            <div class="tip"><strong>Secret:</strong> Servos usually move from 0 to 180. 90 is always the middle!</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="02.1" data-id="l3-m3">
+          <div class="task-content">
+            <span class="title">🚀 Mission 3: The Wall Alarm 🚨</span>
+            <p><strong>Goal:</strong> Use your hand to make the robot "yell" through the Serial Monitor when you get too close.</p>
+            <p><strong>How-to:</strong> Make the robot say "TOO CLOSE!" when the distance is less than 10.</p>
+            <div class="tip">
+              <strong>Tip 1 — The "If" Secret:</strong>
+              <pre><code>if (Get_Sonar() &lt; 10) {
   Serial.print("TOO CLOSE!");
 }</code></pre>
-            <strong>Tip 2:</strong> Place it right after the <code>Get_Sonar</code> line.<br>
-            <strong>Tip 3:</strong> Sensors can see "ghost" numbers occasionally — that's just sensor noise!
+              <strong>Tip 2:</strong> Place it right after the <code>Get_Sonar</code> line.<br>
+              <strong>Tip 3:</strong> Sensors can see "ghost" numbers occasionally — that's just sensor noise!
+            </div>
           </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="3" data-id="l3-m4">
-        <div class="task-content">
-          <span class="title">🚀 Mission 4: The "Yes" Man ✅</span>
-          <p><strong>Goal:</strong> Make the robot shake its head "yes" instead of "no" (up and down instead of left and right).</p>
-          <p><strong>How-to:</strong> Check how your sensor is mounted — if it can't look up, rewrite the code to switch fast between just two angles: 70 and 110.</p>
-          <div class="tip">
-            <strong>Tip 1:</strong> Try going from 80 to 100 instead of 30 to 150 for a subtle "nod."<br>
-            <strong>Tip 2:</strong> Try <code>delay(100);</code> for a quick gesture instead of a slow turn.<br>
-            <strong>Tip 3:</strong> Move the head gently by hand first to check it moves smoothly.
+        <div class="task" data-lesson="02.1" data-id="l3-m4">
+          <div class="task-content">
+            <span class="title">🚀 Mission 4: The "Yes" Man ✅</span>
+            <p><strong>Goal:</strong> Make the robot shake its head "yes" instead of "no" (up and down instead of left and right).</p>
+            <p><strong>How-to:</strong> Check how your sensor is mounted — if it can't look up, rewrite the code to switch fast between just two angles: 70 and 110.</p>
+            <div class="tip">
+              <strong>Tip 1:</strong> Try going from 80 to 100 instead of 30 to 150 for a subtle "nod."<br>
+              <strong>Tip 2:</strong> Try <code>delay(100);</code> for a quick gesture instead of a slow turn.<br>
+              <strong>Tip 3:</strong> Move the head gently by hand first to check it moves smoothly.
+            </div>
           </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="3" data-id="l3-m5">
-        <div class="task-content">
-          <span class="title">🚀 Mission 5: The Guard Dog 🐕</span>
-          <p><strong>Goal:</strong> Make the robot stay at 90° for a while, do one quick scan, then go back to waiting.</p>
-          <p><strong>How-to:</strong> At the very end of <code>void loop()</code>, add <code>delay(5000);</code>.</p>
-          <div class="tip">
-            <strong>Tip 1:</strong> The loop runs top to bottom — put the delay at the very bottom.<br>
-            <strong>Tip 2:</strong> End with <code>Servo_1_Angle(90);</code> so it "stares" straight ahead while waiting.<br>
-            <strong>Tip 3:</strong> Change the nap time: 2000 = 2s nap, 10000 = 10s nap.
+        <div class="task" data-lesson="02.1" data-id="l3-m5">
+          <div class="task-content">
+            <span class="title">🚀 Mission 5: The Guard Dog 🐕</span>
+            <p><strong>Goal:</strong> Make the robot stay at 90° for a while, do one quick scan, then go back to waiting.</p>
+            <p><strong>How-to:</strong> At the very end of <code>void loop()</code>, add <code>delay(5000);</code>.</p>
+            <div class="tip">
+              <strong>Tip 1:</strong> The loop runs top to bottom — put the delay at the very bottom.<br>
+              <strong>Tip 2:</strong> End with <code>Servo_1_Angle(90);</code> so it "stares" straight ahead while waiting.<br>
+              <strong>Tip 3:</strong> Change the nap time: 2000 = 2s nap, 10000 = 10s nap.
+            </div>
           </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+
+        <h4>💡 Engineering Pro-Tips</h4>
+        <ul>
+          <li><strong>The "90" Rule:</strong> 90° is always the "Home" position.</li>
+          <li><strong>Watch the Wires:</strong> Turning to 0° or 180° can tangle or pull wires tight.</li>
+          <li><strong>The Serial Monitor:</strong> Click the Magnifying Glass icon to see the distance numbers!</li>
+        </ul>
+
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/02.1_Ultrasonic_Ranging" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
+    </details>
 
-      <h4>💡 Engineering Pro-Tips</h4>
-      <ul>
-        <li><strong>The "90" Rule:</strong> 90° is always the "Home" position.</li>
-        <li><strong>Watch the Wires:</strong> Turning to 0° or 180° can tangle or pull wires tight.</li>
-        <li><strong>The Serial Monitor:</strong> Click the Magnifying Glass icon to see the distance numbers!</li>
-      </ul>
-    </div>
-  </details>
-
-  <details class="lesson" data-color="green">
-    <summary>
-      <span class="icon-badge">🧠</span>
-      Lesson 4 – IR Follow
-      <span class="lesson-progress" data-lesson="4"></span>
-      <span class="chevron">▶</span>
-    </summary>
-    <div class="lesson-body">
-      <p>Think of this code as the "Brain" of your robot. It follows a simple loop: <strong>Look, Decide, Act.</strong></p>
-
-      <h4>1. The "Eyes" (Reading the Sensors)</h4>
-      <p>Three sensors on the bottom. <code>Track_Read()</code> looks at the ground: 0 = white floor, 1 = black line. The three sensors combine into a number from 0–7.</p>
-
-      <h4>2. The "Decision" (The Switch Case)</h4>
-      <ul>
-        <li>2 (010): Line in the middle → Drive straight.</li>
-        <li>4 or 6 (100/110): Line sliding left → Turn left.</li>
-        <li>1 or 3 (001/011): Line sliding right → Turn right.</li>
-        <li>7 (111): Big black wall or finish line → Stop.</li>
-      </ul>
-
-      <h4>3. The "Legs" (The Motors)</h4>
-      <p>Positive = forward, negative = backward. To turn, one side goes backward while the other goes forward — like spinning a swivel chair!</p>
-
-      <h4>4. The "Face" (The Emotions)</h4>
-      <p><code>showArrow</code> and <code>eyesBlink</code> don't drive the car, but show you what the "brain" is thinking.</p>
-
-      <div class="task" data-lesson="4" data-id="l4-c1">
-        <div class="task-content">
-          <span class="title">Challenge 1: The "Top Speed" Test</span>
-          <p>Make the robot go around the track as fast as possible.</p>
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🦇</span>
+        <span class="folder-tag">02.2_Ultrasonic_Ranging_Car</span>
+        Obstacle Avoidance (Bat Sonar)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program makes the car act like a bat using sonar to feel its way around a room. Every loop, the car swivels its ultrasonic sensor left, straight ahead, and right, then uses if/else decisions: if the path is clear, keep driving forward; if something is too close on one side, curve away from it; if something blocks the way straight ahead, stop, back up, and spin toward whichever side has more open space.</p>
+          <p>It's a great first example of "sensor-driven decision making" — comparing numbers against thresholds (like <code>OBSTACLE_DISTANCE</code>) to let the robot choose its own actions instead of just following a fixed set of commands.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/02.2_Ultrasonic_Ranging_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
+    </details>
+  </div>
 
-      <div class="task" data-lesson="4" data-id="l4-c2">
-        <div class="task-content">
-          <span class="title">Challenge 2: Reverse</span>
-          <p>Make the robot reverse backwards in a straight line whenever it loses the line.</p>
+  <!-- ============ 03 ============ -->
+  <div class="group" data-color="amber">
+    <div class="group-heading" id="group-03"><span class="dot"></span>03 — Light Sensors<span class="group-desc">reading brightness, then steering toward it</span></div>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">💡</span>
+        <span class="folder-tag">03.1_Photosensitive</span>
+        Light Tracking (Reading)
+        <span class="lesson-progress" data-lesson="03.1"></span>
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program uses two photoresistors (light-sensing components) to check how bright it is on the left and right sides of the robot. Every half-second, it reads each sensor's light level as a number using <code>analogRead()</code>, then sends both numbers to the Serial Monitor so you can compare which side is brighter or darker.</p>
+          <p>It's a great first look at reading real-world analog sensors, storing values in variables, and using a <code>loop()</code> that repeats forever with a <code>delay()</code> in between.</p>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="4" data-id="l4-c3">
-        <div class="task-content">
-          <span class="title">Challenge 3: The "Backwards"</span>
-          <p>Make the robot go around the track backwards.</p>
+        <div class="try-it-heading">🏆 Try it: Levels</div>
+
+        <div class="task" data-lesson="03.1" data-id="l6-1">
+          <div class="task-content">
+            <span class="title">Level 1: The Speed Hacker (Warm-up)</span>
+            <p>Right now, the robot reads the light sensors and prints numbers twice a second.</p>
+            <p><strong>Mission:</strong> Change the code so it reads light ten times a second, then change it to read once every two seconds.</p>
+            <p><strong>Teaches:</strong> The <code>delay()</code> function and how milliseconds work (1000 ms = 1 second).</p>
+            <div class="tip"><strong>Solution:</strong> Find <code>delay(500);</code> → change to <code>delay(100);</code> (fast) or <code>delay(2000);</code> (slow).</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
-    </div>
-  </details>
 
-  <details class="lesson" data-color="violet">
-    <summary>
-      <span class="icon-badge">🦇</span>
-      Lesson 5 – Obstacle Avoidance
-      <span class="lesson-progress" data-lesson="5"></span>
-      <span class="chevron">▶</span>
-    </summary>
-    <div class="lesson-body">
-      <p>Think of this code as your robot's "Spidey-Sense." It looks straight ahead so it doesn't crash into a wall, a chair, or the family dog! It follows a new loop: <strong>Shout, Listen, React.</strong></p>
-
-      <h4>1. The "Bat Ears" (The Ultrasonic Sensor)</h4>
-      <p>Looks like eyes but is actually a tiny speaker and microphone. <code>readUltrasonic()</code> sends an invisible squeak and listens for the echo.</p>
-
-      <h4>2. The "Math Brain" (Calculating Distance)</h4>
-      <p>A built-in stopwatch times how fast the echo returns. Short time = wall is close. Long time = path is clear.</p>
-
-      <h4>3. The "Decision" (The If/Else Block)</h4>
-      <ul>
-        <li>Distance &lt; 15 cm: <strong>Danger!</strong> Hit the brakes.</li>
-        <li>Distance &gt; 15 cm: <strong>Coast is clear!</strong> Keep driving.</li>
-      </ul>
-
-      <h4>4. The "Escape Plan" (The Motors)</h4>
-      <p>Both wheels reverse to back away, then one wheel goes forward and the other backward to spin around and face a new direction.</p>
-    </div>
-  </details>
-
-  <details class="lesson" data-color="amber">
-    <summary>
-      <span class="icon-badge">💡</span>
-      Lesson 6 – Light Tracking
-      <span class="lesson-progress" data-lesson="6"></span>
-      <span class="chevron">▶</span>
-    </summary>
-    <div class="lesson-body">
-      <div class="task" data-lesson="6" data-id="l6-1">
-        <div class="task-content">
-          <span class="title">Level 1: The Speed Hacker (Warm-up)</span>
-          <p>Right now, the robot reads the light sensors and prints numbers twice a second.</p>
-          <p><strong>Mission:</strong> Change the code so it reads light ten times a second, then change it to read once every two seconds.</p>
-          <p><strong>Teaches:</strong> The <code>delay()</code> function and how milliseconds work (1000 ms = 1 second).</p>
-          <div class="tip"><strong>Solution:</strong> Find <code>delay(500);</code> → change to <code>delay(100);</code> (fast) or <code>delay(2000);</code> (slow).</div>
-        </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
-
-      <div class="task" data-lesson="6" data-id="l6-2">
-        <div class="task-content">
-          <span class="title">Level 2: The Light Detective (Logic &amp; If/Else)</span>
-          <p><strong>Mission:</strong> Add an if/else inside <code>loop()</code>. If the left sensor's number is bigger than the right's, print "The light is on the Left!" Otherwise print "The light is on the Right!"</p>
-          <p><strong>Teaches:</strong> Comparing two variables using <code>&gt;</code>.</p>
-          <div class="tip">
-            <strong>Hint:</strong>
-            <pre><code>if (getLeftPhotosensitiveADCValue &gt; getRightPhotosensitiveADCValue) {
+        <div class="task" data-lesson="03.1" data-id="l6-2">
+          <div class="task-content">
+            <span class="title">Level 2: The Light Detective (Logic &amp; If/Else)</span>
+            <p><strong>Mission:</strong> Add an if/else inside <code>loop()</code>. If the left sensor's number is bigger than the right's, print "The light is on the Left!" Otherwise print "The light is on the Right!"</p>
+            <p><strong>Teaches:</strong> Comparing two variables using <code>&gt;</code>.</p>
+            <div class="tip">
+              <strong>Hint:</strong>
+              <pre><code>if (getLeftPhotosensitiveADCValue &gt; getRightPhotosensitiveADCValue) {
   Serial.println("The light is on the Left!");
 } else {
   Serial.println("The light is on the Right!");
 }</code></pre>
+            </div>
           </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
-      </div>
 
-      <div class="task" data-lesson="6" data-id="l6-3">
-        <div class="task-content">
-          <span class="title">Level 3: The Dark Room Alarm (Variables &amp; Math)</span>
-          <p><strong>Mission:</strong> Create a new <code>int</code> variable called <code>totalLight</code> equal to the left sensor plus the right sensor. If it drops below 1000, print "WARNING: IT IS TOO DARK!"</p>
-          <p><strong>Teaches:</strong> Variable declaration, basic arithmetic, and threshold logic.</p>
-          <div class="tip">
-            <strong>Hint:</strong>
-            <pre><code>int totalLight = getLeftPhotosensitiveADCValue + getRightPhotosensitiveADCValue;
+        <div class="task" data-lesson="03.1" data-id="l6-3">
+          <div class="task-content">
+            <span class="title">Level 3: The Dark Room Alarm (Variables &amp; Math)</span>
+            <p><strong>Mission:</strong> Create a new <code>int</code> variable called <code>totalLight</code> equal to the left sensor plus the right sensor. If it drops below 1000, print "WARNING: IT IS TOO DARK!"</p>
+            <p><strong>Teaches:</strong> Variable declaration, basic arithmetic, and threshold logic.</p>
+            <div class="tip">
+              <strong>Hint:</strong>
+              <pre><code>int totalLight = getLeftPhotosensitiveADCValue + getRightPhotosensitiveADCValue;
 
 if (totalLight &lt; 1000) {
   Serial.println("WARNING: IT IS TOO DARK!");
 }</code></pre>
+            </div>
           </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
-        <button class="btn mark-btn" type="button">Mark Complete</button>
+
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/03.1_Photosensitive" target="_blank" rel="noopener">View the code on GitHub →</a>
       </div>
-    </div>
-  </details>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🌻</span>
+        <span class="folder-tag">03.2_Photosensitive_Car</span>
+        Light-Tracking Car
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program gives the car "phototropism" — like a plant bending toward sunlight, it steers itself toward whichever side has brighter light. Every fraction of a second it compares its two light sensors: if the left sensor sees more light, it speeds up the right wheels to turn left, and vice versa.</p>
+          <p>It teaches comparing two numbers to choose a direction, and using that comparison result (a "difference") to smoothly adjust motor speeds instead of just turning fully one way or the other — a nice first taste of proportional control instead of simple on-off logic.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/03.2_Photosensitive_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ 04 ============ -->
+  <div class="group" data-color="green">
+    <div class="group-heading" id="group-04"><span class="dot"></span>04 — Line Tracking<span class="group-desc">reading the floor sensors, then following a line</span></div>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🔍</span>
+        <span class="folder-tag">04.1_Tracking_Sensor</span>
+        Tracking Sensor (Reading)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program checks the three infrared line sensors on the bottom of the car — Left, Middle, Right — which each report a simple 0 (white floor) or 1 (black line). It teaches digital input, and the neat trick of combining three separate 0/1 bits into a single number from 0–7 using bit-shifting and OR, so instead of juggling three values you get one number that tells you the exact pattern of what's under the car.</p>
+          <p>This groundwork — turning sensor readings into one combined number — is exactly what the next lesson uses to make the car follow a line automatically.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/04.1_Tracking_Sensor" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🧠</span>
+        <span class="folder-tag">04.2_Track_Car</span>
+        IR Follow (Line-Following Car)
+        <span class="lesson-progress" data-lesson="04.2"></span>
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>Think of this code as the "Brain" of your robot. It follows a simple loop: <strong>Look, Decide, Act.</strong> Every loop it looks at the three floor sensors, squishes their readings into one number (0–7), and uses a <code>switch</code>/<code>case</code> to decide what that number means:</p>
+          <ul>
+            <li>2 (010): Line in the middle → Drive straight.</li>
+            <li>4 or 6 (100/110): Line sliding left → Turn left.</li>
+            <li>1 or 3 (001/011): Line sliding right → Turn right.</li>
+            <li>7 (111): Big black wall or finish line → Stop.</li>
+          </ul>
+          <p>It then spins the four wheels — sending opposite-signed speeds to the left and right sides to pivot like a tank — and shows a matching face or arrow on the LED display.</p>
+        </div>
+
+        <div class="try-it-heading">🏆 Try it: Challenges</div>
+
+        <div class="task" data-lesson="04.2" data-id="l4-c1">
+          <div class="task-content">
+            <span class="title">Challenge 1: The "Top Speed" Test</span>
+            <p>Make the robot go around the track as fast as possible.</p>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="04.2" data-id="l4-c2">
+          <div class="task-content">
+            <span class="title">Challenge 2: Reverse</span>
+            <p>Make the robot reverse backwards in a straight line whenever it loses the line.</p>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="04.2" data-id="l4-c3">
+          <div class="task-content">
+            <span class="title">Challenge 3: The "Backwards"</span>
+            <p>Make the robot go around the track backwards.</p>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/04.2_Track_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ 05 ============ -->
+  <div class="group" data-color="pink">
+    <div class="group-heading" id="group-05"><span class="dot"></span>05 — Remote Control<span class="group-desc">infrared remote, then a fully-loaded RC car</span></div>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">📶</span>
+        <span class="folder-tag">05.1_IR_Receiver</span>
+        IR Receiver (Reading)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program listens for signals from an infrared remote control, like the one used to point-and-click at a TV. Every button sends its own secret number as a burst of invisible light, and this sketch catches that number and prints it to the Serial Monitor in hex.</p>
+          <p>It teaches reading sensor input in <code>setup()</code>/<code>loop()</code>, checking "did something new just happen?" with an <code>if</code> statement, and the idea that button presses often become unique numeric codes your code compares against to decide what to do next.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.1_IR_Receiver" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🎮</span>
+        <span class="folder-tag">05.2_IR_Receiver_Car</span>
+        IR Receiver Car (RC Driving)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program turns the car into a real RC car you drive with an infrared remote! Every button sends its own secret code, and <code>handleControl()</code> uses a big switch/case "lookup table" to match each code to a specific move — forward, back, turn, or (in a special mode) slide diagonally sideways, which only mecanum wheels can do.</p>
+          <p>It also teaches "non-blocking timing," where the car checks the clock (<code>millis()</code>) instead of freezing with <code>delay()</code>, so its animated LED face keeps blinking while it's still listening for your next button press. If no button code is found, the code falls through to a safe "default" case that simply stops the motors.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.2_IR_Receiver_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">🎭</span>
+        <span class="folder-tag">05.3_Multi_Functional_Car</span>
+        Multi-Functional Car (IR + Face + Lights)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This is the "everything car" for this stage — it combines three things you built separately before: driving with the IR remote, showing feelings on the LED-matrix face, and lighting up the RGB strip. It teaches how real programs combine multiple systems at once using a single fast-repeating loop — checking the remote, updating the face, driving the wheels, and animating the lights all happen together, many times per second.</p>
+          <p>You'll see how a remote button press becomes a number your code reacts to, how "eyes" and lights are drawn frame-by-frame using the clock instead of freezing the program with delays, and how the car can automatically detect which accessories are plugged in.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/05.3_Multi_Functional_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ 06 ============ -->
+  <div class="group" data-color="violet">
+    <div class="group-heading" id="group-06"><span class="dot"></span>06 — WiFi Control<span class="group-desc">controlling the car over the network from a phone app</span></div>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">📶</span>
+        <span class="folder-tag">06.1_WiFi_APP_TcpServer</span>
+        WiFi TCP Server (Networking Basics)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This program turns the Pico W into a tiny WiFi "phone" that only answers calls — it connects to your home WiFi and waits on a specific "door number" called a port (4002) for a companion phone/PC app to connect. Once connected, the Pico acts like a chat bridge: anything the app sends gets printed to the Serial Monitor, and anything you type gets sent back to the app.</p>
+          <p>It teaches WiFi networking basics (SSID/password, IP addresses, ports), how a TCP server waits for and accepts connections, and how programs check ("poll") repeatedly for new data using functions like <code>client.connected()</code> and <code>client.available()</code>.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/06.1_WiFi_APP_TcpServer" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+
+    <details class="lesson">
+      <summary>
+        <span class="icon-badge">📱</span>
+        <span class="folder-tag">06.2_Multi_Functional_Car</span>
+        Multi-Functional Car (Full WiFi App Control)
+        <span class="chevron">▶</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="how-it-works">
+          <div class="kicker">📖 How it works</div>
+          <p>This is the "everything" program — it lets you control the whole car from a phone app over WiFi, all in one sketch! Your phone sends short text messages like <code>N#45#80#0#0</code>, and the Pico W reads that text, breaks it into pieces ("parsing"), and calls the right function to drive the mecanum wheels, change the LED face's expression, light up the RGB strip, or check the battery and sensors.</p>
+          <p>It teaches how a computer can run several "brains" at once without freezing — using <code>millis()</code> timers instead of <code>delay()</code> so the face animates, the lights glow, and new WiFi commands keep arriving all at the same time — plus it shows off some real trigonometry, letting a joystick's angle and distance become sideways, forwards, and spinning motion for the mecanum wheels.</p>
+        </div>
+        <a class="view-code" href="https://github.com/hadefuwa/Freenove_4WD/tree/main/Mecanum_wheels/Sketches/06.2_Multi_Functional_Car" target="_blank" rel="noopener">View the code on GitHub →</a>
+      </div>
+    </details>
+  </div>
 
   <footer>Made for a young engineer, one challenge at a time. 🚙</footer>
 </div>
@@ -779,7 +1123,6 @@ if (totalLight &lt; 1000) {
   try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { state = {}; }
 
   var tasks = Array.prototype.slice.call(document.querySelectorAll('.task'));
-  var allLessonEls = Array.prototype.slice.call(document.querySelectorAll('details.lesson'));
 
   function save(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
