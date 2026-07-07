@@ -6,38 +6,41 @@
 <title>Freenove 4WD Car Challenges</title>
 <style>
   :root{
-    --bg: #f4f6fb;
+    --bg: #eef1fb;
     --panel: #ffffff;
-    --text: #1f2430;
-    --muted: #5a6472;
-    --accent: #ff8a3d;
-    --accent-2: #3d7aff;
-    --good: #2fb673;
-    --border: #e3e7ef;
-    --shadow: 0 6px 20px rgba(30, 40, 70, 0.08);
+    --text: #201f36;
+    --muted: #6b6f8a;
+    --border: #e3e5f5;
+    --shadow: 0 10px 28px rgba(50, 40, 110, 0.10);
+    --shadow-sm: 0 4px 12px rgba(50, 40, 110, 0.08);
+    --hero-1: #7c3aed;
+    --hero-2: #ec4899;
+    --hero-3: #fb923c;
+    --good: #16a34a;
+    --good-soft: #dcfce7;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg: #14171f;
-      --panel: #1c212c;
-      --text: #edf0f6;
-      --muted: #9aa4b5;
-      --accent: #ffa159;
-      --accent-2: #6d9bff;
-      --good: #3fd08c;
-      --border: #2a3040;
-      --shadow: 0 6px 24px rgba(0,0,0,0.35);
+      --bg: #14121f;
+      --panel: #1e1b2e;
+      --text: #f1eefc;
+      --muted: #a49fc4;
+      --border: #322c4a;
+      --shadow: 0 10px 30px rgba(0,0,0,0.45);
+      --shadow-sm: 0 4px 14px rgba(0,0,0,0.4);
+      --good: #34d399;
+      --good-soft: #123626;
     }
   }
   :root[data-theme="dark"]{
-    --bg: #14171f; --panel: #1c212c; --text: #edf0f6; --muted: #9aa4b5;
-    --accent: #ffa159; --accent-2: #6d9bff; --good: #3fd08c; --border: #2a3040;
-    --shadow: 0 6px 24px rgba(0,0,0,0.35);
+    --bg: #14121f; --panel: #1e1b2e; --text: #f1eefc; --muted: #a49fc4;
+    --border: #322c4a; --shadow: 0 10px 30px rgba(0,0,0,0.45); --shadow-sm: 0 4px 14px rgba(0,0,0,0.4);
+    --good: #34d399; --good-soft: #123626;
   }
   :root[data-theme="light"]{
-    --bg: #f4f6fb; --panel: #ffffff; --text: #1f2430; --muted: #5a6472;
-    --accent: #ff8a3d; --accent-2: #3d7aff; --good: #2fb673; --border: #e3e7ef;
-    --shadow: 0 6px 20px rgba(30, 40, 70, 0.08);
+    --bg: #eef1fb; --panel: #ffffff; --text: #201f36; --muted: #6b6f8a;
+    --border: #e3e5f5; --shadow: 0 10px 28px rgba(50, 40, 110, 0.10); --shadow-sm: 0 4px 12px rgba(50, 40, 110, 0.08);
+    --good: #16a34a; --good-soft: #dcfce7;
   }
 
   * { box-sizing: border-box; }
@@ -49,106 +52,170 @@
     line-height: 1.55;
   }
   .wrap{
-    max-width: 860px;
+    max-width: 880px;
     margin: 0 auto;
-    padding: 2rem 1.25rem 5rem;
+    padding: 0 1.25rem 5rem;
   }
+
+  /* ---------- Hero ---------- */
   header.hero{
     text-align: center;
-    padding: 2.5rem 1rem 2rem;
+    padding: 3rem 1.5rem 3.5rem;
+    margin: 0 -1.25rem 2rem;
+    background: linear-gradient(135deg, var(--hero-1), var(--hero-2) 55%, var(--hero-3));
+    color: #fff;
+    border-radius: 0 0 32px 32px;
+    box-shadow: var(--shadow);
   }
+  header.hero .badge-emoji{ font-size: 2.6rem; }
   header.hero h1{
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
-    margin: 0 0 0.4rem;
+    font-size: clamp(1.7rem, 5vw, 2.5rem);
+    margin: 0.3rem 0 0.5rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.15);
   }
   header.hero p{
-    color: var(--muted);
-    margin: 0;
+    color: rgba(255,255,255,0.92);
+    margin: 0 auto;
+    max-width: 40rem;
     font-size: 1.05rem;
   }
+
+  /* ---------- Stats bar ---------- */
+  .stats-row{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.9rem;
+    margin: -2.6rem 0 2rem;
+  }
+  .stat-card{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 1rem 0.75rem;
+    text-align: center;
+  }
+  .stat-card .num{
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .stat-card .lbl{
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 0.2rem;
+  }
+  .stat-card.streak .num{ color: var(--hero-3); }
+  .stat-card.badges .num{ color: var(--hero-1); }
+  .stat-card.done .num{ color: var(--good); }
 
   .progress-shell{
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
     box-shadow: var(--shadow);
     margin-bottom: 2rem;
-    position: sticky;
-    top: 1rem;
-    z-index: 10;
   }
   .progress-shell .label{
     display:flex;
     justify-content: space-between;
     font-size: 0.9rem;
     color: var(--muted);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
   }
   .progress-bar{
-    height: 10px;
-    background: var(--border);
+    height: 14px;
+    background: var(--bg);
     border-radius: 999px;
     overflow: hidden;
+    border: 1px solid var(--border);
   }
   .progress-fill{
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--good));
+    background: linear-gradient(90deg, var(--hero-1), var(--hero-2), var(--hero-3));
     border-radius: 999px;
-    transition: width 0.3s ease;
+    transition: width 0.4s ease;
   }
+  .btn{
+    font-family: inherit;
+    font-weight: 700;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn:active{ transform: scale(0.96); }
   .reset-btn{
-    margin-top: 0.75rem;
+    margin-top: 0.9rem;
     background: none;
     border: 1px solid var(--border);
     color: var(--muted);
-    padding: 0.35rem 0.8rem;
-    border-radius: 8px;
+    padding: 0.4rem 0.9rem;
     font-size: 0.8rem;
-    cursor: pointer;
   }
   .reset-btn:hover{ color: var(--text); border-color: var(--muted); }
 
-  section.lesson{
+  /* ---------- Lesson cards ---------- */
+  details.lesson{
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    margin-bottom: 1.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.25rem;
     overflow: hidden;
+    border-top: 5px solid var(--lc);
   }
-  section.lesson > summary{
+  details.lesson > summary{
     list-style: none;
     cursor: pointer;
-    padding: 1.1rem 1.4rem;
+    padding: 1.15rem 1.3rem;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-weight: 700;
-    font-size: 1.15rem;
+    gap: 0.85rem;
+    font-weight: 800;
+    font-size: 1.12rem;
     user-select: none;
   }
-  section.lesson > summary::-webkit-details-marker{ display:none; }
-  section.lesson > summary .chevron{
+  details.lesson > summary::-webkit-details-marker{ display:none; }
+  details.lesson > summary .icon-badge{
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    background: var(--lc-soft);
+  }
+  details.lesson > summary .chevron{
     margin-left: auto;
     color: var(--muted);
     transition: transform 0.2s ease;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
-  section.lesson[open] > summary .chevron{ transform: rotate(90deg); }
-  section.lesson > summary .lesson-progress{
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-    background: var(--bg);
-    border: 1px solid var(--border);
-    padding: 0.15rem 0.55rem;
+  details.lesson[open] > summary .chevron{ transform: rotate(90deg); }
+  details.lesson > summary .lesson-progress{
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--lc);
+    background: var(--lc-soft);
+    padding: 0.2rem 0.6rem;
     border-radius: 999px;
     white-space: nowrap;
   }
+  details.lesson.complete{ border-top-color: var(--good); }
+  details.lesson.complete > summary .lesson-progress{
+    color: var(--good);
+    background: var(--good-soft);
+  }
   .lesson-body{
-    padding: 0 1.4rem 1.4rem;
+    padding: 0.2rem 1.4rem 1.5rem;
     border-top: 1px solid var(--border);
   }
   .lesson-body h3{
@@ -158,7 +225,7 @@
   .lesson-body h4{
     margin: 0.6rem 0 0.3rem;
     font-size: 0.95rem;
-    color: var(--accent-2);
+    color: var(--lc);
   }
   .lesson-body code{
     background: var(--bg);
@@ -180,7 +247,7 @@
     padding: 0;
   }
   .tip{
-    border-left: 3px solid var(--accent-2);
+    border-left: 3px solid var(--lc);
     background: var(--bg);
     padding: 0.7rem 1rem;
     border-radius: 0 8px 8px 0;
@@ -190,35 +257,45 @@
   }
   .tip strong{ color: var(--text); }
 
+  /* ---------- Task cards ---------- */
   .task{
     display: flex;
     align-items: flex-start;
-    gap: 0.7rem;
+    gap: 0.9rem;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 0.9rem 1rem;
-    margin: 0.9rem 0;
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 0;
     background: var(--bg);
+    flex-wrap: wrap;
   }
-  .task input[type="checkbox"]{
-    width: 20px;
-    height: 20px;
-    margin-top: 0.15rem;
-    accent-color: var(--good);
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-  .task .task-content{ flex: 1; }
+  .task .task-content{ flex: 1; min-width: 200px; }
   .task .task-content > .title{
-    font-weight: 700;
-    margin-bottom: 0.25rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+    display: block;
   }
+  .mark-btn{
+    flex-shrink: 0;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.85rem;
+    color: #fff;
+    background: var(--lc);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--lc) 50%, transparent);
+    white-space: nowrap;
+  }
+  .mark-btn:hover{ filter: brightness(1.08); }
   .task.done{
     border-color: var(--good);
+    background: var(--good-soft);
   }
   .task.done .title{
     text-decoration: line-through;
     color: var(--muted);
+  }
+  .task.done .mark-btn{
+    background: var(--good);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--good) 45%, transparent);
   }
 
   ul, ol{ padding-left: 1.3rem; }
@@ -230,15 +307,49 @@
     font-size: 0.85rem;
     margin-top: 2rem;
   }
+
+  /* ---------- Lesson color themes ---------- */
+  .lesson[data-color="slate"]  { --lc: #64748b; --lc-soft: #e2e8f0; }
+  .lesson[data-color="orange"] { --lc: #f97316; --lc-soft: #ffedd5; }
+  .lesson[data-color="pink"]   { --lc: #ec4899; --lc-soft: #fce7f3; }
+  .lesson[data-color="blue"]   { --lc: #3b82f6; --lc-soft: #dbeafe; }
+  .lesson[data-color="green"]  { --lc: #16a34a; --lc-soft: #dcfce7; }
+  .lesson[data-color="violet"] { --lc: #8b5cf6; --lc-soft: #ede9fe; }
+  .lesson[data-color="amber"]  { --lc: #d97706; --lc-soft: #fef3c7; }
+  @media (prefers-color-scheme: dark){
+    .lesson[data-color="slate"]  { --lc-soft: #2a3340; }
+    .lesson[data-color="orange"] { --lc-soft: #3a2412; }
+    .lesson[data-color="pink"]   { --lc-soft: #3a1c2c; }
+    .lesson[data-color="blue"]   { --lc-soft: #17273f; }
+    .lesson[data-color="green"]  { --lc-soft: #123423; }
+    .lesson[data-color="violet"] { --lc-soft: #291f42; }
+    .lesson[data-color="amber"]  { --lc-soft: #3a2c0c; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header class="hero">
-    <h1>🚗 Freenove 4WD Car Challenges</h1>
-    <p>Your mission book for the Freenove 4WD Car. Work through each lesson, tick off challenges as you go, and don't be afraid to break things — that's how you learn to code!</p>
+    <div class="badge-emoji">🚗🏁</div>
+    <h1>Freenove 4WD Car Challenges</h1>
+    <p>Your mission book for the Freenove 4WD Car. Work through each lesson, hit "Mark Complete" as you finish challenges, and don't be afraid to break things — that's how you learn to code!</p>
   </header>
+
+  <div class="stats-row">
+    <div class="stat-card done">
+      <div class="num" id="stat-done">0</div>
+      <div class="lbl">Challenges Done</div>
+    </div>
+    <div class="stat-card badges">
+      <div class="num" id="stat-lessons">0/5</div>
+      <div class="lbl">Lessons Cleared</div>
+    </div>
+    <div class="stat-card streak">
+      <div class="num" id="stat-percent">0%</div>
+      <div class="lbl">Overall Progress</div>
+    </div>
+  </div>
 
   <div class="progress-shell">
     <div class="label">
@@ -246,11 +357,15 @@
       <span id="overall-count">0 / 0 done</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="overall-fill"></div></div>
-    <button class="reset-btn" id="reset-btn" type="button">Reset all progress</button>
+    <button class="btn reset-btn" id="reset-btn" type="button">Reset all progress</button>
   </div>
 
-  <details class="lesson" open>
-    <summary>📥 Guide: How to Download Your Code <span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="slate" open>
+    <summary>
+      <span class="icon-badge">📥</span>
+      Guide: How to Download Your Code
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <h3>Uploading a compiled sketch</h3>
       <ol>
@@ -269,8 +384,13 @@
     </div>
   </details>
 
-  <details class="lesson">
-    <summary>🏎️ Lesson 1 – Car Move &amp; Turn <span class="lesson-progress" data-lesson="1"></span><span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="orange">
+    <summary>
+      <span class="icon-badge">🏎️</span>
+      Lesson 1 – Car Move &amp; Turn
+      <span class="lesson-progress" data-lesson="1"></span>
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <h3>🚦 The Basics: How to Read the Code</h3>
       <p>The "Magic Command":</p>
@@ -282,94 +402,99 @@
       </ul>
 
       <div class="task" data-lesson="1" data-id="l1-c1">
-        <input type="checkbox" id="l1-c1">
         <div class="task-content">
-          <label class="title" for="l1-c1">🏆 Challenge 1: The Speed Racer</label>
+          <span class="title">🏆 Challenge 1: The Speed Racer</span>
           <p><strong>Goal:</strong> Make the car go twice as fast when moving forward, and super slow when moving backward.</p>
           <p><strong>How-to:</strong> Look at the first <code>Motor_M_Move</code> line. Change the 50s to a higher number (up to 100).</p>
           <div class="tip"><strong>Tip:</strong> If 100 is the fastest, what number would make the car crawl like a turtle?</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="1" data-id="l1-c2">
-        <input type="checkbox" id="l1-c2">
         <div class="task-content">
-          <label class="title" for="l1-c2">🕒 Challenge 2: The Long Haul</label>
+          <span class="title">🕒 Challenge 2: The Long Haul</span>
           <p><strong>Goal:</strong> Make the car drive forward for 3 seconds instead of just 1.</p>
           <p><strong>How-to:</strong> Find the <code>delay(1000);</code> line right after the forward command. Change the number inside the parentheses.</p>
           <div class="tip"><strong>Tip:</strong> The computer counts in milliseconds. 1000 = 1 second, so 3000 = 3 seconds.</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="1" data-id="l1-c3">
-        <input type="checkbox" id="l1-c3">
         <div class="task-content">
-          <label class="title" for="l1-c3">🔄 Challenge 3: The "Dizzy" Spinner</label>
+          <span class="title">🔄 Challenge 3: The "Dizzy" Spinner</span>
           <p><strong>Goal:</strong> Make the car spin in a circle in one spot (a "Zero Turn").</p>
           <p><strong>How-to:</strong> To spin, one side of the car needs to go forward while the other side goes backward. Try:</p>
           <pre><code>Motor_M_Move(50, 50, -50, -50);</code></pre>
           <div class="tip"><strong>Tip:</strong> If the car just turns slightly, increase the delay so it keeps spinning longer!</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
     </div>
   </details>
 
-  <details class="lesson">
-    <summary>👀 Lesson 2 – Matrix Display <span class="lesson-progress" data-lesson="2"></span><span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="pink">
+    <summary>
+      <span class="icon-badge">👀</span>
+      Lesson 2 – Matrix Display
+      <span class="lesson-progress" data-lesson="2"></span>
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <p>Those two squares on the front of your car are like the robot's "eyes," and you get to tell them exactly what to do. Right now, your robot is programmed to blink, but you can change its personality just by tweaking the code.</p>
       <p>Here are 5 missions for you to try!</p>
 
       <div class="task" data-lesson="2" data-id="l2-m1">
-        <input type="checkbox" id="l2-m1">
         <div class="task-content">
-          <label class="title" for="l2-m1">🚀 Mission 1: The Fast-Blinker</label>
+          <span class="title">🚀 Mission 1: The Fast-Blinker</span>
           <p>The robot is currently blinking slowly. Let's make it look like it just drank a giant soda! Find <code>showArray(500);</code> at the bottom of <code>void loop</code>.</p>
           <p><strong>Goal:</strong> Change 500 to 100.</p>
           <div class="tip"><strong>Secret:</strong> That number is "milliseconds." 1000 is one second. Smaller number = faster blinking!</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="2" data-id="l2-m2">
-        <input type="checkbox" id="l2-m2">
         <div class="task-content">
-          <label class="title" for="l2-m2">😉 Mission 2: The Pirate Wink</label>
+          <span class="title">😉 Mission 2: The Pirate Wink</span>
           <p>Can you make the robot wink one eye while keeping the other one wide open? Look at <code>y_array</code> (the right eye).</p>
           <p><strong>Goal:</strong> Copy the first line of numbers and paste it over the second line so they match.</p>
           <div class="tip"><strong>Secret:</strong> If the right eye stays the same but <code>x_array</code> keeps changing, it will look like a wink!</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="2" data-id="l2-m3">
-        <input type="checkbox" id="l2-m3">
         <div class="task-content">
-          <label class="title" for="l2-m3">🌙 Mission 3: Night Mode</label>
+          <span class="title">🌙 Mission 3: Night Mode</span>
           <p>Find <code>matrix.init(0x71);</code> inside <code>void setup</code>.</p>
           <p><strong>Goal:</strong> Right under that line, add: <code>matrix.setBrightness(1);</code></p>
           <div class="tip"><strong>Secret:</strong> Numbers range from 0 (off) to 15 (super bright). Try 15 to see the difference!</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="2" data-id="l2-m4">
-        <input type="checkbox" id="l2-m4">
         <div class="task-content">
-          <label class="title" for="l2-m4">😠 Mission 4: Angry Robot</label>
+          <span class="title">😠 Mission 4: Angry Robot</span>
           <p>Let's make the eyes look like flat, grumpy lines. Look at <code>x_array</code> and <code>y_array</code>.</p>
           <p><strong>Goal:</strong> Change one row of numbers to:</p>
           <pre><code>0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00</code></pre>
           <div class="tip"><strong>Secret:</strong> <code>0x00</code> means "lights off" and <code>0xFF</code> means "all lights on in this row."</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="2" data-id="l2-m5">
-        <input type="checkbox" id="l2-m5">
         <div class="task-content">
-          <label class="title" for="l2-m5">🎨 Mission 5: The Master Artist (Custom Face)</label>
+          <span class="title">🎨 Mission 5: The Master Artist (Custom Face)</span>
           <p>The hardest mission! Can you make the eyes look like diamonds? 💎</p>
           <p><strong>Goal:</strong> Use these secret codes for your array:</p>
           <pre><code>0x08, 0x1C, 0x3E, 0x7F, 0x7F, 0x3E, 0x1C, 0x08</code></pre>
           <div class="tip"><strong>Secret:</strong> Each code is one row of the 8x8 grid — the robot will have diamond-shaped eyes.</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <h4>💡 Top Secret Coding Tips</h4>
@@ -381,8 +506,13 @@
     </div>
   </details>
 
-  <details class="lesson">
-    <summary>📡 Lesson 3 – Ultrasonic Ranging <span class="lesson-progress" data-lesson="3"></span><span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="blue">
+    <summary>
+      <span class="icon-badge">📡</span>
+      Lesson 3 – Ultrasonic Ranging
+      <span class="lesson-progress" data-lesson="3"></span>
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <h3>🛰️ The "Head" and the "Ears"</h3>
       <ul>
@@ -395,29 +525,28 @@
       <p><strong>2. The Scouting Loop:</strong> Look Left (150°) → Look Center (90°) → Look Right (30°) → Look Center again (90°) — forever.</p>
 
       <div class="task" data-lesson="3" data-id="l3-m1">
-        <input type="checkbox" id="l3-m1">
         <div class="task-content">
-          <label class="title" for="l3-m1">🚀 Mission 1: The Fast Scanner 🏃</label>
+          <span class="title">🚀 Mission 1: The Fast Scanner 🏃</span>
           <p><strong>Goal:</strong> Make the robot look left, center, and right much faster.</p>
           <p><strong>How-to:</strong> Find all the <code>delay(500);</code> lines. Change 500 to 200.</p>
           <div class="tip"><strong>Secret:</strong> Go too low (like 50) and the robot's neck might get a bit shaky!</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="3" data-id="l3-m2">
-        <input type="checkbox" id="l3-m2">
         <div class="task-content">
-          <label class="title" for="l3-m2">🚀 Mission 2: The Owl Turn 🦉</label>
+          <span class="title">🚀 Mission 2: The Owl Turn 🦉</span>
           <p><strong>Goal:</strong> Make the robot look as far left and right as it possibly can.</p>
           <p><strong>How-to:</strong> Change 150 to 180 (max left) and 30 to 0 (max right).</p>
           <div class="tip"><strong>Secret:</strong> Servos usually move from 0 to 180. 90 is always the middle!</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="3" data-id="l3-m3">
-        <input type="checkbox" id="l3-m3">
         <div class="task-content">
-          <label class="title" for="l3-m3">🚀 Mission 3: The Wall Alarm 🚨</label>
+          <span class="title">🚀 Mission 3: The Wall Alarm 🚨</span>
           <p><strong>Goal:</strong> Use your hand to make the robot "yell" through the Serial Monitor when you get too close.</p>
           <p><strong>How-to:</strong> Make the robot say "TOO CLOSE!" when the distance is less than 10.</p>
           <div class="tip">
@@ -429,12 +558,12 @@
             <strong>Tip 3:</strong> Sensors can see "ghost" numbers occasionally — that's just sensor noise!
           </div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="3" data-id="l3-m4">
-        <input type="checkbox" id="l3-m4">
         <div class="task-content">
-          <label class="title" for="l3-m4">🚀 Mission 4: The "Yes" Man ✅</label>
+          <span class="title">🚀 Mission 4: The "Yes" Man ✅</span>
           <p><strong>Goal:</strong> Make the robot shake its head "yes" instead of "no" (up and down instead of left and right).</p>
           <p><strong>How-to:</strong> Check how your sensor is mounted — if it can't look up, rewrite the code to switch fast between just two angles: 70 and 110.</p>
           <div class="tip">
@@ -443,12 +572,12 @@
             <strong>Tip 3:</strong> Move the head gently by hand first to check it moves smoothly.
           </div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="3" data-id="l3-m5">
-        <input type="checkbox" id="l3-m5">
         <div class="task-content">
-          <label class="title" for="l3-m5">🚀 Mission 5: The Guard Dog 🐕</label>
+          <span class="title">🚀 Mission 5: The Guard Dog 🐕</span>
           <p><strong>Goal:</strong> Make the robot stay at 90° for a while, do one quick scan, then go back to waiting.</p>
           <p><strong>How-to:</strong> At the very end of <code>void loop()</code>, add <code>delay(5000);</code>.</p>
           <div class="tip">
@@ -457,6 +586,7 @@
             <strong>Tip 3:</strong> Change the nap time: 2000 = 2s nap, 10000 = 10s nap.
           </div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <h4>💡 Engineering Pro-Tips</h4>
@@ -468,8 +598,13 @@
     </div>
   </details>
 
-  <details class="lesson">
-    <summary>🧠 Lesson 4 – IR Follow <span class="lesson-progress" data-lesson="4"></span><span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="green">
+    <summary>
+      <span class="icon-badge">🧠</span>
+      Lesson 4 – IR Follow
+      <span class="lesson-progress" data-lesson="4"></span>
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <p>Think of this code as the "Brain" of your robot. It follows a simple loop: <strong>Look, Decide, Act.</strong></p>
 
@@ -491,33 +626,38 @@
       <p><code>showArrow</code> and <code>eyesBlink</code> don't drive the car, but show you what the "brain" is thinking.</p>
 
       <div class="task" data-lesson="4" data-id="l4-c1">
-        <input type="checkbox" id="l4-c1">
         <div class="task-content">
-          <label class="title" for="l4-c1">Challenge 1: The "Top Speed" Test</label>
+          <span class="title">Challenge 1: The "Top Speed" Test</span>
           <p>Make the robot go around the track as fast as possible.</p>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="4" data-id="l4-c2">
-        <input type="checkbox" id="l4-c2">
         <div class="task-content">
-          <label class="title" for="l4-c2">Challenge 2: Reverse</label>
+          <span class="title">Challenge 2: Reverse</span>
           <p>Make the robot reverse backwards in a straight line whenever it loses the line.</p>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="4" data-id="l4-c3">
-        <input type="checkbox" id="l4-c3">
         <div class="task-content">
-          <label class="title" for="l4-c3">Challenge 3: The "Backwards"</label>
+          <span class="title">Challenge 3: The "Backwards"</span>
           <p>Make the robot go around the track backwards.</p>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
     </div>
   </details>
 
-  <details class="lesson">
-    <summary>🦇 Lesson 5 – Obstacle Avoidance (Bat Sonar!) <span class="lesson-progress" data-lesson="5"></span><span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="violet">
+    <summary>
+      <span class="icon-badge">🦇</span>
+      Lesson 5 – Obstacle Avoidance
+      <span class="lesson-progress" data-lesson="5"></span>
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <p>Think of this code as your robot's "Spidey-Sense." It looks straight ahead so it doesn't crash into a wall, a chair, or the family dog! It follows a new loop: <strong>Shout, Listen, React.</strong></p>
 
@@ -538,24 +678,28 @@
     </div>
   </details>
 
-  <details class="lesson">
-    <summary>💡 Lesson 6 – Light Tracking <span class="lesson-progress" data-lesson="6"></span><span class="chevron">▶</span></summary>
+  <details class="lesson" data-color="amber">
+    <summary>
+      <span class="icon-badge">💡</span>
+      Lesson 6 – Light Tracking
+      <span class="lesson-progress" data-lesson="6"></span>
+      <span class="chevron">▶</span>
+    </summary>
     <div class="lesson-body">
       <div class="task" data-lesson="6" data-id="l6-1">
-        <input type="checkbox" id="l6-1">
         <div class="task-content">
-          <label class="title" for="l6-1">Level 1: The Speed Hacker (Warm-up)</label>
+          <span class="title">Level 1: The Speed Hacker (Warm-up)</span>
           <p>Right now, the robot reads the light sensors and prints numbers twice a second.</p>
           <p><strong>Mission:</strong> Change the code so it reads light ten times a second, then change it to read once every two seconds.</p>
           <p><strong>Teaches:</strong> The <code>delay()</code> function and how milliseconds work (1000 ms = 1 second).</p>
           <div class="tip"><strong>Solution:</strong> Find <code>delay(500);</code> → change to <code>delay(100);</code> (fast) or <code>delay(2000);</code> (slow).</div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="6" data-id="l6-2">
-        <input type="checkbox" id="l6-2">
         <div class="task-content">
-          <label class="title" for="l6-2">Level 2: The Light Detective (Logic &amp; If/Else)</label>
+          <span class="title">Level 2: The Light Detective (Logic &amp; If/Else)</span>
           <p><strong>Mission:</strong> Add an if/else inside <code>loop()</code>. If the left sensor's number is bigger than the right's, print "The light is on the Left!" Otherwise print "The light is on the Right!"</p>
           <p><strong>Teaches:</strong> Comparing two variables using <code>&gt;</code>.</p>
           <div class="tip">
@@ -567,12 +711,12 @@
 }</code></pre>
           </div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
 
       <div class="task" data-lesson="6" data-id="l6-3">
-        <input type="checkbox" id="l6-3">
         <div class="task-content">
-          <label class="title" for="l6-3">Level 3: The Dark Room Alarm (Variables &amp; Math)</label>
+          <span class="title">Level 3: The Dark Room Alarm (Variables &amp; Math)</span>
           <p><strong>Mission:</strong> Create a new <code>int</code> variable called <code>totalLight</code> equal to the left sensor plus the right sensor. If it drops below 1000, print "WARNING: IT IS TOO DARK!"</p>
           <p><strong>Teaches:</strong> Variable declaration, basic arithmetic, and threshold logic.</p>
           <div class="tip">
@@ -584,6 +728,7 @@ if (totalLight &lt; 1000) {
 }</code></pre>
           </div>
         </div>
+        <button class="btn mark-btn" type="button">Mark Complete</button>
       </div>
     </div>
   </details>
@@ -597,39 +742,62 @@ if (totalLight &lt; 1000) {
   var state = {};
   try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { state = {}; }
 
-  var checkboxes = Array.prototype.slice.call(document.querySelectorAll('.task input[type="checkbox"]'));
+  var tasks = Array.prototype.slice.call(document.querySelectorAll('.task'));
+  var allLessonEls = Array.prototype.slice.call(document.querySelectorAll('details.lesson'));
 
   function save(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
-  function updateProgress(){
-    var total = checkboxes.length;
-    var done = checkboxes.filter(function(cb){ return cb.checked; }).length;
-    document.getElementById('overall-count').textContent = done + ' / ' + total + ' done';
-    document.getElementById('overall-fill').style.width = (total ? (done/total*100) : 0) + '%';
-
-    var lessons = {};
-    checkboxes.forEach(function(cb){
-      var lesson = cb.closest('.task').getAttribute('data-lesson');
-      lessons[lesson] = lessons[lesson] || {total:0, done:0};
-      lessons[lesson].total++;
-      if (cb.checked) lessons[lesson].done++;
-    });
-    Object.keys(lessons).forEach(function(lesson){
-      var el = document.querySelector('.lesson-progress[data-lesson="' + lesson + '"]');
-      if (el) el.textContent = lessons[lesson].done + '/' + lessons[lesson].total;
-    });
+  function setTaskDone(task, done){
+    var btn = task.querySelector('.mark-btn');
+    task.classList.toggle('done', done);
+    btn.textContent = done ? '✓ Completed' : 'Mark Complete';
   }
 
-  checkboxes.forEach(function(cb){
-    var id = cb.id;
-    if (state[id]) cb.checked = true;
-    cb.closest('.task').classList.toggle('done', cb.checked);
+  function updateProgress(){
+    var total = tasks.length;
+    var done = tasks.filter(function(t){ return t.classList.contains('done'); }).length;
+    document.getElementById('overall-count').textContent = done + ' / ' + total + ' done';
+    var pct = total ? Math.round(done/total*100) : 0;
+    document.getElementById('overall-fill').style.width = pct + '%';
+    document.getElementById('stat-done').textContent = done;
+    document.getElementById('stat-percent').textContent = pct + '%';
 
-    cb.addEventListener('change', function(){
-      state[id] = cb.checked;
-      cb.closest('.task').classList.toggle('done', cb.checked);
+    var lessons = {};
+    tasks.forEach(function(t){
+      var lesson = t.getAttribute('data-lesson');
+      lessons[lesson] = lessons[lesson] || {total:0, done:0};
+      lessons[lesson].total++;
+      if (t.classList.contains('done')) lessons[lesson].done++;
+    });
+
+    var clearedLessons = 0;
+    var lessonNumbers = Object.keys(lessons);
+    lessonNumbers.forEach(function(lesson){
+      var el = document.querySelector('.lesson-progress[data-lesson="' + lesson + '"]');
+      var info = lessons[lesson];
+      if (el) el.textContent = info.done + '/' + info.total;
+      var lessonCard = el ? el.closest('details.lesson') : null;
+      var complete = info.total > 0 && info.done === info.total;
+      if (complete) clearedLessons++;
+      if (lessonCard) lessonCard.classList.toggle('complete', complete);
+    });
+
+    document.getElementById('stat-lessons').textContent = clearedLessons + '/' + lessonNumbers.length;
+  }
+
+  tasks.forEach(function(task){
+    var id = task.getAttribute('data-id');
+    var btn = task.querySelector('.mark-btn');
+    if (!btn) return;
+
+    setTaskDone(task, !!state[id]);
+
+    btn.addEventListener('click', function(){
+      var nowDone = !task.classList.contains('done');
+      state[id] = nowDone;
+      setTaskDone(task, nowDone);
       save();
       updateProgress();
     });
@@ -639,10 +807,7 @@ if (totalLight &lt; 1000) {
     if (!confirm('Reset all progress? This cannot be undone.')) return;
     state = {};
     save();
-    checkboxes.forEach(function(cb){
-      cb.checked = false;
-      cb.closest('.task').classList.remove('done');
-    });
+    tasks.forEach(function(task){ setTaskDone(task, false); });
     updateProgress();
   });
 
