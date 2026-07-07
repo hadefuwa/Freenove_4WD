@@ -1,9 +1,29 @@
+// ---------------------------------------------------------------------
+// WHAT IS THIS FILE?
+// ---------------------------------------------------------------------
+// This is NOT code that runs on the robot car! It's a separate helper
+// program written in "Processing" (a language similar to Java) that runs
+// on a computer. It shows two clickable 8x8 grids on screen so you can
+// draw a face with your mouse, then press "GETCODE" to print out the
+// matching 0x.. hex numbers - the exact same kind of numbers used in
+// x_array/y_array back in 01.5_Matrix.ino! It's basically a picture
+// editor that speaks the LED matrix's "hex language" for you, so you
+// don't have to work out the binary by hand.
+//
+// It uses the "ControlP5" library, which provides ready-made buttons,
+// sliders and clickable grids (here called "Matrix" objects) for
+// building simple on-screen tools.
+// ---------------------------------------------------------------------
+
 import controlP5.*; //<>//
 ControlP5 cp5;
 int nx =16;
 int ny = 8;
 int []cn=new int[20];
 
+// ax/ay: store the (x, y) grid positions of every LED the user has
+// turned on, across every saved frame. They're sized huge (2600*2) just
+// so there's always plenty of room, like an oversized notebook.
 int []ax=new int[2600*2];
 int []ay=new int[2600*2];
 
@@ -21,6 +41,9 @@ int matrixplay=0;
 int speed;
 int moven=0;
 
+// setup(): runs once when the Processing program starts. It builds the
+// whole on-screen tool - the two clickable LED grids, the speed slider,
+// and all the buttons (PREVIOUS, CLEAR, ON_ALL, BlinkShow, GETCODE...).
 void setup() {
   size(500, 460);
   mn=nx*ny;
@@ -110,6 +133,10 @@ void setup() {
   smooth();
 }
 
+// draw(): in Processing, this runs automatically many times per second
+// (like loop() in Arduino). It repaints the background, records whatever
+// the user has drawn on matrix1, and - if a preview animation is
+// running - shows the blink or move animation on matrix2.
 void draw() {
   background(30);
   getmatrixdata();
@@ -125,6 +152,9 @@ void draw() {
   timect++;
 }
 
+// showmatrixdata1(): plays back the saved frames on matrix2 one at a
+// time (like flipping through a picture book), pausing "speed" ticks
+// between each frame - this previews the simple blink animation.
 void showmatrixdata1() {
   te=speed;
   if (timect==(tn+1)*te) {
@@ -140,6 +170,10 @@ void showmatrixdata1() {
   }
 }
 
+// showmatrixdata2(): previews a "sliding" animation instead of a plain
+// blink - it gradually shifts one frame's dots sideways (using "moven")
+// while the next frame's dots slide in from the other side, so the
+// picture appears to scroll across the matrix.
 void showmatrixdata2() {
   if (timect==speed) {
     matrix2.clear();
@@ -167,6 +201,9 @@ void showmatrixdata2() {
   }
 }
 
+// getmatrixdata(): checks every cell of the on-screen drawing grid
+// (matrix1) and remembers the (x, y) position of each LED the user has
+// clicked on, into the ax/ay lists, for whichever frame slot "barn" is.
 void getmatrixdata() {
   cn[barn]=0;
   for (int x=0; x<nx; x++) {
@@ -181,6 +218,10 @@ void getmatrixdata() {
   }
 }
 
+// bar(n): called when the user clicks a letter on the button-bar at the
+// top (frame slots a, b, c...). Switches the drawing grid to show
+// whichever saved frame number "n" corresponds to.
+// Parameter: n - the frame slot index to switch to and display.
 void bar(int n) {
   barn=n;
   matrix1.clear();
@@ -189,6 +230,9 @@ void bar(int n) {
   }
 }
 
+// PREVIOUS(): button handler for the "PREVIOUS" button. Clears the
+// drawing grid and redraws whatever was saved in the frame just before
+// the current one, so you can flip backwards through your frames.
 void PREVIOUS() {
   matrix1.clear();
   if (barn>0) {
@@ -197,6 +241,8 @@ void PREVIOUS() {
     }
   }
 }
+// ON_ALL(): button handler for "ON_ALL". Turns every single LED on the
+// drawing grid on, useful as a quick starting point or test pattern.
 void ON_ALL() {
   for (int i=0; i<nx; i++) {
     for (int j=0; j<ny; j++) {
@@ -205,6 +251,8 @@ void ON_ALL() {
   }
 }
 
+// BlinkShow(): button handler that toggles the simple blink preview
+// on/off (calls showmatrixdata1() from within draw() while it's active).
 void BlinkShow() {
   timect=0;
   if (matrixplay==1) {
@@ -213,6 +261,9 @@ void BlinkShow() {
     matrixplay=1;
   }
 }
+
+// MoveShow(): button handler that toggles the sliding/scrolling preview
+// on/off (calls showmatrixdata2() from within draw() while it's active).
 void MoveShow() {
   timect=0;
   if (matrixplay==2) {
@@ -222,6 +273,13 @@ void MoveShow() {
   }
 }
 
+// GETCODE(): the important one! Converts every drawn frame into the
+// same hex byte format used by x_array/y_array in 01.5_Matrix.ino.
+// For each row, it adds up powers of 2 (1,2,4,8,16,32,64,128) for every
+// lit LED in that row - exactly how binary bits combine into one byte -
+// then prints that row's total as a "0x.." hex number. Copy/paste the
+// printed numbers straight into the .ino file's arrays to use your
+// drawing on the real robot.
 void GETCODE() {
   println("------------------------------get HEX------------------------------------------------------------------");
   int cnn=0;
@@ -272,16 +330,24 @@ void GETCODE() {
 }
 
 
+// CLEAR(): button handler that switches off every LED on the current
+// drawing frame only (other saved frames are untouched).
 void CLEAR() {
   matrix1.clear();
 }
 
+// CLEAR_ALL(): button handler that wipes the current drawing frame AND
+// forgets every saved frame's data, resetting the whole tool.
 void CLEAR_ALL() {
   matrix1.clear();
   for (int i=0; i<20; i++) {
     cn[i]=0;
   }
 }
+
+// SPEED(n): called automatically whenever the speed slider is moved.
+// Stores the new animation speed and resets the animation timer.
+// Parameter: n - the new speed value read from the slider.
 void SPEED(int n) {
   speed=n;
   timect=0;

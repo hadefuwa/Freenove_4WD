@@ -1,8 +1,20 @@
 #ifndef _FREENOVE_4WD_CAR_H
 #define _FREENOVE_4WD_CAR_H
 #include <Arduino.h>
-#include "RP2040_PWM.h"  
+#include "RP2040_PWM.h"
 
+// ============================================================================
+// This is the big "hardware driver" header for the car itself: motors,
+// steering servo, buzzer, battery sensing, light sensors, ultrasonic
+// distance sensor, line-tracking sensors, and the overall "which mode is
+// the car in right now" logic. Each labelled section below groups the pins,
+// settings and function declarations for one piece of hardware. The matching
+// .cpp file has the real code; this file just lists what's available to use.
+// ============================================================================
+
+// Uncomment any of these if a particular wheel spins the "wrong" way once
+// the car is assembled - it flips that motor's direction in software instead
+// of you having to re-wire it.
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
 // #define REVERSE_MOTOR3
@@ -13,10 +25,13 @@
 #define SONAR_IS_ESIST  2
 
 ///// define car mode value
-#define CAR_MODE_MANUAL 0
-#define CAR_MODE_LIGHT_TRACING 1
-#define CAR_MODE_LINE_TRACKING 2
-#define CAR_MODE_SONAR 3
+// These are the four "driving modes" the car can be in. Car_Select() (in the
+// .cpp file) checks carFlag against these each time through loop() and hands
+// control to the matching behaviour.
+#define CAR_MODE_MANUAL 0        // You drive it yourself with the IR remote
+#define CAR_MODE_LIGHT_TRACING 1 // Car steers itself towards a light source
+#define CAR_MODE_LINE_TRACKING 2 // Car follows a dark line on the floor
+#define CAR_MODE_SONAR 3         // Car avoids obstacles using the ultrasonic sensor
 
 extern bool isLightModeFirstStarting; 
   
@@ -110,11 +125,11 @@ extern int carFlag;
 void Car_SetMode(int mode);//set the car mode
 void Car_Select(int mode);////select it to run car:0-command car，1-light car ，2-track car
 
-extern int Check_Module_value;
+extern int Check_Module_value;  // Which head accessory was detected: MATRIX_IS_EXIST or SONAR_IS_ESIST
 extern bool isLightModeFirstStarting ;  //is_light_mode_first_starting
 
-bool i2CAddrTest(uint8_t addr);
-void Emotion_and_Ultrasonic_Setup(void);
+bool i2CAddrTest(uint8_t addr);          // Checks if a chip answers at this I2C address (used to auto-detect the matrix)
+void Emotion_and_Ultrasonic_Setup(void); // Re-detects which head accessory is plugged in and (re)initialises it
 
 void Get_Command(String inputStringTemp) ;
 

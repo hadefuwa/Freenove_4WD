@@ -66,7 +66,9 @@ uint32_t PWM_Pins[] = { PIN_MOTOR_PWM_RIGHT1, PIN_MOTOR_PWM_RIGHT2, PIN_MOTOR_PW
 float dutyCycle2[NUM_OF_PINS] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 float freq2[] = { 500.0f, 500.0f, 500.0f, 500.0f, 500.0f, 500.0f, 500.0f, 500.0f };
 RP2040_PWM* PWM_Instance[NUM_OF_PINS];
-//Motor initialization
+// Sets up the 8 PWM (pulse-width modulation) signals used to drive the
+// 4 motors - each motor needs 2 pins (one to spin it forwards, one
+// backwards) so we can control both speed and direction.
 void Motor_Setup(void) {
   for (uint8_t index = 0; index < NUM_OF_PINS; index++) {
     PWM_Instance[index] = new RP2040_PWM(PWM_Pins[index], freq2[index], dutyCycle2[index]);
@@ -79,7 +81,11 @@ void Motor_Setup(void) {
   }
 }
 
-//A function to control the car motor
+// Low-level motor driver: takes 4 speeds (one per wheel, -100 to 100),
+// clamps them to the allowed range, and for each motor picks which of its
+// 2 pins gets the PWM signal based on the sign (positive speed drives one
+// pin, negative speed drives the other, giving forward vs. reverse).
+// Motor_Move() and Motor_M_Move() below both end up calling this.
 void Motor_Move_Init(int m1_speed, int m2_speed, int m3_speed, int m4_speed) {
   float frequency = 500;
   m1_speed = constrain(m1_speed, MOTOR_SPEED_MIN, MOTOR_SPEED_MAX);
@@ -119,6 +125,10 @@ void Motor_Move_Init(int m1_speed, int m2_speed, int m3_speed, int m4_speed) {
     PWM_Instance[6]->setPWM(PIN_MOTOR_PWM_RIGHT3, frequency, 0);
   }
 }
+// Simple "tank drive" helper for normal (non-mecanum) two-side control:
+// one speed for the whole left side, one for the whole right side.
+// Not used by this IR remote sketch (it uses Motor_M_Move instead), but
+// kept here for other sketches that don't need sideways movement.
 void Motor_Move(int Left_speed, int Right_speed) {
   int lf, lb, rf, rb;
   lf = lb = Left_speed;
@@ -137,6 +147,12 @@ void Motor_Move(int Left_speed, int Right_speed) {
 #endif
   Motor_Move_Init(lf, lb, rf, rb);
 }
+// The function the IR remote control code actually calls. It lets each of
+// the 4 mecanum wheels spin at its own independent speed (M1..M4), which
+// is what allows the car to strafe sideways and diagonally, not just turn.
+// The #ifdef blocks below let you flip a motor's wiring in software (by
+// defining REVERSE_MOTORx near the top of the .h file) if a wheel spins
+// the wrong way after you wire it up.
 void Motor_M_Move(int M1_speed, int M2_speed, int M3_speed,int M4_speed) {
   int lf, lb, rf, rb;
   lf = M1_speed;
@@ -193,7 +209,8 @@ void freq(int PIN, int freqs, int times) {
 float batteryVoltage = 0;      //Battery voltage variable
 float batteryCoefficient = 4;  //Set the proportional coefficient
 
-//Gets the battery ADC value
+// Reads the raw analog-to-digital (ADC) value from the battery sensing
+// pin 5 times and averages them, to smooth out electrical noise.
 int Get_Battery_Voltage_ADC(void) {
   pinMode(PIN_BATTERY, INPUT);
   int batteryADC = 0;
@@ -202,7 +219,9 @@ int Get_Battery_Voltage_ADC(void) {
   return batteryADC / 5;
 }
 
-//Get the battery voltage value
+// Converts the raw ADC reading into an actual voltage number using a
+// scaling formula, so the rest of the program can work with real volts
+// instead of a meaningless raw sensor number.
 float Get_Battery_Voltage(void) {
   int batteryADC = Get_Battery_Voltage_ADC();
   batteryVoltage = (batteryADC / 1023.0 * 3.67) * batteryCoefficient;
@@ -271,7 +290,8 @@ int time_before = 0;  //Record each non-blocking time
 int time_count = 0;   //Record the number of non-blocking times
 int time_flag = 0;    //Record the blink time
 
-//Initialize
+// Starts communication with the LED-matrix "face" chip and records the
+// current time, so the animation timers below have a starting point.
 void Emotion_Setup() {
   matrix.init(EMOTION_ADDRESS);
   time_before = millis();
@@ -281,6 +301,14 @@ void Emotion_Setup() {
 void matrixClear(void) {
   matrix.clear();
 }
+
+// All the animation functions below (eyesRotate, eyesBlink, eyesSmile, ...)
+// share the same trick: instead of using delay() (which would freeze the
+// whole program and stop it from noticing IR remote presses), they check
+// "has enough time passed since the last frame?" using millis(). If yes,
+// they draw the next frame and remember the new time. This is called
+// "non-blocking timing" - a very handy pattern once you start juggling
+// more than one thing happening at once in a program.
 
 //Turn the eyes-1
 void eyesRotate(int delay_ms) {
@@ -470,7 +498,11 @@ void saveWater(int delay_ms) {
   }
 }
 
-//show emoticons
+// The single function the main sketch calls every loop(). It's a simple
+// dispatcher: given a mode number (0-10), it calls the matching animation
+// function above. This is the same "map a number/code to an action" idea
+// used by handleControl() for the IR remote, just simpler (no switch needed
+// since it's a short list of plain if/else checks).
 void showEmotion(int mode) {
   if (mode == 0)
     eyesRotate(100);

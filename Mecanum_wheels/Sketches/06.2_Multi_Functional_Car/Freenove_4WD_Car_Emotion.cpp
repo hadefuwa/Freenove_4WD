@@ -2,6 +2,16 @@
 #include "Freenove_VK16K33_Lib.h"
 #include "Freenove_4WD_Car_Emotion.h"
 
+// ---------------------------------------------------------------------
+// Below this point are lots of "byte arrays" like eyeRotate1[][8]. Each
+// group of 8 bytes is ONE picture frame for the 8x8 LED matrix: row by
+// row, top to bottom, and within each byte the bits say which of the 8
+// LEDs in that row should light up. Several frames in a row form a short
+// animation (eyes blinking, rotating, etc). You don't need to understand
+// the hex numbers to follow the rest of the code — just know "this is a
+// list of pictures". The interesting logic is in the functions further
+// down (eyesRotate, eyesBlink, Emotion_Show, ...).
+// ---------------------------------------------------------------------
 Freenove_VK16K33 matrix = Freenove_VK16K33();
 int emotion_time_next = 0;
 int emotion_time_now = 0;
@@ -494,7 +504,13 @@ byte clearEmotion[][8] = {
   0x00,
 };
 
-//rotate eyes
+// eyesRotate(): plays the "rotating eyes" animation one frame at a time.
+// Rather than using delay() (which would freeze the whole program), it
+// checks how much time has passed since the last frame using millis() —
+// this is a common Arduino trick for animating things without blocking
+// everything else (like reading WiFi commands) from happening. Every time
+// enough time (delay_ms) has passed, it shows the next frame and loops
+// back to frame 0 once it reaches the end.
 void eyesRotate(int delay_ms) {
   int count = sizeof(eyeRotate1) / sizeof(eyeRotate1[0]);
   emotion_time_next = millis();
@@ -507,7 +523,9 @@ void eyesRotate(int delay_ms) {
   }
 }
 
-//Blink eyes
+// eyesBlink(): plays the "blinking" animation the same non-blocking way as
+// eyesRotate() above — shows the "eyes open" frame for a while, then steps
+// through the blink-closing frames once, then goes back to eyes-open.
 void eyesBlink(int delay_ms) {
   emotion_time_next = millis();
   if (emotion_time_next - emotion_time_now >= delay_ms) {
@@ -524,7 +542,7 @@ void eyesBlink(int delay_ms) {
   }
 }
 
-//smile
+// eyesSmile(): plays the looping "smiling eyes" animation frame by frame.
 void eyesSmile(int delay_ms) {
   int count = sizeof(eyeSmile) / sizeof(eyeSmile[0]);
   emotion_time_next = millis();
@@ -537,7 +555,7 @@ void eyesSmile(int delay_ms) {
   }
 }
 
-//cry
+// eyesCry(): plays the looping "crying eyes" animation frame by frame.
 void eyesCry(int delay_ms) {
   int count = sizeof(eyeCry1) / sizeof(eyeCry1[0]);
   emotion_time_next = millis();
@@ -550,7 +568,9 @@ void eyesCry(int delay_ms) {
   }
 }
 
-//wheel
+// wheel(): plays a spinning-wheel/gear icon animation, used while the car
+// is turning. mode 1 shows the left-spin picture set, mode 2 the right-spin
+// set — this is purely a visual indicator, it doesn't affect driving.
 void wheel(int mode, int delay_ms) {
   if (mode == 1) {
     emotion_time_next = millis();
@@ -577,14 +597,18 @@ void wheel(int mode, int delay_ms) {
   }
 }
 
-//show static emotion
+// staticEmtions(): shows ONE of the 21 fixed "emoji" pictures (no
+// animation, just a single frame), chosen by the emotion number — see the
+// list of 21 names in Freenove_4WD_Car_Emotion.h. constrain() stops an
+// out-of-range number from reading past the end of the array.
 void staticEmtions(int emotion) {
   int count = sizeof(static_emotion_left) / sizeof(static_emotion_left[0]);
   emotion = constrain(emotion, 0, count - 1);
   matrix.showStaticArray(static_emotion_left[emotion], static_emotion_right[emotion]);
 }
 
-//clear all
+// clearEmtions(): blanks the LED matrix (turns all dots off), used when
+// switching between animations so old frames don't linger.
 void clearEmtions(void) {
   emotion_time_next = millis();
   if (emotion_time_next - emotion_time_now >= 500) {
@@ -596,7 +620,9 @@ void clearEmtions(void) {
   }
 }
 
-//initialize HT16K33
+// Emotion_Setup(): starts up the HT16K33/VK16K33 LED matrix driver chip
+// over I2C at the given address and sets it to full brightness. Called
+// once we've detected the matrix is actually plugged in.
 void Emotion_Setup(int address) {
   matrix.init(address);
   matrix.setBrightness(255);
@@ -604,7 +630,11 @@ void Emotion_Setup(int address) {
 }
 
 int emotion_task_mode = 0;
-//Emotion show
+// Emotion_Show(): called every loop() iteration with the currently-active
+// animation mode number, and steps that animation forward by one frame if
+// enough time has passed. This is the function that actually keeps the
+// face moving over time; Emotion_SetMode() below is what CHANGES which
+// mode is active.
 void Emotion_Show(int mode) {
   if (mode == 0)
     clearEmtions();
@@ -625,7 +655,12 @@ void Emotion_Show(int mode) {
 }
 
 extern int Check_Module_value;
-//Emotion set mode
+// Emotion_SetMode(): called when the phone app sends a CMD_MATRIX_MOD
+// command. Modes 0-6 pick one of the built-in animations (handled by
+// Emotion_Show above). Mode 7+ instead shows a RANDOM one of the 21 fixed
+// static emoji pictures — the "random" pick is just the current millis()
+// clock value modulo 22, a simple trick to get an unpredictable number
+// without a proper random-number generator.
 void Emotion_SetMode(int mode) {
   if (Check_Module_value == MATRIX_IS_EXIST) {
     if (mode <= 6) {

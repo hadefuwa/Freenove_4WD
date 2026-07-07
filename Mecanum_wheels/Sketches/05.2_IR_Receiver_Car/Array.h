@@ -1,3 +1,10 @@
+// This file just stores picture data for the little 8x8 LED matrix "face"
+// on top of the car. Each byte is one row of 8 pixels (a bit set to 1 means
+// that pixel lights up), and each array is a stack of frames played one
+// after another to make a simple animation (like a tiny flip-book).
+// None of this is related to the IR remote control logic - it's only used
+// by showEmotion() in Freenove_4WD_Car_For_Pico_W.cpp to animate the face.
+
 //Turn your eyes clockwise
 byte eyeRotate1[][8]  = {
   0x00, 0x3C, 0x4E, 0x4E, 0x7E, 0x7E, 0x3C, 0x00,

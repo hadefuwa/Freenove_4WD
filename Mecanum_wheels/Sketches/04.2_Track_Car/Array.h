@@ -1,3 +1,11 @@
+// This file is just DATA, not logic - a big box of pictures for the small
+// 8x8 LED grid ("face") on top of the car. Each byte is one row of 8 LEDs,
+// written in binary/hex where each bit is one LED (on/off). Every array
+// below is one animation: a list of "frames" that get shown one after
+// another to make the eyes blink, an arrow point, or a wheel spin. The
+// functions in Freenove_4WD_Car_For_Pico_W.cpp (like eyesBlink1, showArrow,
+// wheel) are what actually display these pictures on the LED matrix.
+
 //Turn your eyes clockwise
 byte eyeRotate1[][8]  = {
   0x00, 0x3C, 0x4E, 0x4E, 0x7E, 0x7E, 0x3C, 0x00,

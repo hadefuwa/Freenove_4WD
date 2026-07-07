@@ -1,21 +1,29 @@
 #ifndef _FREENOVE_4WD_CAR_H
 #define _FREENOVE_4WD_CAR_H
 #include <Arduino.h>
-#include "RP2040_PWM.h"  
+#include "RP2040_PWM.h"
+// This header (and its matching .cpp) is the "hardware toolbox" for the
+// whole car: motors, servo, buzzer, battery, light sensors, ultrasonic
+// sensor and line-tracking sensors. Nothing in here knows about WiFi or
+// the app's text commands — it just offers simple functions like
+// Motor_M_Move() or Get_Battery_Voltage() that the main .ino calls.
 
+// If a wheel spins the wrong way when you test the car, uncomment the
+// matching line below to flip that motor's direction in software instead
+// of re-wiring it.
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
 // #define REVERSE_MOTOR3
 // #define REVERSE_MOTOR4
 
-#define MATRIX_IS_EXIST 1
-#define SONAR_IS_ESIST 2
+#define MATRIX_IS_EXIST 1  //Code for "an LED matrix (face) is plugged into the head connector"
+#define SONAR_IS_ESIST 2   //Code for "an ultrasonic distance sensor is plugged in instead"
 
-// define car mode value
-#define CAR_MODE_MANUAL 0
-#define CAR_MODE_LIGHT_TRACING 1
-#define CAR_MODE_LINE_TRACKING 2
-#define CAR_MODE_SONAR 3
+// define car mode value — which "brain" is currently driving the wheels
+#define CAR_MODE_MANUAL 0         //You're driving it yourself with the joysticks
+#define CAR_MODE_LIGHT_TRACING 1  //Car drives itself towards/away from light
+#define CAR_MODE_LINE_TRACKING 2  //Car follows a black line on the floor
+#define CAR_MODE_SONAR 3          //Car avoids obstacles using the ultrasonic sensor
 
 
 /////////////////////Servo drive area///////////////////////////////////

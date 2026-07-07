@@ -1,3 +1,13 @@
+// This whole file is just picture data for the little LED "face" matrix on
+// top of the car - not code logic. Each array is a stack of 8x8 grids
+// (like graph paper) where each number is one row of pixels. The numbers are
+// written in hexadecimal (base 16, prefixed with 0x) - each hex digit
+// represents 4 pixels on/off in that row, together forming an 8-pixel-wide
+// row of the little screen. Playing the grids one after another (like a
+// flipbook) makes the eyes/icons appear to move. None of this is used by
+// the line-tracking sketch in this folder, but it's included because this
+// Array.h file is shared by every example sketch that uses the LED display.
+
 //Turn your eyes clockwise
 byte eyeRotate1[][8]  = {
   0x00, 0x3C, 0x4E, 0x4E, 0x7E, 0x7E, 0x3C, 0x00,

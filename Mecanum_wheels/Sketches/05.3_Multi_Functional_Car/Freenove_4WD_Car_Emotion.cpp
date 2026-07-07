@@ -3,6 +3,19 @@
 #include "Freenove_4WD_Car_For_Pico_W.h"
 #include "Freenove_4WD_Car_Emotion.h"
 
+// ============================================================================
+// THIS FILE: the robot's "face" - two 8x8 LED matrices side by side, driven
+// by the Freenove_VK16K33 library.
+//
+// Below are a bunch of byte arrays like `eyeRotate1[][8]`. Each group of 8
+// numbers is ONE animation frame: each number is one row of 8 pixels on the
+// matrix, and each bit in that number (in binary) says whether that pixel
+// is lit or not. For example 0x3C is binary 00111100, meaning the middle 4
+// pixels of that row are lit. You don't need to decode these by hand - just
+// know that "an array of 8-number groups" = "a flip-book of animation
+// frames" that gets played back frame-by-frame further down in this file.
+// ============================================================================
+
 //Turn eyes clockwise
 byte eyeRotate1[][8]  = {
   0x00, 0x3C, 0x4E, 0x4E, 0x7E, 0x7E, 0x3C, 0x00,
@@ -143,13 +156,27 @@ byte clearEmotion[][8] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-Freenove_VK16K33 matrix = Freenove_VK16K33();
+Freenove_VK16K33 matrix = Freenove_VK16K33();  // The object that actually talks to the LED matrix hardware
 
-int emotion_time_next = 0;
-int emotion_time_now = 0;
-int emotion_count = 0;
+int emotion_time_next = 0;  // millis() reading taken "now", each time we check the clock
+int emotion_time_now = 0;   // millis() reading of when we last actually drew a new frame
+int emotion_count = 0;      // Which frame of the current animation we're up to
 
-//rotate eyes
+// ----------------------------------------------------------------------------
+// The functions below (eyesRotate, eyesBlink, eyesSmile, eyesCry, wheel) all
+// follow the same pattern, which is a very useful trick for animating
+// things WITHOUT using delay() (which would freeze the whole program):
+//   1. Look at the clock (millis(), which counts milliseconds since power-on).
+//   2. If enough time (delay_ms) has passed since the last frame, draw the
+//      next frame and remember this new time.
+//   3. Otherwise, do nothing this time - just return and try again next
+//      time the function is called (once per loop(), very fast).
+// This means you can call these functions constantly and they will animate
+// smoothly at their own pace, while the rest of loop() keeps running too.
+// ----------------------------------------------------------------------------
+
+// eyesRotate: plays the "eyes looking around in a circle" animation.
+// delay_ms controls how fast it spins (smaller = faster).
 void eyesRotate(int delay_ms)
 {
   int count = sizeof(eyeRotate1) / sizeof(eyeRotate1[0]);
@@ -164,7 +191,8 @@ void eyesRotate(int delay_ms)
   }
 }
 
-//Blink eyes
+// eyesBlink: shows normal open eyes for a while (10 frames' worth), then
+// plays through the closing/opening blink frames once, then repeats.
 void eyesBlink(int delay_ms)
 {
   emotion_time_next = millis();
@@ -184,7 +212,7 @@ void eyesBlink(int delay_ms)
   }
 }
 
-//smile
+// eyesSmile: plays a short 2-frame "smiling eyes" animation on a loop.
 void eyesSmile(int delay_ms)
 {
   int count = sizeof(eyeSmile) / sizeof(eyeSmile[0]);
@@ -199,7 +227,8 @@ void eyesSmile(int delay_ms)
   }
 }
 
-//cry
+// eyesCry: plays a "crying" animation - tears appear one at a time under
+// each eye, using two different frame arrays for the left/right matrix.
 void eyesCry(int delay_ms)
 {
   int count = sizeof(eyeCry1) / sizeof(eyeCry1[0]);
@@ -214,7 +243,8 @@ void eyesCry(int delay_ms)
   }
 }
 
-//wheel
+// wheel: plays a spinning-wheel icon animation. mode 1 = left wheel design,
+// mode 2 = right wheel design (used to show which way the car is turning).
 void wheel(int mode, int delay_ms)
 {
   if (mode == 1)
@@ -245,7 +275,9 @@ void wheel(int mode, int delay_ms)
   }
 }
 
-//show static emotion
+// staticEmtions: shows one single unmoving picture (chosen by `emotion`,
+//0 to 20) from the big static_emotion_left/right picture collections -
+// no animation, just draws that one frame and stops.
 void staticEmtions(int emotion)
 {
   int count = sizeof(static_emotion_left) / sizeof(static_emotion_left[0]);
@@ -253,7 +285,8 @@ void staticEmtions(int emotion)
   matrix.showStaticArray(static_emotion_left[emotion], static_emotion_right[emotion]);
 }
 
-//clear all
+// clearEmtions: turns every pixel off, resets the animation frame counter
+// back to 0 so the next animation starts fresh from its first frame.
 void clearEmtions(void)
 {
   emotion_count = 0;
@@ -264,7 +297,8 @@ void clearEmtions(void)
   }
 }
 
-//initialize HT16K33
+// Emotion_Setup: connects to the matrix driver chip over I2C and sets its
+// brightness. Call this once before using any of the other functions here.
 void Emotion_Setup()
 {
   matrix.init(EMOTION_ADDRESS);
@@ -272,8 +306,11 @@ void Emotion_Setup()
   emotion_time_now = millis();
 }
 
-int emotion_task_mode = 0;
-//Emotion show
+int emotion_task_mode = 0;  // The animation mode last picked by Emotion_SetMode()
+// Emotion_Show: draws one frame of whichever animation `mode` selects.
+// Called every time through loop() - since each of these sub-functions only
+// actually updates the display once enough time has passed, calling this
+// constantly is what makes the animation run smoothly.
 void Emotion_Show(int mode)
 {
   if (mode == 0)
@@ -292,7 +329,9 @@ void Emotion_Show(int mode)
     wheel(1, 100);
 }
 
-//Emotion set mode
+// Emotion_SetMode: chooses which animation (0-6) Emotion_Show() will play.
+// Passing 7 or higher instead shows a single random static picture, picked
+// using the current clock time as a simple "random" number.
 void Emotion_SetMode(int mode)
 {
   if (mode <= 6)

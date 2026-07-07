@@ -1,9 +1,20 @@
+// This is a "header file". It doesn't do any work itself - it just lists
+// (declares) what pins, constants, and functions exist in
+// Freenove_4WD_Car_For_Pico_W.cpp, so that the .ino sketch (and this .cpp
+// file) can use them. Think of it like a table of contents.
 #ifndef _FREENOVE_4WD_CAR_H
 #define _FREENOVE_4WD_CAR_H
+// The 3 lines above are an "include guard": they make sure this file's
+// contents only get pasted into the program once, even if several other
+// files try to #include it. Without this, the compiler would complain
+// about things being defined twice.
 
 #include <Arduino.h>
-#include "RP2040_PWM.h"  
+#include "RP2040_PWM.h"
 
+// These commented-out lines are switches a builder could turn on (by
+// removing the //) if a motor spins the wrong way round when wired up -
+// not used in this battery-reading example.
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
 // #define REVERSE_MOTOR3
@@ -44,12 +55,16 @@ void Buzzer_Alert(int beat, int rebeat);//Buzzer alarm function
 void freq(int PIN, int freqs, int times); 
 
 ////////////////////Battery drive area/////////////////////////////////////
+// PIN_BATTERY is connected to a "voltage divider": a pair of resistors
+// wired across the battery that scales the (too-high-to-read-directly)
+// battery voltage down into the safe 0-3.3V range the Pico W's ADC can
+// measure. See the .cpp file for the maths that undoes this scaling.
 #define PIN_BATTERY        26        //Set the battery detection voltage pin
 #define LOW_VOLTAGE_VALUE  525       //Set the minimum battery voltage
 extern float batteryCoefficient;     //Set the proportional coefficient
 
-int Get_Battery_Voltage_ADC(void);   //Gets the battery ADC value
-float Get_Battery_Voltage(void);     //Get the battery voltage value
-void Set_Battery_Coefficient(float coefficient);//Set the partial pressure coefficient
+int Get_Battery_Voltage_ADC(void);   //Gets the raw battery ADC value (roughly 0-1023, no units - just a sensor reading)
+float Get_Battery_Voltage(void);     //Get the battery voltage, converted into real volts (V)
+void Set_Battery_Coefficient(float coefficient);//Change the scaling number used to turn the divided-down voltage back into the real battery voltage
 
 #endif

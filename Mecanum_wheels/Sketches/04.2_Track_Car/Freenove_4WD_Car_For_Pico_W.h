@@ -1,9 +1,19 @@
+// This header is the "menu" of everything the car's hardware can do:
+// servos, drive motors, buzzer, battery sensor, light sensor, ultrasonic
+// distance sensor, line-tracking sensors, and the LED face. Each section
+// below just declares (announces) the pins and functions that the matching
+// .cpp file actually implements. This 04.2 line-following lesson mainly
+// uses the "Motor drive area" and "Track drive area" sections, plus a few
+// of the "Emotion drive area" face animations.
 #ifndef _FREENOVE_4WD_CAR_H
 #define _FREENOVE_4WD_CAR_H
 
 #include <Arduino.h>
-#include "RP2040_PWM.h"  
+#include "RP2040_PWM.h"
 
+// Uncomment one of these if a specific motor spins the "wrong" way when
+// wired up - it flips that motor's direction in software instead of you
+// having to re-wire the connector.
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
 // #define REVERSE_MOTOR3
@@ -32,9 +42,9 @@ void Servo_Sweep(int servo_id, int angle_start, int angle_end);//Servo sweep fun
 #define MOTOR_SPEED_MAX       100        //Define a maximum speed limit for wheels
 
 void Motor_Setup(void);                //motor initialization
-void Motor_Move_Init(int m1_speed, int m2_speed, int m3_speed, int m4_speed);//A function to control the car motor
-void Motor_Move(int Left_speed, int Right_speed);//A function to control the car motor
-void Motor_M_Move(int M1_speed, int M2_speed, int M3_speed,int M4_speed);//A function to control the maicanum wheel car motor
+void Motor_Move_Init(int m1_speed, int m2_speed, int m3_speed, int m4_speed);//Low-level: sends a speed (-100 to 100) straight to each of the 4 wheels
+void Motor_Move(int Left_speed, int Right_speed);//Simple 2-wheel-drive style control: one speed for both left wheels, one for both right wheels
+void Motor_M_Move(int M1_speed, int M2_speed, int M3_speed,int M4_speed);//Mecanum control: lets all 4 wheels spin at independent speeds - this is what the line-follower uses to pivot left/right
 
 //////////////////////Buzzer drive area///////////////////////////////////
 //Buzzer pin definition             
@@ -68,9 +78,13 @@ void Ultrasonic_Setup(void);//Ultrasonic initialization
 float Get_Sonar(void);//Obtain ultrasonic distance data
 
 /////////////////////Track drive area//////////////////////////////
+// The 3 line-tracking sensors, left to right across the bottom of the car.
 #define PIN_TRACKING_LEFT   12
 #define PIN_TRACKING_CENTER 11
 #define PIN_TRACKING_RIGHT  10
+// sensorValue[0..2] hold the raw left/center/right readings (0 or 1).
+// sensorValue[3] holds all three combined into one 3-bit number (0-7) -
+// that's the value the line-following switch/case in the .ino reacts to.
 extern unsigned char sensorValue[4];
 void Track_Setup(void);//Trace module initialization
 void Track_Read(void);//Tracking module reading

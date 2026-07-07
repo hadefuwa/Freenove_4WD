@@ -1,8 +1,14 @@
 #ifndef _FREENOVE_4WD_CAR_H
 #define _FREENOVE_4WD_CAR_H
+// This header is the "menu" of everything the car's driver library (the
+// .cpp file next to this one) can do: servos, motors, buzzer, battery
+// check, light sensor, ultrasonic distance sensor, line-tracking sensors,
+// and the LED face/emotion display. This sketch (04.1) only actually uses
+// the "Track drive area" section below - the rest is here because the
+// library file is shared by every example sketch in this kit.
 
 #include <Arduino.h>
-#include "RP2040_PWM.h"  
+#include "RP2040_PWM.h"
 
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
@@ -67,12 +73,21 @@ void Ultrasonic_Setup(void);//Ultrasonic initialization
 float Get_Sonar(void);//Obtain ultrasonic distance data
 
 /////////////////////Track drive area//////////////////////////////
+// This is the part this sketch actually uses: the 3 infrared line-tracking
+// ("IR reflectance") sensors on the underside of the car. Each one is wired
+// to its own digital input pin, and reads either LOW/0 (white floor) or
+// HIGH/1 (black line).
 #define PIN_TRACKING_LEFT   12
 #define PIN_TRACKING_CENTER 11
 #define PIN_TRACKING_RIGHT  10
+// sensorValue is a global array shared between Track_Read() (which fills it)
+// and any sketch (which reads it). "extern" means "this array really lives
+// in the .cpp file, but I'm telling you its type here so you can use it."
+// sensorValue[0..2] hold the raw Left/Middle/Right 0-or-1 readings.
+// sensorValue[3] holds all three combined into one number, 0-7.
 extern unsigned char sensorValue[4];
-void Track_Setup(void);//Trace module initialization
-void Track_Read(void);//Tracking module reading
+void Track_Setup(void);//Sets the 3 tracking sensor pins as digital inputs
+void Track_Read(void);//Reads all 3 sensors and updates sensorValue[]
 
 //////////////////////Emotion drive area////////////////////////////////
 #define EMOTION_ADDRESS 0x71

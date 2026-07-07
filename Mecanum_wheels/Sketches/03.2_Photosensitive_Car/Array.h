@@ -1,3 +1,11 @@
+// This file is just DATA - no logic here, only lists of numbers.
+// Each array below describes pictures (like "eyes" or "arrows") to show on the
+// car's little 8x8 LED dot-matrix "face". Each row of 8 numbers is one image
+// (or one frame of an animation), and each number is really 8 bits in
+// disguise - every bit says whether one LED dot in that row is on (1) or off (0).
+// This particular sketch (light-tracking) doesn't actually use these faces,
+// but the file is still included because it's shared by all the car sketches.
+
 //Turn your eyes clockwise
 byte eyeRotate1[][8]  = {
   0x00, 0x3C, 0x4E, 0x4E, 0x7E, 0x7E, 0x3C, 0x00,

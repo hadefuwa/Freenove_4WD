@@ -4,6 +4,12 @@
 #include <Arduino.h>
 #include "RP2040_PWM.h"  
 
+// This header file is like a table of contents for the whole car: it lists
+// every pin number, setting, and function that the .cpp file provides, so
+// other files (like the .ino sketch) know what's available to call.
+
+// Uncomment one of these (remove the "//") if a wheel spins the wrong way -
+// it flips that motor's direction in software instead of rewiring it.
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
 // #define REVERSE_MOTOR3
@@ -59,13 +65,17 @@ void Set_Battery_Coefficient(float coefficient);//Set the partial pressure coeff
 void oa_CalculateVoltageCompensation(void);
 
 ////////////////////Photosensitive drive area//////////////////////////////
+// This is the important part for THIS sketch: two photoresistors (light
+// sensors) are wired to these two analog pins, one on the car's left side
+// and one on the right. Light_Car() compares their readings every loop to
+// decide which way to steer - see Light_Car() in the .cpp file for the logic.
 #define Left_PHOTOSENSITIVE_PIN    28
 #define Right_PHOTOSENSITIVE_PIN   27
 
 void Photosensitive_Setup(void);           //Photosensitive initialization
-int getLeftPhotosensitiveADCValue(void);              //Gets the photosensitive resistance value
-int getRightPhotosensitiveADCValue(void);              //Gets the photosensitive resistance value
-void Light_Car(void);               //Light Car
+int getLeftPhotosensitiveADCValue(void);              //Reads the left light sensor (bigger number = darker, smaller number = brighter, roughly 0-1023)
+int getRightPhotosensitiveADCValue(void);              //Reads the right light sensor (same scale as the left one)
+void Light_Car(void);               //Reads both light sensors and drives the wheels toward the brighter side
 
 /////////////////////Ultrasonic drive area/////////////////////////////////
 #define PIN_SONIC_TRIG    4            //define Trig pin

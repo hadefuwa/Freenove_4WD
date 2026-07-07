@@ -1,10 +1,17 @@
 #ifndef _EMOTION_H
 #define _EMOTION_H
+// This file/its .cpp control the small 8x8-dot LED matrix that can be
+// plugged into the car's "head" — it draws simple animated faces
+// (blinking, smiling, crying...) or one of 21 fixed "emoji" pictures.
+// Each frame of an animation is stored as a tiny picture: an array of 8
+// bytes, one per row, where each BIT in the byte says whether that dot in
+// the row is lit or not. You won't need to edit those byte arrays — just
+// know they're pictures made of 1s and 0s.
 
 #include "Freenove_4WD_Car_For_Pico_W.h"
 
-extern int emotion_task_mode;
-extern int emotion_count;
+extern int emotion_task_mode;  //Which animation is currently playing (see Emotion_Show mode numbers below)
+extern int emotion_count;      //Which frame of that animation we're currently showing
 
 void Emotion_Setup(int address = 0x71);                 //Initializes the Led Matrix
 void Emotion_Show(int mode);       //Display:0-Display off,1-Turn the eyes,2-blink eyes,3-smile,4-cry,5-left-wheel,6-right-wheel

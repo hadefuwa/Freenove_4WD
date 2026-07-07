@@ -1,8 +1,15 @@
 #ifndef _FREENOVE_4WD_CAR_H
 #define _FREENOVE_4WD_CAR_H
 
+// This header just lists (declares) all the functions the car's hardware
+// "helper library" (Freenove_4WD_Car_For_Pico_W.cpp) provides: driving the
+// 4 mecanum-wheel motors, playing sounds, reading the battery/light/
+// distance sensors, and animating the LED-matrix "face". The IR remote
+// control sketch (the .ino file) calls these functions but doesn't need to
+// know how they work inside - that's the whole point of a header file!
+
 #include <Arduino.h>
-#include "RP2040_PWM.h"  
+#include "RP2040_PWM.h"
 
 // #define REVERSE_MOTOR1
 // #define REVERSE_MOTOR2
@@ -34,6 +41,10 @@ void Servo_Sweep(int servo_id, int angle_start, int angle_end);//Servo sweep fun
 void Motor_Setup(void);                //motor initialization
 void Motor_Move_Init(int m1_speed, int m2_speed, int m3_speed, int m4_speed);//A function to control the car motor
 void Motor_Move(int Left_speed, int Right_speed);//A function to control the car motor
+// Sets each of the 4 mecanum wheels to its own speed (-100 to 100, negative
+// = spin backwards). This is the function the IR remote sketch calls every
+// time it needs to move the car, since mecanum wheels can drive sideways
+// and diagonally, not just forward/back/turn like normal wheels.
 void Motor_M_Move(int M1_speed, int M2_speed, int M3_speed,int M4_speed);//A function to control the maicanum wheel car motor
 
 //////////////////////Buzzer drive area///////////////////////////////////
@@ -50,6 +61,9 @@ void freq(int PIN, int freqs, int times);
 extern float batteryCoefficient;    //Set the proportional coefficient
 
 int Get_Battery_Voltage_ADC(void);   //Gets the battery ADC value
+// Reads the battery and converts it into a real voltage (like "7.4V").
+// The IR remote sketch uses this to time how fast the spin-in-place
+// animation should run, since a weaker battery turns the motors slower.
 float Get_Battery_Voltage(void);     //Get the battery voltage value
 void Set_Battery_Coefficient(float coefficient);//Set the partial pressure coefficient
 
@@ -79,6 +93,7 @@ void Track_Read(void);//Tracking module reading
 #define EMOTION_ADDRESS 0x71
 #define EMOTION_SDA     4
 #define EMOTION_SCL     5
+// Gets the LED-matrix "face" display ready to use (called once from setup()).
 void Emotion_Setup();                            //Initialize
 void eyesRotate(int delay_ms);                   //Turn the eyes-1
 void eyesBlink(int delay_ms);                    //Wink the eyes-2
@@ -91,6 +106,9 @@ void carMove(int mode,int delay_ms);             //car-8
 void expressingLove(void);                       //expressing love-9
 void saveWater(int delay_ms);                    //save water-10
 void matrixClear(void);                          //clear all
-void showEmotion(int mode);                      //show emoticons  
+// Picks which face/animation to display based on a number (0-10). This
+// sketch calls it every loop() with emotionMode, so the face keeps
+// animating in the background while you drive the car with the remote.
+void showEmotion(int mode);                      //show emoticons
 
 #endif
