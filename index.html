@@ -1552,6 +1552,7 @@ if (totalLight &lt; 100) {
         <span class="icon-badge">🌻</span>
         <span class="folder-tag">03.2_Photosensitive_Car</span>
         Light-Tracking Car
+        <span class="lesson-progress" data-lesson="03.2"></span>
         <span class="chevron">▶</span>
       </summary>
       <div class="lesson-body">
@@ -1605,7 +1606,46 @@ void loop() {
 
         <div class="step">
           <div class="step-title">🏆 Step 3 — Try the challenge</div>
-          <p style="color:var(--muted); font-style:italic;">No set challenge here yet — open the code above, tweak a number, re-upload, and see what changes!</p>
+          <div class="try-it-heading">🏆 Try it: Challenges</div>
+
+        <div class="task" data-lesson="03.2" data-id="l7-c1">
+          <div class="task-content">
+            <span class="title">🚨 Challenge 1: The Dark Room Alarm</span>
+            <p><strong>Goal:</strong> Make the car beep a warning instead of driving blind when the room is too dark for it to see properly.</p>
+            <p><strong>How-to:</strong> This one needs a few new lines written in <code>loop()</code> in the <code>.ino</code> file itself — <code>Light_Car()</code> is too simple to tweak on its own. Read both sensors yourself, check if they're both dark, and beep if so:</p>
+            <pre><code>void loop() {
+  int leftLight = getLeftPhotosensitiveADCValue();
+  int rightLight = getRightPhotosensitiveADCValue();
+  if (leftLight &lt; 50 &amp;&amp; rightLight &lt; 50) {
+    Buzzer_Alert(3, 1);   // 3 quick beeps = "too dark!"
+  } else {
+    Light_Car();
+  }
+}</code></pre>
+            <div class="tip"><strong>Tip:</strong> Remember bigger ADC number = brighter, so checking for "less than 50" on both sensors means "it's dark on both sides". <code>Buzzer_Alert(beat, rebeat)</code> beeps <code>beat</code> times per burst, repeated <code>rebeat</code> times.</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="03.2" data-id="l7-c2">
+          <div class="task-content">
+            <span class="title">🐢 Challenge 2: Turtle Mode vs. Turbo Mode</span>
+            <p><strong>Goal:</strong> Make the car cruise noticeably slower, then noticeably faster, while it's chasing the light.</p>
+            <p><strong>How-to:</strong> The speed isn't set in the <code>.ino</code> at all — it's a constant inside the supporting file <code>Freenove_4WD_Car_For_Pico_W.cpp</code>. Open it and find <code>#define LIGHT_MODE_CRUISE_SPEED (25+oa_VoltageCompensationToSpeed)</code>. Change the <code>25</code> to <code>10</code> for a crawling car, then try <code>60</code> for a much faster one.</p>
+            <div class="tip"><strong>Tip:</strong> This number is the car's baseline speed before steering is added on top — it's why both wheels still move even when the left and right light readings are equal. Search for <code>LIGHT_MODE_CRUISE_SPEED</code> in the file to see everywhere it's used.</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
+
+        <div class="task" data-lesson="03.2" data-id="l7-c3">
+          <div class="task-content">
+            <span class="title">🎯 Challenge 3: Twitchy vs. Chill Steering</span>
+            <p><strong>Goal:</strong> Make the car react much more sharply to a light difference between its two sensors — then make it react much more gently.</p>
+            <p><strong>How-to:</strong> Also in <code>Freenove_4WD_Car_For_Pico_W.cpp</code>, inside the <code>Light_Car()</code> function, find <code>int diffLightValue = (rightLightValue - leftLightValue) / 8;</code>. Change the <code>8</code> to <code>2</code> for aggressive, twitchy steering, or <code>20</code> for a smoother, gentler turn.</p>
+            <div class="tip"><strong>Tip:</strong> A smaller divisor means a bigger chunk of the raw sensor difference gets added to the motor speeds each loop — that's what makes the steering feel "sharper". Try combining this with Challenge 2's cruise speed to build your own driving "personality".</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
         </div>
       </div>
     </details>
