@@ -1601,6 +1601,8 @@ void loop() {
           <div class="kicker">📖 How it works</div>
           <p>This program gives the car "phototropism" — like a plant reacting to sunlight, it changes direction based on which side sees more light. Every fraction of a second it compares its two light sensors: whichever side is brighter gets its wheels sped up, and the darker side's wheels slow down. Try shining a torch at one sensor and watch which way your own car actually turns — it's a great experiment!</p>
           <p>It teaches comparing two numbers to choose a direction, and using that comparison result (a "difference") to smoothly adjust motor speeds instead of just turning fully one way or the other — a nice first taste of proportional control instead of simple on-off logic.</p>
+          <p>Underneath <code>Light_Car()</code> there are really three separate decisions happening on every single pass through <code>loop()</code>: a <strong>base speed</strong> both wheels get regardless of light (so the car keeps moving even when both sensors match), a <strong>steering adjustment</strong> that pushes one wheel faster and the other slower based on how big the gap between sensors is, and a <strong>safety check</strong> that refuses to drive at all if either sensor thinks it's too dark to trust. Each of these three ideas is controlled by its own number in the code, which is why they're worth pulling apart one at a time.</p>
+          <p>It's also worth noticing what <em>isn't</em> in this "brain" function: nothing here decides when to sound the buzzer. <code>setup()</code> only beeps once, right at power-on. If you want the car to react with sound as well as motion, that logic has to be built separately — it doesn't come for free just because a buzzer exists on the board.</p>
         </div>
         </div>
 
@@ -1612,17 +1614,9 @@ void loop() {
           <div class="task-content">
             <span class="title">🚨 Challenge 1: The Dark Room Alarm</span>
             <p><strong>Goal:</strong> Make the car beep a warning instead of driving blind when the room is too dark for it to see properly.</p>
-            <p><strong>How-to:</strong> This one needs a few new lines written in <code>loop()</code> in the <code>.ino</code> file itself — <code>Light_Car()</code> is too simple to tweak on its own. Read both sensors yourself, check if they're both dark, and beep if so:</p>
-            <pre><code>void loop() {
-  int leftLight = getLeftPhotosensitiveADCValue();
-  int rightLight = getRightPhotosensitiveADCValue();
-  if (leftLight &lt; 50 &amp;&amp; rightLight &lt; 50) {
-    Buzzer_Alert(3, 1);   // 3 quick beeps = "too dark!"
-  } else {
-    Light_Car();
-  }
-}</code></pre>
-            <div class="tip"><strong>Tip:</strong> Remember bigger ADC number = brighter, so checking for "less than 50" on both sensors means "it's dark on both sides". <code>Buzzer_Alert(beat, rebeat)</code> beeps <code>beat</code> times per burst, repeated <code>rebeat</code> times.</div>
+            <p><strong>Think about:</strong> <code>loop()</code> currently only ever does one thing: call <code>Light_Car()</code>. For the car to "choose" between beeping and driving, <code>loop()</code> itself needs to make that choice — <code>Light_Car()</code> won't do it for you. That means reading both sensors <em>before</em> deciding whether to call <code>Light_Car()</code> at all, not after.</p>
+            <p>What counts as "too dark"? <code>Light_Car()</code> already has an opinion on that (look at how it decides whether to drive at all), so you don't have to invent a threshold from scratch — you could reuse the same idea, or pick your own and see how it compares. And should it beep once, or keep beeping the whole time it's dark? What would each feel like if you were actually watching the car?</p>
+            <div class="tip"><strong>Building blocks you already have:</strong> <code>getLeftPhotosensitiveADCValue()</code> and <code>getRightPhotosensitiveADCValue()</code> return raw sensor readings (bigger = brighter). <code>Buzzer_Alert(beat, rebeat)</code> beeps <code>beat</code> times per burst, repeated <code>rebeat</code> times. Everything else — when to call them, and what "dark" means — is your design decision.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
@@ -1631,8 +1625,9 @@ void loop() {
           <div class="task-content">
             <span class="title">🐢 Challenge 2: Turtle Mode vs. Turbo Mode</span>
             <p><strong>Goal:</strong> Make the car cruise noticeably slower, then noticeably faster, while it's chasing the light.</p>
-            <p><strong>How-to:</strong> The speed isn't set in the <code>.ino</code> at all — it's a constant inside the supporting file <code>Freenove_4WD_Car_For_Pico_W.cpp</code>. Open it and find <code>#define LIGHT_MODE_CRUISE_SPEED (25+oa_VoltageCompensationToSpeed)</code>. Change the <code>25</code> to <code>10</code> for a crawling car, then try <code>60</code> for a much faster one.</p>
-            <div class="tip"><strong>Tip:</strong> This number is the car's baseline speed before steering is added on top — it's why both wheels still move even when the left and right light readings are equal. Search for <code>LIGHT_MODE_CRUISE_SPEED</code> in the file to see everywhere it's used.</div>
+            <p><strong>Think about:</strong> The number that sets the car's "resting" speed isn't in the <code>.ino</code> at all — the main sketch just calls <code>Light_Car()</code> and trusts it to know how fast to go. That means the answer lives one level down, in the supporting <code>Freenove_4WD_Car_For_Pico_W.cpp</code> file, somewhere near the top where the other constants for this mode are defined.</p>
+            <p>Before you change anything, predict: if this number went up, would you expect the car to steer differently, or just move at a different pace while steering the same way? Then find the constant, test your prediction, and see if the car behaves the way you guessed.</p>
+            <div class="tip"><strong>Where to look:</strong> Search the <code>.cpp</code> file for a <code>#define</code> whose name mentions "cruise speed" — it's used inside <code>Light_Car()</code> as the starting point both wheel speeds are calculated from before steering is added or subtracted.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
@@ -1641,8 +1636,9 @@ void loop() {
           <div class="task-content">
             <span class="title">🎯 Challenge 3: Twitchy vs. Chill Steering</span>
             <p><strong>Goal:</strong> Make the car react much more sharply to a light difference between its two sensors — then make it react much more gently.</p>
-            <p><strong>How-to:</strong> Also in <code>Freenove_4WD_Car_For_Pico_W.cpp</code>, inside the <code>Light_Car()</code> function, find <code>int diffLightValue = (rightLightValue - leftLightValue) / 8;</code>. Change the <code>8</code> to <code>2</code> for aggressive, twitchy steering, or <code>20</code> for a smoother, gentler turn.</p>
-            <div class="tip"><strong>Tip:</strong> A smaller divisor means a bigger chunk of the raw sensor difference gets added to the motor speeds each loop — that's what makes the steering feel "sharper". Try combining this with Challenge 2's cruise speed to build your own driving "personality".</div>
+            <p><strong>Think about:</strong> Somewhere inside <code>Light_Car()</code>, the raw gap between the left and right sensor readings gets shrunk down into a smaller "steering" number before it's added to one wheel and subtracted from the other. Find where that shrinking happens.</p>
+            <p>If you made the shrinking <em>less</em> aggressive, would the steering number end up bigger or smaller for the same sensor gap — and would that make the car turn harder or softer? What do you think happens if you make the shrinking so aggressive that the steering number rounds down to zero every time?</p>
+            <div class="tip"><strong>Connects to Challenge 2:</strong> Cruise speed and steering strength are two independent knobs on the same behaviour — try changing both together and see what kind of "driving personality" you can build.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
