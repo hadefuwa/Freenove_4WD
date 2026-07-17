@@ -1284,19 +1284,20 @@ void loop() {
         <div class="task" data-lesson="01.6" data-id="lws-c4">
           <div class="task-content">
             <span class="title">⏱️ Challenge 4: Custom Timings</span>
-            <p><strong>Goal:</strong> Starting from your Challenge 3 code, make two improvements: (1) skip mode 0 ("off") so the LEDs never go completely dark during the show, and (2) give each mode its own display time — e.g. rainbow (mode 5) stays on for 6 seconds, but blink (mode 3) only gets 1 second.</p>
-            <div class="tip">
-              <strong>Tip 1 — Skipping mode 0:</strong> Find the line in your Challenge 3 code that resets <code>ws2812_task_mode</code> back to <code>0</code> once it goes past 5. That's the only place mode 0 can ever get chosen — change what it resets to and mode 0 will never come up again.
-            </div>
-            <div class="tip">
-              <strong>Tip 2 — Where the "one fixed number" lives:</strong> Your Challenge 3 code has exactly one place where <code>3000</code> appears, inside the <code>if (millis() - last_switch_time &gt; ...)</code> check. Every mode currently waits that same amount of time. To give each mode its own time, that single number has to be swapped out for something that changes depending on which mode you're on.
-            </div>
-            <div class="tip">
-              <strong>Tip 3 — An array is a row of labelled boxes:</strong> <code>int mode_durations[6] = {1000, 2000, 1500, 1000, 2000, 6000};</code> creates 6 boxes, numbered 0 to 5, each holding a duration in milliseconds. <code>mode_durations[0]</code> gets you the first box's value (1000), <code>mode_durations[5]</code> gets you the last (6000). Since <code>ws2812_task_mode</code> is already a number from 0-5... what would <code>mode_durations[ws2812_task_mode]</code> give you?
-            </div>
-            <div class="tip">
-              <strong>Tip 4 — Putting it together:</strong> Declare the array once, above <code>setup()</code>. Then in the <code>if</code> condition where <code>3000</code> currently sits, replace it with the array lookup from Tip 3, so the wait time is different every time the mode changes.
-            </div>
+            <p><strong>Goal:</strong> Two small changes to your Challenge 3 code: make the LEDs skip the "off" mode (mode 0) so they never go fully dark, and make some modes stay on longer than others (instead of every mode getting the same 3 seconds).</p>
+
+            <p><strong>Part 1 — Never go dark:</strong></p>
+            <p>Tip: Somewhere in your code, once the mode number counts past 5, it resets back down to <code>0</code> — that's what turns the LEDs off. Just change what number it resets to.</p>
+
+            <p><strong>Part 2 — Different modes, different lengths of time:</strong></p>
+            <p>Right now every mode waits the exact same amount of time (3 seconds) before switching to the next one, because your code checks against one single number. To make rainbow last longer than blink, that one number needs to become six numbers — one for each mode — so the code can pick a different waiting time depending on which mode is currently playing.</p>
+
+            <p>The way to store "six numbers, one per mode" in code is a list, like this:</p>
+            <pre><code>int mode_durations[6] = {1000, 2000, 1500, 1000, 2000, 6000};</code></pre>
+            <p>Think of it like six labelled cups in a row, numbered cup 0 through cup 5. <code>mode_durations[0]</code> is "look inside cup 0" (which holds 1000). <code>mode_durations[5]</code> is "look inside cup 5" (which holds 6000).</p>
+            <p>Your mode number, <code>ws2812_task_mode</code>, is also always a number from 0 to 5 — the exact same numbers as the cups. So whatever mode you're currently on, you can use that same number to look in the matching cup: <code>mode_durations[ws2812_task_mode]</code>.</p>
+
+            <div class="tip"><strong>Where to put it:</strong> Put the <code>mode_durations</code> line once, near the top of the file. Then find the spot in your <code>if</code> line where it currently says <code>3000</code>, and put <code>mode_durations[ws2812_task_mode]</code> there instead.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
