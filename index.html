@@ -550,6 +550,66 @@
     </div>
   </details>
 
+  <details class="lesson" data-color="slate" id="guide-combining" style="--lc:#64748b; --lc-soft:#e2e8f0;">
+    <summary>
+      <span class="icon-badge">🧩</span>
+      Guide: Combining Two Example Sketches (e.g. Motors + LEDs)
+      <span class="chevron">▶</span>
+    </summary>
+    <div class="lesson-body">
+      <p>Every lesson folder in <code>Sketches/</code> is <strong>self-contained</strong> — the Arduino IDE only compiles the <code>.ino</code> plus whatever <code>.cpp</code>/<code>.h</code> files are sitting in that same folder. If you want to combine features from two different lessons (like making the LEDs flash <em>while</em> the motors drive), you have to manually bring the right files together. This trips almost everyone up the first time — follow these steps exactly and it will work.</p>
+
+      <h3>Step 1 — Know which folder has which "recipe" file</h3>
+      <p>Each recipe file (like <code>Freenove_4WD_Car_For_Pico_W.cpp</code>/<code>.h</code>) can be <em>slightly different</em> depending which folder it came from — some include extra functions, some don't. Mixing files from different folders is the #1 cause of "was not declared in this scope" errors.</p>
+      <table style="width:100%; border-collapse:collapse; margin:0.75rem 0;">
+        <tr style="background:var(--lc-soft);"><th style="text-align:left; padding:6px; border:1px solid var(--border,#ccc);">You want...</th><th style="text-align:left; padding:6px; border:1px solid var(--border,#ccc);">Copy from this folder</th></tr>
+        <tr><td style="padding:6px; border:1px solid var(--border,#ccc);">Motors (<code>Motor_M_Move</code>) + Servo</td><td style="padding:6px; border:1px solid var(--border,#ccc);"><code>01.1_Car_Move_and_Turn</code></td></tr>
+        <tr><td style="padding:6px; border:1px solid var(--border,#ccc);">RGB LEDs (<code>WS2812_Show</code> etc.)</td><td style="padding:6px; border:1px solid var(--border,#ccc);"><code>01.6_WS2812</code></td></tr>
+        <tr><td style="padding:6px; border:1px solid var(--border,#ccc);">Face display / emotions (<code>Emotion_SetMode</code>)</td><td style="padding:6px; border:1px solid var(--border,#ccc);"><code>06.2_Multi_Functional_Car</code></td></tr>
+      </table>
+
+      <h3>Step 2 — Start from ONE folder, add files from the other</h3>
+      <p>Example: to combine Motors with the WS2812 LEDs, start inside your <code>01.6_WS2812</code> folder (since that already has your LED work) and add the motor files to it:</p>
+      <ol>
+        <li>Open the <code>01.6_WS2812</code> folder and the <code>01.1_Car_Move_and_Turn</code> folder side by side.</li>
+        <li>Copy <code>Freenove_4WD_Car_For_Pico_W.cpp</code> and <code>Freenove_4WD_Car_For_Pico_W.h</code> from <code>01.1_Car_Move_and_Turn</code> into your <code>01.6_WS2812</code> folder.</li>
+        <li>If a file with that name already exists there, <strong>overwrite it</strong> — don't keep two different versions.</li>
+        <li>Only bring in the files for features you actually want. Don't copy <code>Freenove_4WD_Car_Emotion.cpp</code>/<code>.h</code> or <code>Array.c</code> unless you're also using the face display — extra files you don't need are extra ways to get compile errors.</li>
+      </ol>
+      <p>Your folder should now contain exactly these 5 files (plus the auto-generated <code>build</code> folder, which you can ignore):</p>
+      <pre><code>01.6_WS2812.ino
+Freenove_4WD_Car_WS2812.cpp
+Freenove_4WD_Car_WS2812.h
+Freenove_4WD_Car_For_Pico_W.cpp
+Freenove_4WD_Car_For_Pico_W.h</code></pre>
+
+      <h3>Step 3 — Add a #include for every recipe file you copied in</h3>
+      <p>Copying the files into the folder is not enough on its own — your <code>.ino</code> also needs to <code>#include</code> each header, or the compiler won't know the functions inside it exist. At the top of your <code>.ino</code>:</p>
+      <pre><code>#include &lt;Arduino.h&gt;
+#include &lt;Adafruit_NeoPixel.h&gt;
+#include "Freenove_4WD_Car_WS2812.h"
+#include "Freenove_4WD_Car_For_Pico_W.h"</code></pre>
+
+      <h3>Step 4 — Call each feature's setup function once, and its "run" function in loop()</h3>
+      <pre><code>void setup() {
+  WS2812_Setup();
+  Motor_Setup();
+}
+
+void loop() {
+  Motor_M_Move(50, 50, 50, 50);   // drive all 4 wheels forward
+  WS2812_Show(5);                 // mode 5 = rainbow
+}</code></pre>
+
+      <h3>If it still won't compile</h3>
+      <ol>
+        <li>Read the <strong>first</strong> error only — later errors are often just knock-on effects of the first one.</li>
+        <li>The error names the missing function/constant (e.g. <code>Motor_M_Move</code>) — search for that exact name across the lesson folders (<code>Ctrl+Shift+F</code> in most editors) to find which folder's version actually has it.</li>
+        <li>Delete any file from your folder that you copied "just in case" but don't actually call anywhere — fewer files means fewer things that can be missing a dependency.</li>
+      </ol>
+    </div>
+  </details>
+
   <!-- ============ 00 ============ -->
   <div class="group" data-color="slate">
     <div class="group-heading" id="group-00"><span class="dot"></span>00 — Getting Ready<span class="group-desc">calibrate before you build</span></div>
@@ -1198,6 +1258,7 @@ void loop() {
         <div class="step">
           <div class="step-title">🏆 Step 3 — Try the challenge</div>
           <div class="try-it-heading">🏆 Try it: Challenges</div>
+          <p style="color:var(--muted); font-style:italic;">Want the LEDs running <em>at the same time</em> as the motors? See <a href="#guide-combining">Guide: Combining Two Example Sketches</a> near the top of the page — mixing files from two lesson folders trips almost everyone up the first time.</p>
 
         <div class="task" data-lesson="01.6" data-id="lws-c1">
           <div class="task-content">
