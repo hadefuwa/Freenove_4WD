@@ -1276,6 +1276,17 @@ void loop() {
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
+
+        <div class="task" data-lesson="01.6" data-id="lws-c4">
+          <div class="task-content">
+            <span class="title">⏱️ Challenge 4: Custom Timings</span>
+            <p><strong>Goal:</strong> Starting from your Challenge 3 code, make two improvements: (1) skip mode 0 ("off") so the LEDs never go completely dark during the show, and (2) give each mode its own display time — e.g. rainbow (mode 5) stays on for 6 seconds, but blink (mode 3) only gets 1 second.</p>
+            <p><strong>Think about — skipping mode 0:</strong> Right now, when <code>ws2812_task_mode</code> wraps past 5 it resets to <code>0</code>. What if it reset to <code>1</code> instead? Would that ever let mode 0 run at all?</p>
+            <p><strong>Think about — custom durations:</strong> Your Challenge 3 code uses one fixed number (<code>3000</code>) for every mode. To give each mode a <em>different</em> duration, that fixed number needs to become "look up the duration for whichever mode we're currently on." An array is exactly a lookup table like that — <code>int mode_durations[6] = {1000, 2000, 1500, 1000, 2000, 6000};</code> stores one duration per mode index (0 through 5). How would you use <code>ws2812_task_mode</code> to read the right entry out of that array inside your <code>if</code> condition?</p>
+            <div class="tip"><strong>Secret:</strong> <code>mode_durations[ws2812_task_mode]</code> gives you "the duration for the mode we're on right now" — swap that in wherever your Challenge 3 code currently says <code>3000</code>.</div>
+          </div>
+          <button class="btn mark-btn" type="button">Mark Complete</button>
+        </div>
         </div>
       </div>
     </details>
