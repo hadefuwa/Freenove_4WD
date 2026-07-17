@@ -1190,7 +1190,7 @@ void loop() {
 </code></pre>
           <div class="how-it-works">
           <div class="kicker">📖 How it works</div>
-          <p>This program controls the strip of tiny RGB LEDs on the front of the car, making them glow, chase, blink, breathe, and swirl through rainbow colors. It shows how every light color is really just a mix of Red, Green, and Blue numbers from 0–255, and how a <code>for</code> loop can update each LED one at a time.</p>
+          <p>This program controls the 8 tiny RGB LEDs built onto the car's main board — two mounted next to each wheel — making them glow, chase, blink, breathe, and swirl through rainbow colors together as a set. It shows how every light color is really just a mix of Red, Green, and Blue numbers from 0–255, and how a <code>for</code> loop can update each LED one at a time.</p>
           <p>It also introduces functions as reusable "recipes" (like <code>WS2812_Setup</code> and <code>WS2812_Show</code>) and uses <code>millis()</code> timing so the lights can animate smoothly without ever freezing the rest of the program.</p>
         </div>
         </div>
@@ -1202,7 +1202,7 @@ void loop() {
         <div class="task" data-lesson="01.6" data-id="lws-c1">
           <div class="task-content">
             <span class="title">🎨 Challenge 1: Pick Your Own Color</span>
-            <p><strong>Goal:</strong> Make the strip glow a color you chose — not the dim blue it starts with — while running in static mode.</p>
+            <p><strong>Goal:</strong> Make the LEDs glow a color you chose — not the dim blue they start with — while running in static mode.</p>
             <p><strong>Think about:</strong> <code>WS2812_Setup()</code> is where the starting color for "color slot 1" gets decided, using <code>WS2812_Set_Color_1(number, red, green, blue)</code>. The <code>number</code> argument is a bitmask — <code>4095</code> means "every LED" — and each of red/green/blue is 0-255. What three numbers would make orange? Purple? Try mixing a few combinations and see what actually lights up.</p>
             <p>Once you've picked new numbers, you'll also need <code>loop()</code> to be calling <code>WS2812_Show(1)</code> (mode 1 = static color) instead of mode 5, or your new color will never be shown — it'll just sit there unused while rainbow mode keeps running.</p>
             <div class="tip"><strong>Secret:</strong> (255,0,0) is pure red, (0,255,0) is pure green, (0,0,255) is pure blue — mixing two of them at full strength gets you yellow, cyan or magenta.</div>
@@ -1215,7 +1215,7 @@ void loop() {
             <span class="title">⚡ Challenge 2: Speed Up the Chase</span>
             <p><strong>Goal:</strong> Make the "chasing lights" pattern (mode 2) noticeably faster or slower than normal.</p>
             <p><strong>Think about:</strong> Every pattern function in <code>Freenove_4WD_Car_WS2812.cpp</code> checks elapsed time with a line like <code>if (ws2812_strip_time_next - ws2812_strip_time_now &gt; 100)</code> before it's allowed to update. That number is how many milliseconds must pass between updates — find it inside <code>ws2812_following()</code> specifically, since each pattern has its own timing number.</p>
-            <p>If that number went down, would the strip update more often or less often — and would that look faster or slower? What do you think happens if you set it to something tiny, like 1?</p>
+            <p>If that number went down, would the LEDs update more often or less often — and would that look faster or slower? What do you think happens if you set it to something tiny, like 1?</p>
             <div class="tip"><strong>Secret:</strong> Don't forget to set <code>loop()</code> to call <code>WS2812_Show(2)</code> so you're actually watching the chase pattern while you test.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
@@ -1224,7 +1224,7 @@ void loop() {
         <div class="task" data-lesson="01.6" data-id="lws-c3">
           <div class="task-content">
             <span class="title">🔁 Challenge 3: Auto Mode-Switcher</span>
-            <p><strong>Goal:</strong> Make the strip cycle through all six lighting modes on its own — a few seconds of each — instead of sitting on one mode forever.</p>
+            <p><strong>Goal:</strong> Make the LEDs cycle through all six lighting modes on their own — a few seconds of each — instead of sitting on one mode forever.</p>
             <p><strong>Think about:</strong> Right now <code>loop()</code> always calls <code>WS2812_Show(5)</code> with the same fixed number every time. To cycle modes automatically, something needs to change <em>which</em> number gets passed in as time goes by — that means tracking elapsed time in <code>loop()</code> itself (look at how <code>millis()</code> is used elsewhere in this file for the pattern) and switching to the next mode (0 through 5, then back to 0) once enough time has passed.</p>
             <p><code>WS2812_SetMode(mode)</code> and <code>ws2812_task_mode</code> already exist for remembering "which mode are we on" — could you reuse one of them instead of inventing a brand new variable?</p>
             <div class="tip"><strong>Building blocks you already have:</strong> <code>WS2812_Show(mode)</code> runs one frame of whichever mode number you pass it. Calling it with a different number each time is all "switching modes" really means.</div>
