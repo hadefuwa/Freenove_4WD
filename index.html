@@ -1202,9 +1202,9 @@ void loop() {
         <div class="task" data-lesson="01.6" data-id="lws-c1">
           <div class="task-content">
             <span class="title">🎨 Challenge 1: Pick Your Own Color</span>
-            <p><strong>Goal:</strong> Make the LEDs glow a color you chose — not the dim blue they start with — while running in static mode.</p>
+            <p><strong>Goal:</strong> Make the LEDs glow a color you chose, instead of the rainbow the example ships with.</p>
+            <p><strong>Heads up:</strong> The code as downloaded calls <code>WS2812_Show(5)</code> in <code>loop()</code> — mode 5 is rainbow, which is why every LED cycles through colors right out of the box. Rainbow mode ignores color slot 1 completely, so picking new colors alone won't change anything you see — you have to switch modes too. Change that line to <code>WS2812_Show(1)</code> (mode 1 = static color) first.</p>
             <p><strong>Think about:</strong> <code>WS2812_Setup()</code> is where the starting color for "color slot 1" gets decided, using <code>WS2812_Set_Color_1(number, red, green, blue)</code>. The <code>number</code> argument is a bitmask — <code>4095</code> means "every LED" — and each of red/green/blue is 0-255. What three numbers would make orange? Purple? Try mixing a few combinations and see what actually lights up.</p>
-            <p>Once you've picked new numbers, you'll also need <code>loop()</code> to be calling <code>WS2812_Show(1)</code> (mode 1 = static color) instead of mode 5, or your new color will never be shown — it'll just sit there unused while rainbow mode keeps running.</p>
             <div class="tip"><strong>Secret:</strong> (255,0,0) is pure red, (0,255,0) is pure green, (0,0,255) is pure blue — mixing two of them at full strength gets you yellow, cyan or magenta.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
