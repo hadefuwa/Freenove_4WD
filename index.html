@@ -1255,7 +1255,11 @@ void loop() {
             </div>
             <details style="margin-top:0.75rem;">
               <summary style="cursor:pointer; font-weight:600; color:var(--lc);">🔓 Still stuck? Show the full working code</summary>
-              <pre><code>unsigned long last_switch_time = 0;
+              <pre><code>#include &lt;Arduino.h&gt;
+#include &lt;Adafruit_NeoPixel.h&gt;
+#include "Freenove_4WD_Car_WS2812.h"
+
+unsigned long last_switch_time = 0;
 
 void setup() {
   WS2812_Setup();
