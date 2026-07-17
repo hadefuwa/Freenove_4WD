@@ -1253,6 +1253,26 @@ void loop() {
               <strong>Tip 3:</strong> Change <code>3000</code> to make each mode last a shorter or longer time before switching.<br>
               <strong>Tip 4 — If it doesn't seem to be working:</strong> Add <code>Serial.println(ws2812_task_mode);</code> right after you update it, and <code>Serial.begin(115200);</code> in <code>setup()</code>. Open the Serial Monitor and watch the numbers — if they're changing (0, 1, 2, 3...) but the LEDs aren't, the timing logic is fine and the bug is elsewhere; if the numbers never change at all, the problem is in your <code>if</code> condition or where you're updating the variable.
             </div>
+            <details style="margin-top:0.75rem;">
+              <summary style="cursor:pointer; font-weight:600; color:var(--lc);">🔓 Still stuck? Show the full working code</summary>
+              <pre><code>unsigned long last_switch_time = 0;
+
+void setup() {
+  WS2812_Setup();
+}
+
+void loop() {
+  if (millis() - last_switch_time &gt; 3000) {   // 3 seconds per mode
+    last_switch_time = millis();
+    ws2812_task_mode = ws2812_task_mode + 1;   // move to the next mode
+    if (ws2812_task_mode &gt; 5) {
+      ws2812_task_mode = 0;                    // wrap back to mode 0 after mode 5
+    }
+  }
+  WS2812_Show(ws2812_task_mode);   // always draw whichever mode we're currently on
+}</code></pre>
+              <p style="color:var(--muted); font-style:italic;">Try to solve it yourself first using the tips above — but if you've been stuck a while, copy this in, get it working, then come back and see if you can explain to yourself why each line is needed.</p>
+            </details>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
