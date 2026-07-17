@@ -1250,7 +1250,8 @@ void loop() {
   WS2812_Show(ws2812_task_mode);
 }</code></pre>
               <strong>Tip 2 — Moving to the next mode:</strong> <code>ws2812_task_mode</code> counts 0-5. Adding 1 each time gets you to the next mode — but what should happen when it goes past 5? (Hint: this is the same "wrap back to zero" idea used in <code>ws2812_following()</code> for <code>ws2812_following_number</code>.)<br>
-              <strong>Tip 3:</strong> Change <code>3000</code> to make each mode last a shorter or longer time before switching.
+              <strong>Tip 3:</strong> Change <code>3000</code> to make each mode last a shorter or longer time before switching.<br>
+              <strong>Tip 4 — If it doesn't seem to be working:</strong> Add <code>Serial.println(ws2812_task_mode);</code> right after you update it, and <code>Serial.begin(115200);</code> in <code>setup()</code>. Open the Serial Monitor and watch the numbers — if they're changing (0, 1, 2, 3...) but the LEDs aren't, the timing logic is fine and the bug is elsewhere; if the numbers never change at all, the problem is in your <code>if</code> condition or where you're updating the variable.
             </div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
