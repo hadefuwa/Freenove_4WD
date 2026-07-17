@@ -1238,6 +1238,20 @@ void loop() {
             <p><strong>Think about:</strong> Right now <code>loop()</code> always calls <code>WS2812_Show(5)</code> with the same fixed number every time. To cycle modes automatically, something needs to change <em>which</em> number gets passed in as time goes by — that means tracking elapsed time in <code>loop()</code> itself (look at how <code>millis()</code> is used elsewhere in this file for the pattern) and switching to the next mode (0 through 5, then back to 0) once enough time has passed.</p>
             <p><code>WS2812_SetMode(mode)</code> and <code>ws2812_task_mode</code> already exist for remembering "which mode are we on" — could you reuse one of them instead of inventing a brand new variable?</p>
             <div class="tip"><strong>Building blocks you already have:</strong> <code>WS2812_Show(mode)</code> runs one frame of whichever mode number you pass it. Calling it with a different number each time is all "switching modes" really means.</div>
+            <div class="tip">
+              <strong>Tip 1 — Tracking time in loop():</strong> You need two timestamp variables and a "has enough time passed?" check, similar to this pattern used elsewhere in this file:
+              <pre><code>unsigned long last_switch_time = 0;
+
+void loop() {
+  if (millis() - last_switch_time &gt; 3000) {   // 3000ms = 3 seconds per mode
+    last_switch_time = millis();
+    // TODO: move ws2812_task_mode on to the next mode here
+  }
+  WS2812_Show(ws2812_task_mode);
+}</code></pre>
+              <strong>Tip 2 — Moving to the next mode:</strong> <code>ws2812_task_mode</code> counts 0-5. Adding 1 each time gets you to the next mode — but what should happen when it goes past 5? (Hint: this is the same "wrap back to zero" idea used in <code>ws2812_following()</code> for <code>ws2812_following_number</code>.)<br>
+              <strong>Tip 3:</strong> Change <code>3000</code> to make each mode last a shorter or longer time before switching.
+            </div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
