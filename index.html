@@ -1285,9 +1285,18 @@ void loop() {
           <div class="task-content">
             <span class="title">⏱️ Challenge 4: Custom Timings</span>
             <p><strong>Goal:</strong> Starting from your Challenge 3 code, make two improvements: (1) skip mode 0 ("off") so the LEDs never go completely dark during the show, and (2) give each mode its own display time — e.g. rainbow (mode 5) stays on for 6 seconds, but blink (mode 3) only gets 1 second.</p>
-            <p><strong>Think about — skipping mode 0:</strong> Right now, when <code>ws2812_task_mode</code> wraps past 5 it resets to <code>0</code>. What if it reset to <code>1</code> instead? Would that ever let mode 0 run at all?</p>
-            <p><strong>Think about — custom durations:</strong> Your Challenge 3 code uses one fixed number (<code>3000</code>) for every mode. To give each mode a <em>different</em> duration, that fixed number needs to become "look up the duration for whichever mode we're currently on." An array is exactly a lookup table like that — <code>int mode_durations[6] = {1000, 2000, 1500, 1000, 2000, 6000};</code> stores one duration per mode index (0 through 5). How would you use <code>ws2812_task_mode</code> to read the right entry out of that array inside your <code>if</code> condition?</p>
-            <div class="tip"><strong>Secret:</strong> <code>mode_durations[ws2812_task_mode]</code> gives you "the duration for the mode we're on right now" — swap that in wherever your Challenge 3 code currently says <code>3000</code>.</div>
+            <div class="tip">
+              <strong>Tip 1 — Skipping mode 0:</strong> Find the line in your Challenge 3 code that resets <code>ws2812_task_mode</code> back to <code>0</code> once it goes past 5. That's the only place mode 0 can ever get chosen — change what it resets to and mode 0 will never come up again.
+            </div>
+            <div class="tip">
+              <strong>Tip 2 — Where the "one fixed number" lives:</strong> Your Challenge 3 code has exactly one place where <code>3000</code> appears, inside the <code>if (millis() - last_switch_time &gt; ...)</code> check. Every mode currently waits that same amount of time. To give each mode its own time, that single number has to be swapped out for something that changes depending on which mode you're on.
+            </div>
+            <div class="tip">
+              <strong>Tip 3 — An array is a row of labelled boxes:</strong> <code>int mode_durations[6] = {1000, 2000, 1500, 1000, 2000, 6000};</code> creates 6 boxes, numbered 0 to 5, each holding a duration in milliseconds. <code>mode_durations[0]</code> gets you the first box's value (1000), <code>mode_durations[5]</code> gets you the last (6000). Since <code>ws2812_task_mode</code> is already a number from 0-5... what would <code>mode_durations[ws2812_task_mode]</code> give you?
+            </div>
+            <div class="tip">
+              <strong>Tip 4 — Putting it together:</strong> Declare the array once, above <code>setup()</code>. Then in the <code>if</code> condition where <code>3000</code> currently sits, replace it with the array lookup from Tip 3, so the wait time is different every time the mode changes.
+            </div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
         </div>
