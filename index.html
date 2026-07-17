@@ -1203,8 +1203,18 @@ void loop() {
           <div class="task-content">
             <span class="title">🎨 Challenge 1: Pick Your Own Color</span>
             <p><strong>Goal:</strong> Make the LEDs glow a color you chose, instead of the rainbow the example ships with.</p>
-            <p><strong>Heads up:</strong> The code as downloaded calls <code>WS2812_Show(5)</code> in <code>loop()</code> — mode 5 is rainbow, which is why every LED cycles through colors right out of the box. Rainbow mode ignores color slot 1 completely, so picking new colors alone won't change anything you see — you have to switch modes too. Change that line to <code>WS2812_Show(1)</code> (mode 1 = static color) first.</p>
-            <p><strong>Think about:</strong> <code>WS2812_Setup()</code> is where the starting color for "color slot 1" gets decided, using <code>WS2812_Set_Color_1(number, red, green, blue)</code>. The <code>number</code> argument is a bitmask — <code>4095</code> means "every LED" — and each of red/green/blue is 0-255. What three numbers would make orange? Purple? Try mixing a few combinations and see what actually lights up.</p>
+            <p><strong>Why it's still rainbow:</strong> The example calls <code>WS2812_Show(5)</code> in <code>loop()</code>. Mode 5 always means rainbow, no matter what colors you set elsewhere — so you need to change two separate things, not just one.</p>
+            <p><strong>How-to:</strong></p>
+            <p>1. In <code>setup()</code>, change the color numbers. Try orange as a starting point:</p>
+            <pre><code>void setup() {
+  WS2812_Setup();
+  WS2812_Set_Color_1(4095, 255, 100, 0);  // 4095 = all LEDs, then Red, Green, Blue (0-255 each)
+}</code></pre>
+            <p>2. In <code>loop()</code>, change the mode number from 5 to 1 (static color):</p>
+            <pre><code>void loop() {
+  WS2812_Show(1);   // was WS2812_Show(5);
+}</code></pre>
+            <p>3. Re-upload and check the LEDs turn orange and stay that way (no more rainbow cycling). Then try your own numbers for red/green/blue — what makes purple? What makes cyan?</p>
             <div class="tip"><strong>Secret:</strong> (255,0,0) is pure red, (0,255,0) is pure green, (0,0,255) is pure blue — mixing two of them at full strength gets you yellow, cyan or magenta.</div>
           </div>
           <button class="btn mark-btn" type="button">Mark Complete</button>
